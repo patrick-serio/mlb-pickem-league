@@ -2,13 +2,15 @@
 build_dashboard.py
 
 Reads data/team_scores.csv + data/team_rosters_updated.csv (produced by
-team_scores.py) and writes two self-contained static HTML pages:
+team_scores.py) and writes three self-contained static HTML pages:
 
   docs/index.html    - standings + collapsible team rosters
   docs/players.html  - every player's point total and the raw stat line
                         behind it, sortable by column
+  docs/trends.html   - curated hot/cold callouts based on each player's
+                        last 10 games
 
-Both are what GitHub Pages serves — no server, no build step, no JS
+All three are what GitHub Pages serves — no server, no build step, no JS
 framework beyond a tiny bit of vanilla JS for sorting/filtering. Re-running
 this script (or the daily GitHub Action) overwrites them in place, so the
 published pages always reflect the latest data.
@@ -30,7 +32,9 @@ ROSTER_FILE = "data/team_rosters_updated.csv"
 OUTPUT_DIR = "docs"
 INDEX_FILE = os.path.join(OUTPUT_DIR, "index.html")
 PLAYERS_FILE = os.path.join(OUTPUT_DIR, "players.html")
+TRENDS_FILE = os.path.join(OUTPUT_DIR, "trends.html")
 DISPLAY_TZ = "America/New_York"             # timestamp shown on the page
+TRENDS_PER_GROUP = 4                        # how many hot / cold callouts per group
 
 # Stat columns update.py / team_scores.py attach to each player.
 HITTER_STATS = [
@@ -85,6 +89,7 @@ def build_nav(active: str) -> str:
     <nav class="top-nav">
       {link('index.html', 'Standings', 'standings')}
       {link('players.html', 'Players', 'players')}
+      {link('trends.html', 'Trends', 'trends')}
     </nav>"""
 
 
@@ -226,6 +231,138 @@ def build_players_tables(roster: pd.DataFrame) -> str:
 
 
 # =========================
+# TRENDS PAGE FRAGMENTS
+# =========================
+
+def _safe_float(value) -> float:
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return 0.0
+
+
+def format_avg(avg) -> str:
+    """Batting-average style formatting: .400 instead of 0.400."""
+    val = _safe_float(avg)
+    s = f"{val:.3f}"
+    if s.startswith("0."):
+        s = s[1:]
+    elif s.startswith("-0."):
+        s = "-" + s[2:]
+    return s
+
+
+def build_trend_section(title: str, cards_html: str) -> str:
+    return f"""
+    <section>
+      <h2>{esc(title)}</h2>
+      <div class="trend-grid">
+        {cards_html}
+      </div>
+    </section>"""
+
+
+def build_hitter_trend_card(row, hot: bool) -> str:
+    name = player_display_name(row)
+    team = str(row.get("MLB Team", "") or "").strip() or "—"
+    avg = format_avg(row.get("TrendAVG", 0))
+    hr = int(_safe_float(row.get("TrendHR", 0)))
+    rbi = int(_safe_float(row.get("TrendRBI", 0)))
+    pts = int(_safe_float(row.get("TrendPoints", 0)))
+
+    css = "trend-card hot" if hot else "trend-card cold"
+    icon = "🔥" if hot else "🥶"
+    blurb = f"Hitting {avg} with {hr} HR and {rbi} RBI over his last 10 games"
+
+    return f"""
+        <div class="{css}">
+          <div class="trend-icon">{icon}</div>
+          <div class="trend-body">
+            <div class="trend-name">{esc(name)} <span class="trend-team">{esc(team)}</span></div>
+            <div class="trend-blurb">{esc(blurb)}</div>
+            <div class="trend-pts">{pts} pts</div>
+          </div>
+        </div>"""
+
+
+def build_pitcher_trend_card(row, hot: bool) -> str:
+    name = player_display_name(row)
+    team = str(row.get("MLB Team", "") or "").strip() or "—"
+    era = format(_safe_float(row.get("TrendERA", 0)), ".2f")
+    k = int(_safe_float(row.get("TrendK", 0)))
+    pts = int(_safe_float(row.get("TrendPoints", 0)))
+
+    css = "trend-card hot" if hot else "trend-card cold"
+    icon = "🔥" if hot else "🥶"
+    blurb = f"{k} Ks and a {era} ERA over his last 10 games"
+
+    return f"""
+        <div class="{css}">
+          <div class="trend-icon">{icon}</div>
+          <div class="trend-body">
+            <div class="trend-name">{esc(name)} <span class="trend-team">{esc(team)}</span></div>
+            <div class="trend-blurb">{esc(blurb)}</div>
+            <div class="trend-pts">{pts} pts</div>
+          </div>
+        </div>"""
+
+
+def build_trends_content(roster: pd.DataFrame) -> str:
+    roster = dedupe_by_player(roster)
+    ptype = roster.get("Type", pd.Series(dtype=str)).astype(str).str.lower()
+
+    hitters = roster[ptype.isin(["hitter", "both"])].copy()
+    pitchers = roster[ptype.isin(["pitcher", "both"])].copy()
+
+    # Only include players who actually appeared in their last 10 games —
+    # otherwise someone injured the whole window would look like a cold streak.
+    hitters["TrendAB"] = hitters.get("TrendAB", 0).apply(_safe_float) if "TrendAB" in hitters.columns else 0
+    hitters = hitters[hitters["TrendAB"] > 0]
+
+    pitchers["_ip_decimal"] = pitchers.get("TrendIP", "0.0").apply(_safe_float) if "TrendIP" in pitchers.columns else 0
+    pitchers = pitchers[pitchers["_ip_decimal"] > 0]
+
+    hitters["TrendPoints"] = hitters.get("TrendPoints", 0).apply(_safe_float) if "TrendPoints" in hitters.columns else 0
+    pitchers["TrendPoints"] = pitchers.get("TrendPoints", 0).apply(_safe_float) if "TrendPoints" in pitchers.columns else 0
+
+    hot_hitters = hitters.sort_values("TrendPoints", ascending=False).head(TRENDS_PER_GROUP)
+    cold_hitters = (
+        hitters[~hitters.index.isin(hot_hitters.index)]
+        .sort_values("TrendPoints", ascending=True)
+        .head(TRENDS_PER_GROUP)
+    )
+    hot_pitchers = pitchers.sort_values("TrendPoints", ascending=False).head(TRENDS_PER_GROUP)
+    cold_pitchers = (
+        pitchers[~pitchers.index.isin(hot_pitchers.index)]
+        .sort_values("TrendPoints", ascending=True)
+        .head(TRENDS_PER_GROUP)
+    )
+
+    sections = []
+
+    if not hot_hitters.empty:
+        cards = "".join(build_hitter_trend_card(r, hot=True) for _, r in hot_hitters.iterrows())
+        sections.append(build_trend_section("🔥 Hot Hitters", cards))
+
+    if not cold_hitters.empty:
+        cards = "".join(build_hitter_trend_card(r, hot=False) for _, r in cold_hitters.iterrows())
+        sections.append(build_trend_section("🥶 Cold Hitters", cards))
+
+    if not hot_pitchers.empty:
+        cards = "".join(build_pitcher_trend_card(r, hot=True) for _, r in hot_pitchers.iterrows())
+        sections.append(build_trend_section("🔥 Hot Pitchers", cards))
+
+    if not cold_pitchers.empty:
+        cards = "".join(build_pitcher_trend_card(r, hot=False) for _, r in cold_pitchers.iterrows())
+        sections.append(build_trend_section("🥶 Cold Pitchers", cards))
+
+    if not sections:
+        sections.append('<p class="no-data">Not enough recent game data yet — check back after a few more games.</p>')
+
+    return "\n".join(sections)
+
+
+# =========================
 # SHARED CSS
 # =========================
 
@@ -237,6 +374,7 @@ BASE_CSS = """
     --cream: #F6EFDF;
     --cream-row: #EDE2C4;
     --red: #D14B36;
+    --cold: #5C7A9E;
     --text: #22242E;
     --white: #FFFFFF;
   }
@@ -552,6 +690,70 @@ BASE_CSS = """
     text-align: center;
   }
 
+  /* ---- Trends page ---- */
+
+  .trend-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .trend-card {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    background: var(--white);
+    border: 1px solid var(--cream-row);
+    border-left: 4px solid var(--gold);
+    border-radius: 6px;
+    padding: 0.9rem 1rem;
+  }
+
+  .trend-card.cold {
+    border-left-color: var(--cold);
+  }
+
+  .trend-icon {
+    font-size: 1.4rem;
+    line-height: 1;
+  }
+
+  .trend-name {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    color: var(--navy);
+  }
+
+  .trend-team {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 0.78rem;
+    color: #8a8d99;
+  }
+
+  .trend-blurb {
+    font-size: 0.88rem;
+    margin-top: 0.15rem;
+    color: var(--text);
+  }
+
+  .trend-pts {
+    margin-top: 0.4rem;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--gold);
+  }
+
+  .trend-card.cold .trend-pts {
+    color: var(--cold);
+  }
+
+  .no-data {
+    color: #6b6e7a;
+    font-style: italic;
+  }
+
   @media (max-width: 480px) {
     h1 { font-size: 1.6rem; }
     .roster-table { font-size: 0.85rem; }
@@ -679,6 +881,19 @@ PLAYERS_MAIN = """
 </html>
 """
 
+TRENDS_MAIN = """
+<main>
+  {trends_content}
+</main>
+
+<footer>
+  Based on each player's last 10 games. Refreshes automatically every day.
+</footer>
+
+</body>
+</html>
+"""
+
 
 def render_head(page_title: str, active_nav: str, updated: str) -> str:
     return HEAD_TEMPLATE.format(
@@ -695,6 +910,14 @@ def build_index_page(scores: pd.DataFrame, roster: pd.DataFrame, updated: str) -
     body = INDEX_MAIN.format(
         standings_rows=build_standings_rows(scores),
         roster_sections=build_roster_sections(roster),
+    )
+    return head + body
+
+
+def build_trends_page(roster: pd.DataFrame, updated: str) -> str:
+    head = render_head("Trends", "trends", updated)
+    body = TRENDS_MAIN.format(
+        trends_content=build_trends_content(roster),
     )
     return head + body
 
@@ -721,8 +944,12 @@ def main():
     with open(PLAYERS_FILE, "w", encoding="utf-8") as f:
         f.write(build_players_page(roster, updated))
 
+    with open(TRENDS_FILE, "w", encoding="utf-8") as f:
+        f.write(build_trends_page(roster, updated))
+
     print(f"Dashboard generated → {INDEX_FILE}")
     print(f"Players page generated → {PLAYERS_FILE}")
+    print(f"Trends page generated → {TRENDS_FILE}")
 
 
 if __name__ == "__main__":

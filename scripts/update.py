@@ -67,6 +67,38 @@ def get_stats(player_id, group):
         print(f"Stats error for ID {player_id}: {e}")
         return {}
 
+# Rolling "last N games" stats, for trend/hot-cold callouts — separate from
+# the season endpoint above, and not tied to a season year since it's just
+# the player's most recent games regardless of date.
+def get_recent_stats(player_id, group, limit=10):
+    try:
+        url = f"https://statsapi.mlb.com/api/v1/people/{player_id}/stats"
+
+        params = {
+            "stats": "lastXGames",
+            "limit": limit,
+            "group": group,
+        }
+
+        r = requests.get(url, params=params)
+        data = r.json()
+
+        stats_list = data.get("stats", [])
+
+        if not stats_list:
+            return {}
+
+        splits = stats_list[0].get("splits", [])
+
+        if not splits:
+            return {}
+
+        return splits[0].get("stat", {})
+
+    except Exception as e:
+        print(f"Recent stats error for ID {player_id}: {e}")
+        return {}
+
 # Active Player Check (Injury/Minors Status) + MLB team lookup:
 def build_active_roster_set():
     teams = statsapi.get('teams', {'sportId': 1, 'activeStatus': 'Y'})['teams']
@@ -253,11 +285,50 @@ for i, row in df.iterrows():
         if pitching_stats:
             total_points += calculate_pitcher_points(pitching_stats, qs)
 
+    # =========================
+    # RECENT FORM (LAST 10 GAMES) — for the trends page
+    # Quality starts aren't available on a rolling window from the API,
+    # so recent pitcher points don't include the QS bonus (season points do).
+    # =========================
+    recent_hitting = {}
+    recent_pitching = {}
+    trend_points = 0
+
+    if player_type in ["hitter", "both"]:
+        recent_hitting = get_recent_stats(player_id, "hitting", limit=10)
+        if recent_hitting:
+            trend_points += calculate_hitter_points(recent_hitting)
+
+    if player_type in ["pitcher", "both"]:
+        recent_pitching = get_recent_stats(player_id, "pitching", limit=10)
+        if recent_pitching:
+            trend_points += calculate_pitcher_points(recent_pitching, quality_starts=0)
+
+    recent_at_bats = recent_hitting.get("atBats", 0)
+    recent_hits = recent_hitting.get("hits", 0)
+    recent_avg = round(recent_hits / recent_at_bats, 3) if recent_at_bats else 0
+
+    recent_ip_str = str(recent_pitching.get("inningsPitched", "0.0"))
+    recent_outs = innings_to_outs(recent_ip_str)
+    recent_ip_decimal = recent_outs / 3 if recent_outs else 0
+    recent_er = recent_pitching.get("earnedRuns", 0)
+    recent_era = round(recent_er * 9 / recent_ip_decimal, 2) if recent_ip_decimal > 0 else 0
+
     df.at[i, "Total Points"] = total_points
     df.at[i, "Injured"] = injured_status
     df.at[i, "Type"] = player_type
     df.at[i, "Player ID"] = player_id
     df.at[i, "MLB Team"] = get_mlb_team(player_id)
+
+    df.at[i, "TrendPoints"] = trend_points
+    df.at[i, "TrendAB"] = recent_at_bats
+    df.at[i, "TrendAVG"] = recent_avg
+    df.at[i, "TrendHR"] = recent_hitting.get("homeRuns", 0)
+    df.at[i, "TrendRBI"] = recent_hitting.get("rbi", 0)
+    df.at[i, "TrendIP"] = recent_ip_str
+    df.at[i, "TrendERA"] = recent_era
+    df.at[i, "TrendWins"] = recent_pitching.get("wins", 0)
+    df.at[i, "TrendK"] = recent_pitching.get("strikeOuts", 0)
 
     # =========================
     # SAVE THE RAW STAT LINE

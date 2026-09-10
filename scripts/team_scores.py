@@ -24,8 +24,16 @@ STAT_COLUMNS = [
     "IP", "ER", "Wins", "Saves", "K", "QS", "Holds",
 ]
 
-# Non-numeric extras also attached by update.py.
+# Last-10-games trend stats, for the Trends page hot/cold callouts.
+TREND_COLUMNS = [
+    "TrendPoints", "TrendAB", "TrendAVG", "TrendHR", "TrendRBI",
+    "TrendIP", "TrendERA", "TrendWins", "TrendK",
+]
+
+# Non-numeric extras also attached by update.py. TrendIP is text (like IP)
+# for the same reason — MLB's fractional-innings notation isn't a true decimal.
 EXTRA_COLUMNS = ["Type", "Player ID", "MLB Team"]
+TEXT_COLUMNS = ["TrendIP"]
 
 # =========================
 # 2. LOAD DATA
@@ -74,7 +82,7 @@ if "Total Points" in backend_df.columns:
 print("Merging team roster with backend stats...")
 
 backend_cols = ["Player", "Full Name", "Total Score", "Injured"] + [
-    c for c in (EXTRA_COLUMNS + STAT_COLUMNS) if c in backend_df.columns
+    c for c in (EXTRA_COLUMNS + STAT_COLUMNS + TREND_COLUMNS) if c in backend_df.columns
 ]
 
 merged = team_df.merge(
@@ -129,7 +137,7 @@ if len(missing) > 0:
 # Fill missing values with 0
 merged["Total Score"] = merged["Total Score"].fillna(0)
 
-numeric_stat_cols = [c for c in STAT_COLUMNS if c in merged.columns]
+numeric_stat_cols = [c for c in (STAT_COLUMNS + TREND_COLUMNS) if c in merged.columns and c not in TEXT_COLUMNS]
 merged[numeric_stat_cols] = merged[numeric_stat_cols].fillna(0)
 if "Type" in merged.columns:
     merged["Type"] = merged["Type"].fillna("hitter")
@@ -137,6 +145,8 @@ if "MLB Team" in merged.columns:
     merged["MLB Team"] = merged["MLB Team"].fillna("")
 if "Player ID" in merged.columns:
     merged["Player ID"] = merged["Player ID"].fillna(0)
+if "TrendIP" in merged.columns:
+    merged["TrendIP"] = merged["TrendIP"].fillna("0.0")
 
 # =========================
 # 7. CALCULATE TEAM SCORES
