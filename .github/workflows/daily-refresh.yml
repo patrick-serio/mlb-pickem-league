@@ -35,4 +35,4 @@ jobs:
             data/backend_updated.csv
             data/team_scores.csv
             data/team_rosters_updated.csv
-            docs/index.html
+            docs/*.html
