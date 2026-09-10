@@ -294,7 +294,7 @@ def build_pitcher_trend_card(row, hot: bool) -> str:
 
     css = "trend-card hot" if hot else "trend-card cold"
     icon = "🔥" if hot else "🥶"
-    blurb = f"{k} Ks and a {era} ERA over his last 14 days"
+    blurb = f"{k} Ks and a {era} ERA over the last 14 days"
 
     return f"""
         <div class="{css}">
