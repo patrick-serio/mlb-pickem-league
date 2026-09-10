@@ -111,7 +111,7 @@ Jason Gouin,SP,C Bassitt,Chris Bassitt,343.0,N,pitcher,605135.0,BAL,0.0,0.0,0.0,
 Jason Gouin,SP,G Crochet,Garrett Crochet,168.0,Y,pitcher,676979.0,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,30.0,21.0,3.0,0.0,37.0,3.0,0.0
 Jason Gouin,SP,T Skubal,Tarik Skubal,894.0,N,pitcher,669373.0,LAD,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,139.2,44.0,9.0,0.0,164.0,14.0,0.0
 Jason Gouin,SP,H Brown,Hunter Brown,528.0,N,pitcher,686613.0,HOU,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,92.0,36.0,5.0,0.0,100.0,7.0,0.0
-Jason Gouin,SP,J DeGrom,Jacob deGrom,880.0,N,pitcher,594798.0,TEX,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,144.1,63.0,10.0,0.0,177.0,11.0,0.0
+Jason Gouin,SP,J DeGrom,Jacob deGrom,901.0,N,pitcher,594798.0,TEX,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,146.1,63.0,10.0,0.0,182.0,11.0,0.0
 Jason Gouin,SP,C Cavalli,Cade Cavalli,1011.0,N,pitcher,676917.0,WSH,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,158.2,55.0,12.0,0.0,185.0,17.0,0.0
 Jason Gouin,SP,P Skenes,Paul Skenes,915.0,N,pitcher,694973.0,PIT,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,155.0,66.0,10.0,0.0,181.0,11.0,0.0
 Jason Gouin,SP,L Webb,Logan Webb,760.0,N,pitcher,657277.0,SF,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,155.2,71.0,8.0,0.0,127.0,17.0,0.0
@@ -141,7 +141,7 @@ Owen Shelffo,SP,G Crochet,Garrett Crochet,168.0,Y,pitcher,676979.0,,0.0,0.0,0.0,
 Owen Shelffo,SP,T Skubal,Tarik Skubal,894.0,N,pitcher,669373.0,LAD,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,139.2,44.0,9.0,0.0,164.0,14.0,0.0
 Owen Shelffo,SP,J Ryan,Joe Ryan,750.0,N,pitcher,657746.0,MIN,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,129.2,53.0,6.0,0.0,145.0,11.0,0.0
 Owen Shelffo,SP,H Brown,Hunter Brown,528.0,N,pitcher,686613.0,HOU,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,92.0,36.0,5.0,0.0,100.0,7.0,0.0
-Owen Shelffo,SP,L Gilbert,Logan Gilbert,955.0,N,pitcher,669302.0,SEA,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,167.0,68.0,11.0,0.0,181.0,12.0,0.0
+Owen Shelffo,SP,L Gilbert,Logan Gilbert,958.0,N,pitcher,669302.0,SEA,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,168.0,70.0,11.0,0.0,183.0,12.0,0.0
 Owen Shelffo,SP,J Misiorowski,Jacob Misiorowski,1247.0,N,pitcher,694819.0,MIL,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,161.1,35.0,14.0,0.0,236.0,18.0,0.0
 Owen Shelffo,SP,P Skenes,Paul Skenes,915.0,N,pitcher,694973.0,PIT,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,155.0,66.0,10.0,0.0,181.0,11.0,0.0
 Owen Shelffo,SP,L Webb,Logan Webb,760.0,N,pitcher,657277.0,SF,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,155.2,71.0,8.0,0.0,127.0,17.0,0.0
@@ -320,7 +320,7 @@ Patrick + Emily,DH/Utility,S Ohtani,Shohei Ohtani,1956.0,N,both,660271.0,LAD,139
 Patrick + Emily,SP,G Crochet,Garrett Crochet,168.0,Y,pitcher,676979.0,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,30.0,21.0,3.0,0.0,37.0,3.0,0.0
 Patrick + Emily,SP,T Skubal,Tarik Skubal,894.0,N,pitcher,669373.0,LAD,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,139.2,44.0,9.0,0.0,164.0,14.0,0.0
 Patrick + Emily,SP,J Ryan,Joe Ryan,750.0,N,pitcher,657746.0,MIN,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,129.2,53.0,6.0,0.0,145.0,11.0,0.0
-Patrick + Emily,SP,J DeGrom,Jacob deGrom,880.0,N,pitcher,594798.0,TEX,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,144.1,63.0,10.0,0.0,177.0,11.0,0.0
+Patrick + Emily,SP,J DeGrom,Jacob deGrom,901.0,N,pitcher,594798.0,TEX,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,146.1,63.0,10.0,0.0,182.0,11.0,0.0
 Patrick + Emily,SP,E Perez,Eury Pérez,775.0,N,pitcher,691587.0,MIA,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,139.1,61.0,7.0,0.0,150.0,11.0,0.0
 Patrick + Emily,SP,C Sanchez,Cristopher Sánchez,1203.0,N,pitcher,650911.0,PHI,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,187.1,58.0,17.0,0.0,210.0,20.0,0.0
 Patrick + Emily,SP,P Skenes,Paul Skenes,915.0,N,pitcher,694973.0,PIT,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,155.0,66.0,10.0,0.0,181.0,11.0,0.0
@@ -350,7 +350,7 @@ Casey Spilka,DH/Utility,S Ohtani,Shohei Ohtani,1956.0,N,both,660271.0,LAD,139.0,
 Casey Spilka,SP,G Crochet,Garrett Crochet,168.0,Y,pitcher,676979.0,,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,30.0,21.0,3.0,0.0,37.0,3.0,0.0
 Casey Spilka,SP,T Skubal,Tarik Skubal,894.0,N,pitcher,669373.0,LAD,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,139.2,44.0,9.0,0.0,164.0,14.0,0.0
 Casey Spilka,SP,J Ryan,Joe Ryan,750.0,N,pitcher,657746.0,MIN,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,129.2,53.0,6.0,0.0,145.0,11.0,0.0
-Casey Spilka,SP,L Gilbert,Logan Gilbert,955.0,N,pitcher,669302.0,SEA,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,167.0,68.0,11.0,0.0,181.0,12.0,0.0
+Casey Spilka,SP,L Gilbert,Logan Gilbert,958.0,N,pitcher,669302.0,SEA,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,168.0,70.0,11.0,0.0,183.0,12.0,0.0
 Casey Spilka,SP,M Gore,MacKenzie Gore,831.0,N,pitcher,669022.0,TEX,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,157.2,79.0,8.0,0.0,170.0,9.0,0.0
 Casey Spilka,SP,C Sanchez,Cristopher Sánchez,1203.0,N,pitcher,650911.0,PHI,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,187.1,58.0,17.0,0.0,210.0,20.0,0.0
 Casey Spilka,SP,P Skenes,Paul Skenes,915.0,N,pitcher,694973.0,PIT,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,155.0,66.0,10.0,0.0,181.0,11.0,0.0
@@ -591,7 +591,7 @@ Tim Horton,SP,G Crochet,Garrett Crochet,168.0,Y,pitcher,676979.0,,0.0,0.0,0.0,0.
 Tim Horton,SP,T Skubal,Tarik Skubal,894.0,N,pitcher,669373.0,LAD,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,139.2,44.0,9.0,0.0,164.0,14.0,0.0
 Tim Horton,SP,J Ryan,Joe Ryan,750.0,N,pitcher,657746.0,MIN,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,129.2,53.0,6.0,0.0,145.0,11.0,0.0
 Tim Horton,SP,Y Kikuchi,Yusei Kikuchi,233.0,N,pitcher,579328.0,LAA,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,49.0,27.0,1.0,0.0,49.0,3.0,0.0
-Tim Horton,SP,J DeGrom,Jacob deGrom,880.0,N,pitcher,594798.0,TEX,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,144.1,63.0,10.0,0.0,177.0,11.0,0.0
+Tim Horton,SP,J DeGrom,Jacob deGrom,901.0,N,pitcher,594798.0,TEX,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,146.1,63.0,10.0,0.0,182.0,11.0,0.0
 Tim Horton,SP,C Sanchez,Cristopher Sánchez,1203.0,N,pitcher,650911.0,PHI,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,187.1,58.0,17.0,0.0,210.0,20.0,0.0
 Tim Horton,SP,P Skenes,Paul Skenes,915.0,N,pitcher,694973.0,PIT,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,155.0,66.0,10.0,0.0,181.0,11.0,0.0
 Tim Horton,SP,L Webb,Logan Webb,760.0,N,pitcher,657277.0,SF,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,155.2,71.0,8.0,0.0,127.0,17.0,0.0
@@ -622,7 +622,7 @@ Zac Brittain,SP,P Skenes,Paul Skenes,915.0,N,pitcher,694973.0,PIT,0.0,0.0,0.0,0.
 Zac Brittain,SP,C Sanchez,Cristopher Sánchez,1203.0,N,pitcher,650911.0,PHI,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,187.1,58.0,17.0,0.0,210.0,20.0,0.0
 Zac Brittain,SP,C Sale,Chris Sale,1057.0,N,pitcher,519242.0,ATL,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,150.0,35.0,14.0,0.0,184.0,18.0,0.0
 Zac Brittain,SP,L Webb,Logan Webb,760.0,N,pitcher,657277.0,SF,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,155.2,71.0,8.0,0.0,127.0,17.0,0.0
-Zac Brittain,SP,J DeGrom,Jacob deGrom,880.0,N,pitcher,594798.0,TEX,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,144.1,63.0,10.0,0.0,177.0,11.0,0.0
+Zac Brittain,SP,J DeGrom,Jacob deGrom,901.0,N,pitcher,594798.0,TEX,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,146.1,63.0,10.0,0.0,182.0,11.0,0.0
 Zac Brittain,SP,E Perez,Eury Pérez,775.0,N,pitcher,691587.0,MIA,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,139.1,61.0,7.0,0.0,150.0,11.0,0.0
 Zac Brittain,SP,J Ryan,Joe Ryan,750.0,N,pitcher,657746.0,MIN,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,129.2,53.0,6.0,0.0,145.0,11.0,0.0
 Zac Brittain,RP,S Dominguez,Seranthony Domínguez,360.0,N,pitcher,622554.0,SEA,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,54.0,25.0,5.0,12.0,58.0,0.0,7.0
@@ -709,7 +709,7 @@ Trevor Maslowski,DH/Utility,Z Neto,Zach Neto,1296.0,N,hitter,687263.0,LAA,137.0,
 Trevor Maslowski,DH/Utility,S Ohtani,Shohei Ohtani,1956.0,N,both,660271.0,LAD,139.0,25.0,4.0,30.0,80.0,89.0,80.0,11.0,7.0,85.2,17.0,8.0,0.0,95.0,12.0,0.0
 Trevor Maslowski,SP,T Skubal,Tarik Skubal,894.0,N,pitcher,669373.0,LAD,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,139.2,44.0,9.0,0.0,164.0,14.0,0.0
 Trevor Maslowski,SP,J Ryan,Joe Ryan,750.0,N,pitcher,657746.0,MIN,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,129.2,53.0,6.0,0.0,145.0,11.0,0.0
-Trevor Maslowski,SP,J DeGrom,Jacob deGrom,880.0,N,pitcher,594798.0,TEX,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,144.1,63.0,10.0,0.0,177.0,11.0,0.0
+Trevor Maslowski,SP,J DeGrom,Jacob deGrom,901.0,N,pitcher,594798.0,TEX,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,146.1,63.0,10.0,0.0,182.0,11.0,0.0
 Trevor Maslowski,SP,S Imanaga,Shota Imanaga,826.0,N,pitcher,684007.0,CHC,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,156.1,68.0,9.0,0.0,152.0,12.0,0.0
 Trevor Maslowski,SP,C Burns,Chase Burns,968.0,N,pitcher,695505.0,CIN,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,148.1,45.0,15.0,0.0,176.0,11.0,0.0
 Trevor Maslowski,SP,P Skenes,Paul Skenes,915.0,N,pitcher,694973.0,PIT,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,155.0,66.0,10.0,0.0,181.0,11.0,0.0
@@ -771,7 +771,7 @@ Andrew Serio,SP,T Skubal,Tarik Skubal,894.0,N,pitcher,669373.0,LAD,0.0,0.0,0.0,0
 Andrew Serio,SP,P Skenes,Paul Skenes,915.0,N,pitcher,694973.0,PIT,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,155.0,66.0,10.0,0.0,181.0,11.0,0.0
 Andrew Serio,SP,L Webb,Logan Webb,760.0,N,pitcher,657277.0,SF,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,155.2,71.0,8.0,0.0,127.0,17.0,0.0
 Andrew Serio,SP,C Sanchez,Cristopher Sánchez,1203.0,N,pitcher,650911.0,PHI,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,187.1,58.0,17.0,0.0,210.0,20.0,0.0
-Andrew Serio,SP,J DeGrom,Jacob deGrom,880.0,N,pitcher,594798.0,TEX,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,144.1,63.0,10.0,0.0,177.0,11.0,0.0
+Andrew Serio,SP,J DeGrom,Jacob deGrom,901.0,N,pitcher,594798.0,TEX,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,146.1,63.0,10.0,0.0,182.0,11.0,0.0
 Andrew Serio,SP,E Perez,Eury Pérez,775.0,N,pitcher,691587.0,MIA,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,139.1,61.0,7.0,0.0,150.0,11.0,0.0
 Andrew Serio,SP,H Brown,Hunter Brown,528.0,N,pitcher,686613.0,HOU,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,92.0,36.0,5.0,0.0,100.0,7.0,0.0
 Andrew Serio,SP,C Sale,Chris Sale,1057.0,N,pitcher,519242.0,ATL,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,150.0,35.0,14.0,0.0,184.0,18.0,0.0
