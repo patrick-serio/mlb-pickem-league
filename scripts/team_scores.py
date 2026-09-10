@@ -24,7 +24,7 @@ STAT_COLUMNS = [
     "IP", "ER", "Wins", "Saves", "K", "QS", "Holds",
 ]
 
-# Last-10-games trend stats, for the Trends page hot/cold callouts.
+# Last-14-days trend stats, for the Trends page hot/cold callouts.
 TREND_COLUMNS = [
     "TrendPoints", "TrendAB", "TrendAVG", "TrendHR", "TrendRBI",
     "TrendIP", "TrendERA", "TrendWins", "TrendK",

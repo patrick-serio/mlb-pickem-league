@@ -8,7 +8,7 @@ team_scores.py) and writes three self-contained static HTML pages:
   docs/players.html  - every player's point total and the raw stat line
                         behind it, sortable by column
   docs/trends.html   - curated hot/cold callouts based on each player's
-                        last 10 games
+                        last 14 days
 
 All three are what GitHub Pages serves — no server, no build step, no JS
 framework beyond a tiny bit of vanilla JS for sorting/filtering. Re-running
@@ -272,7 +272,7 @@ def build_hitter_trend_card(row, hot: bool) -> str:
 
     css = "trend-card hot" if hot else "trend-card cold"
     icon = "🔥" if hot else "🥶"
-    blurb = f"Hitting {avg} with {hr} HR and {rbi} RBI over his last 10 games"
+    blurb = f"Hitting {avg} with {hr} HR and {rbi} RBI over his last 14 days"
 
     return f"""
         <div class="{css}">
@@ -294,7 +294,7 @@ def build_pitcher_trend_card(row, hot: bool) -> str:
 
     css = "trend-card hot" if hot else "trend-card cold"
     icon = "🔥" if hot else "🥶"
-    blurb = f"{k} Ks and a {era} ERA over his last 10 games"
+    blurb = f"{k} Ks and a {era} ERA over his last 14 days"
 
     return f"""
         <div class="{css}">
@@ -314,7 +314,7 @@ def build_trends_content(roster: pd.DataFrame) -> str:
     hitters = roster[ptype.isin(["hitter", "both"])].copy()
     pitchers = roster[ptype.isin(["pitcher", "both"])].copy()
 
-    # Only include players who actually appeared in their last 10 games —
+    # Only include players who actually appeared in their last 14 days —
     # otherwise someone injured the whole window would look like a cold streak.
     hitters["TrendAB"] = hitters.get("TrendAB", 0).apply(_safe_float) if "TrendAB" in hitters.columns else 0
     hitters = hitters[hitters["TrendAB"] > 0]
@@ -887,7 +887,7 @@ TRENDS_MAIN = """
 </main>
 
 <footer>
-  Based on each player's last 10 games. Refreshes automatically every day.
+  Based on each player's last 14 days. Refreshes automatically every day.
 </footer>
 
 </body>

@@ -3,6 +3,7 @@ import json
 import os
 import statsapi
 import requests
+from datetime import datetime, timedelta
 
 # =========================
 # 1. LOAD BACKEND DATA (PUBLISHED GOOGLE SHEETS CSV)
@@ -67,16 +68,22 @@ def get_stats(player_id, group):
         print(f"Stats error for ID {player_id}: {e}")
         return {}
 
-# Rolling "last N games" stats, for trend/hot-cold callouts — separate from
-# the season endpoint above, and not tied to a season year since it's just
-# the player's most recent games regardless of date.
-def get_recent_stats(player_id, group, limit=10):
+# Rolling "last N days" stats, for trend/hot-cold callouts — a real calendar
+# window rather than "last N appearances," which matters for two-way players
+# like Ohtani: his last 10 pitching *appearances* could span months if he
+# hasn't pitched recently, which would misleadingly show up as a hot streak.
+# A date range naturally returns nothing if he hasn't played in the window.
+def get_recent_stats(player_id, group, days=14):
     try:
         url = f"https://statsapi.mlb.com/api/v1/people/{player_id}/stats"
 
+        end_date = datetime.now()
+        start_date = end_date - timedelta(days=days)
+
         params = {
-            "stats": "lastXGames",
-            "limit": limit,
+            "stats": "byDateRange",
+            "startDate": start_date.strftime("%m/%d/%Y"),
+            "endDate": end_date.strftime("%m/%d/%Y"),
             "group": group,
         }
 
@@ -286,7 +293,7 @@ for i, row in df.iterrows():
             total_points += calculate_pitcher_points(pitching_stats, qs)
 
     # =========================
-    # RECENT FORM (LAST 10 GAMES) — for the trends page
+    # RECENT FORM (LAST 14 DAYS) — for the trends page
     # Quality starts aren't available on a rolling window from the API,
     # so recent pitcher points don't include the QS bonus (season points do).
     # =========================
@@ -295,12 +302,12 @@ for i, row in df.iterrows():
     trend_points = 0
 
     if player_type in ["hitter", "both"]:
-        recent_hitting = get_recent_stats(player_id, "hitting", limit=10)
+        recent_hitting = get_recent_stats(player_id, "hitting", days=14)
         if recent_hitting:
             trend_points += calculate_hitter_points(recent_hitting)
 
     if player_type in ["pitcher", "both"]:
-        recent_pitching = get_recent_stats(player_id, "pitching", limit=10)
+        recent_pitching = get_recent_stats(player_id, "pitching", days=14)
         if recent_pitching:
             trend_points += calculate_pitcher_points(recent_pitching, quality_starts=0)
 
