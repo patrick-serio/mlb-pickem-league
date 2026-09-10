@@ -272,7 +272,7 @@ def build_hitter_trend_card(row, hot: bool) -> str:
 
     css = "trend-card hot" if hot else "trend-card cold"
     icon = "🔥" if hot else "🥶"
-    blurb = f"Hitting {avg} with {hr} HR and {rbi} RBI over his last 14 days"
+    blurb = f"Hitting {avg} with {hr} HR and {rbi} RBI over the last 14 days"
 
     return f"""
         <div class="{css}">
