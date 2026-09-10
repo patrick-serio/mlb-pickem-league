@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+.DS_Store
+
+# Locally generated PDF — not needed in the repo, regenerate with run_all.py
+output/*.pdf

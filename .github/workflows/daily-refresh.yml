@@ -1,0 +1,38 @@
+name: Daily league refresh
+
+on:
+  schedule:
+    # 12:00 UTC = 8:00am ET / 7:00am CT. Adjust to taste.
+    - cron: "0 12 * * *"
+  workflow_dispatch: {}   # lets you trigger a run manually from the Actions tab
+
+permissions:
+  contents: write   # needed so the workflow can commit updated CSVs/HTML back
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run pipeline (stats pull -> scores -> dashboard)
+        run: python run_automated.py
+
+      - name: Commit and push updated data + dashboard
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Automated daily refresh"
+          file_pattern: >-
+            data/backend_updated.csv
+            data/team_scores.csv
+            data/team_rosters_updated.csv
+            docs/index.html

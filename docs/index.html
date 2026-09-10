@@ -1,0 +1,4695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fantasy Baseball League — Standings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #303444;
+    --navy-light: #454a60;
+    --gold: #D5A451;
+    --cream: #F6EFDF;
+    --cream-row: #EDE2C4;
+    --red: #D14B36;
+    --text: #22242E;
+    --white: #FFFFFF;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--cream);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.5;
+  }
+
+  header {
+    background: var(--navy);
+    color: var(--white);
+    padding: 2.5rem 1.5rem 2rem;
+  }
+
+  .header-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  h1 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 2.1rem;
+    margin: 0;
+    letter-spacing: 0.01em;
+  }
+
+  .updated {
+    color: var(--gold);
+    font-size: 0.9rem;
+    font-family: 'Inter', sans-serif;
+  }
+
+  main {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  h2 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: 1.3rem;
+    color: var(--navy);
+    margin: 0 0 1rem;
+    border-bottom: 3px solid var(--gold);
+    padding-bottom: 0.4rem;
+  }
+
+  section + section {
+    margin-top: 2.5rem;
+  }
+
+  ul.standings {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border: 1px solid var(--cream-row);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .standing-row {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.7rem 1rem;
+    background: var(--white);
+  }
+
+  .standing-row:nth-child(odd) {
+    background: var(--cream-row);
+  }
+
+  .rank {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--gold);
+    width: 1.6rem;
+    text-align: right;
+  }
+
+  .team-name {
+    flex: 1;
+    font-weight: 600;
+    color: var(--navy);
+    text-decoration: none;
+  }
+
+  .team-name:hover {
+    text-decoration: underline;
+  }
+
+  .pts {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .pts-label {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 0.8rem;
+    color: #6b6e7a;
+  }
+
+  .team-card {
+    background: var(--white);
+    border: 1px solid var(--cream-row);
+    border-radius: 6px;
+    margin-bottom: 0.75rem;
+    overflow: hidden;
+  }
+
+  .team-card summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.85rem 1.1rem;
+    cursor: pointer;
+    background: var(--navy);
+    color: var(--white);
+    font-family: 'Oswald', sans-serif;
+    list-style: none;
+  }
+
+  .team-card summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .summary-team {
+    font-weight: 600;
+    font-size: 1.05rem;
+  }
+
+  .summary-total {
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  .roster-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+  }
+
+  .roster-table th {
+    text-align: left;
+    background: var(--cream-row);
+    color: var(--navy);
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+  }
+
+  .roster-table td {
+    padding: 0.5rem 1rem;
+    border-top: 1px solid var(--cream-row);
+  }
+
+  .roster-row.injured td {
+    background: var(--red);
+    color: var(--white);
+  }
+
+  .injury-tag {
+    display: inline-block;
+    margin-left: 0.4rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    background: rgba(255,255,255,0.25);
+    padding: 0.05rem 0.35rem;
+    border-radius: 3px;
+  }
+
+  .score {
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+
+  footer {
+    text-align: center;
+    color: #8a8d99;
+    font-size: 0.8rem;
+    padding: 1.5rem;
+  }
+
+  @media (max-width: 480px) {
+    h1 { font-size: 1.6rem; }
+    .roster-table { font-size: 0.85rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <h1>Fantasy Baseball League</h1>
+    <span class="updated">Updated September 09, 2026 at 10:14 PM EDT</span>
+  </div>
+</header>
+
+<main>
+  <section>
+    <h2>Standings</h2>
+    <ul class="standings">
+      
+        <li class="standing-row">
+          <span class="rank">1</span>
+          <a class="team-name" href="#team-Patrick-+-Emily">Patrick + Emily</a>
+          <span class="pts">28699<span class="pts-label"> pts</span></span>
+        </li>
+
+        <li class="standing-row">
+          <span class="rank">2</span>
+          <a class="team-name" href="#team-Casey-Spilka">Casey Spilka</a>
+          <span class="pts">28169<span class="pts-label"> pts</span></span>
+        </li>
+
+        <li class="standing-row">
+          <span class="rank">3</span>
+          <a class="team-name" href="#team-Nate-Moggio">Nate Moggio</a>
+          <span class="pts">28112<span class="pts-label"> pts</span></span>
+        </li>
+
+        <li class="standing-row">
+          <span class="rank">4</span>
+          <a class="team-name" href="#team-Brandon-Zaikowski">Brandon Zaikowski</a>
+          <span class="pts">27969<span class="pts-label"> pts</span></span>
+        </li>
+
+        <li class="standing-row">
+          <span class="rank">5</span>
+          <a class="team-name" href="#team-Ben-Fowler">Ben Fowler</a>
+          <span class="pts">27857<span class="pts-label"> pts</span></span>
+        </li>
+
+        <li class="standing-row">
+          <span class="rank">6</span>
+          <a class="team-name" href="#team-Zac-Brittain">Zac Brittain</a>
+          <span class="pts">27608<span class="pts-label"> pts</span></span>
+        </li>
+
+        <li class="standing-row">
+          <span class="rank">7</span>
+          <a class="team-name" href="#team-Jake-Brittain">Jake Brittain</a>
+          <span class="pts">27592<span class="pts-label"> pts</span></span>
+        </li>
+
+        <li class="standing-row">
+          <span class="rank">8</span>
+          <a class="team-name" href="#team-Mike-Zisk">Mike Zisk</a>
+          <span class="pts">27508<span class="pts-label"> pts</span></span>
+        </li>
+
+        <li class="standing-row">
+          <span class="rank">9</span>
+          <a class="team-name" href="#team-Andrew-Serio">Andrew Serio</a>
+          <span class="pts">27001<span class="pts-label"> pts</span></span>
+        </li>
+
+        <li class="standing-row">
+          <span class="rank">10</span>
+          <a class="team-name" href="#team-Owen-Shelffo">Owen Shelffo</a>
+          <span class="pts">26592<span class="pts-label"> pts</span></span>
+        </li>
+
+        <li class="standing-row">
+          <span class="rank">11</span>
+          <a class="team-name" href="#team-Maxwell-Edwards">Maxwell Edwards</a>
+          <span class="pts">26545<span class="pts-label"> pts</span></span>
+        </li>
+
+        <li class="standing-row">
+          <span class="rank">12</span>
+          <a class="team-name" href="#team-Emily-Zaikowski">Emily Zaikowski</a>
+          <span class="pts">26455<span class="pts-label"> pts</span></span>
+        </li>
+
+        <li class="standing-row">
+          <span class="rank">13</span>
+          <a class="team-name" href="#team-Amy-Serio">Amy Serio</a>
+          <span class="pts">26419<span class="pts-label"> pts</span></span>
+        </li>
+
+        <li class="standing-row">
+          <span class="rank">14</span>
+          <a class="team-name" href="#team-Trevor-Maslowski">Trevor Maslowski</a>
+          <span class="pts">26334<span class="pts-label"> pts</span></span>
+        </li>
+
+        <li class="standing-row">
+          <span class="rank">15</span>
+          <a class="team-name" href="#team-Tim-Horton">Tim Horton</a>
+          <span class="pts">26010<span class="pts-label"> pts</span></span>
+        </li>
+
+        <li class="standing-row">
+          <span class="rank">16</span>
+          <a class="team-name" href="#team-Julie-Brittain">Julie Brittain</a>
+          <span class="pts">25972<span class="pts-label"> pts</span></span>
+        </li>
+
+        <li class="standing-row">
+          <span class="rank">17</span>
+          <a class="team-name" href="#team-Andrew-Sadowski">Andrew Sadowski</a>
+          <span class="pts">25681<span class="pts-label"> pts</span></span>
+        </li>
+
+        <li class="standing-row">
+          <span class="rank">18</span>
+          <a class="team-name" href="#team-Levi-Richards">Levi Richards</a>
+          <span class="pts">25477<span class="pts-label"> pts</span></span>
+        </li>
+
+        <li class="standing-row">
+          <span class="rank">19</span>
+          <a class="team-name" href="#team-Paul-Serio">Paul Serio</a>
+          <span class="pts">25232<span class="pts-label"> pts</span></span>
+        </li>
+
+        <li class="standing-row">
+          <span class="rank">20</span>
+          <a class="team-name" href="#team-Gabe-Selig">Gabe Selig</a>
+          <span class="pts">25050<span class="pts-label"> pts</span></span>
+        </li>
+
+        <li class="standing-row">
+          <span class="rank">21</span>
+          <a class="team-name" href="#team-Steve-Richards">Steve Richards</a>
+          <span class="pts">24993<span class="pts-label"> pts</span></span>
+        </li>
+
+        <li class="standing-row">
+          <span class="rank">22</span>
+          <a class="team-name" href="#team-Jamie-Horton">Jamie Horton</a>
+          <span class="pts">24877<span class="pts-label"> pts</span></span>
+        </li>
+
+        <li class="standing-row">
+          <span class="rank">23</span>
+          <a class="team-name" href="#team-Jason-Gouin">Jason Gouin</a>
+          <span class="pts">24596<span class="pts-label"> pts</span></span>
+        </li>
+
+        <li class="standing-row">
+          <span class="rank">24</span>
+          <a class="team-name" href="#team-Billy-Haber">Billy Haber</a>
+          <span class="pts">24174<span class="pts-label"> pts</span></span>
+        </li>
+
+        <li class="standing-row">
+          <span class="rank">25</span>
+          <a class="team-name" href="#team-Jack-Power">Jack Power</a>
+          <span class="pts">22644<span class="pts-label"> pts</span></span>
+        </li>
+
+        <li class="standing-row">
+          <span class="rank">26</span>
+          <a class="team-name" href="#team-Randy-Sherman">Randy Sherman</a>
+          <span class="pts">21358<span class="pts-label"> pts</span></span>
+        </li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Rosters</h2>
+    
+      <details class="team-card" id="team-Patrick-+-Emily">
+        <summary>
+          <span class="summary-team">Patrick + Emily</span>
+          <span class="summary-total">28699 pts</span>
+        </summary>
+        <table class="roster-table">
+          <thead>
+            <tr><th>Pos</th><th>Player</th><th>Score</th></tr>
+          </thead>
+          <tbody>
+            
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">Cal Raleigh </td>
+              <td class="score">725</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">Hunter Goodman </td>
+              <td class="score">1093</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">1B</td>
+              <td class="player">Vladimir Guerrero Jr. </td>
+              <td class="score">878</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">1B</td>
+              <td class="player">Nick Kurtz <span class="injury-tag">INJ</span></td>
+              <td class="score">1003</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Brice Turang </td>
+              <td class="score">1208</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Ketel Marte </td>
+              <td class="score">1006</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">Junior Caminero </td>
+              <td class="score">1340</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">José Ramírez </td>
+              <td class="score">944</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Bobby Witt Jr. </td>
+              <td class="score">1167</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Elly De La Cruz </td>
+              <td class="score">1183</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">Aaron Judge <span class="injury-tag">INJ</span></td>
+              <td class="score">622</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Yordan Alvarez </td>
+              <td class="score">1496</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Ronald Acuña Jr. </td>
+              <td class="score">764</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Juan Soto </td>
+              <td class="score">867</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Pete Crow-Armstrong </td>
+              <td class="score">1588</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Fernando Tatis Jr. </td>
+              <td class="score">1255</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Gunnar Henderson </td>
+              <td class="score">1133</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Shohei Ohtani </td>
+              <td class="score">1928</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Garrett Crochet <span class="injury-tag">INJ</span></td>
+              <td class="score">168</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Tarik Skubal </td>
+              <td class="score">824</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Joe Ryan <span class="injury-tag">INJ</span></td>
+              <td class="score">723</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Jacob deGrom </td>
+              <td class="score">830</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Eury Pérez </td>
+              <td class="score">758</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Cristopher Sánchez </td>
+              <td class="score">1160</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Paul Skenes </td>
+              <td class="score">877</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Logan Webb </td>
+              <td class="score">734</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Grant Taylor </td>
+              <td class="score">536</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Reid Detmers </td>
+              <td class="score">884</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Clayton Beeter </td>
+              <td class="score">318</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Kyle Leahy </td>
+              <td class="score">687</td>
+            </tr>
+          </tbody>
+        </table>
+      </details>
+
+      <details class="team-card" id="team-Casey-Spilka">
+        <summary>
+          <span class="summary-team">Casey Spilka</span>
+          <span class="summary-total">28169 pts</span>
+        </summary>
+        <table class="roster-table">
+          <thead>
+            <tr><th>Pos</th><th>Player</th><th>Score</th></tr>
+          </thead>
+          <tbody>
+            
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">Agustín Ramírez </td>
+              <td class="score">335</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">Hunter Goodman </td>
+              <td class="score">1093</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">1B</td>
+              <td class="player">Vladimir Guerrero Jr. </td>
+              <td class="score">878</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">1B</td>
+              <td class="player">Nick Kurtz <span class="injury-tag">INJ</span></td>
+              <td class="score">1003</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Jose Altuve </td>
+              <td class="score">820</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Brice Turang </td>
+              <td class="score">1208</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">José Ramírez </td>
+              <td class="score">944</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">Manny Machado </td>
+              <td class="score">1064</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Bobby Witt Jr. </td>
+              <td class="score">1167</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Elly De La Cruz </td>
+              <td class="score">1183</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">Aaron Judge <span class="injury-tag">INJ</span></td>
+              <td class="score">622</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Ronald Acuña Jr. </td>
+              <td class="score">764</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Juan Soto </td>
+              <td class="score">867</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">James Wood <span class="injury-tag">INJ</span></td>
+              <td class="score">1337</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Pete Crow-Armstrong </td>
+              <td class="score">1588</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Corbin Carroll </td>
+              <td class="score">1265</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Gunnar Henderson </td>
+              <td class="score">1133</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Shohei Ohtani </td>
+              <td class="score">1928</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Garrett Crochet <span class="injury-tag">INJ</span></td>
+              <td class="score">168</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Tarik Skubal </td>
+              <td class="score">824</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Joe Ryan <span class="injury-tag">INJ</span></td>
+              <td class="score">723</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Logan Gilbert </td>
+              <td class="score">911</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">MacKenzie Gore </td>
+              <td class="score">804</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Cristopher Sánchez </td>
+              <td class="score">1160</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Paul Skenes </td>
+              <td class="score">877</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Logan Webb </td>
+              <td class="score">734</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Ian Seymour </td>
+              <td class="score">695</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Erick Fedde </td>
+              <td class="score">503</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Reid Detmers </td>
+              <td class="score">884</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Kyle Leahy </td>
+              <td class="score">687</td>
+            </tr>
+          </tbody>
+        </table>
+      </details>
+
+      <details class="team-card" id="team-Nate-Moggio">
+        <summary>
+          <span class="summary-team">Nate Moggio</span>
+          <span class="summary-total">28112 pts</span>
+        </summary>
+        <table class="roster-table">
+          <thead>
+            <tr><th>Pos</th><th>Player</th><th>Score</th></tr>
+          </thead>
+          <tbody>
+            
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">Cal Raleigh </td>
+              <td class="score">725</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">Hunter Goodman </td>
+              <td class="score">1093</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">1B</td>
+              <td class="player">Vladimir Guerrero Jr. </td>
+              <td class="score">878</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">1B</td>
+              <td class="player">Nick Kurtz <span class="injury-tag">INJ</span></td>
+              <td class="score">1003</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Luke Keaschall </td>
+              <td class="score">982</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Ketel Marte </td>
+              <td class="score">1006</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">José Ramírez </td>
+              <td class="score">944</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">Alex Bregman </td>
+              <td class="score">1215</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Bobby Witt Jr. </td>
+              <td class="score">1167</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Elly De La Cruz </td>
+              <td class="score">1183</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Jarren Duran </td>
+              <td class="score">948</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">Aaron Judge <span class="injury-tag">INJ</span></td>
+              <td class="score">622</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Ronald Acuña Jr. </td>
+              <td class="score">764</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Juan Soto </td>
+              <td class="score">867</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Jackson Chourio </td>
+              <td class="score">998</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Fernando Tatis Jr. </td>
+              <td class="score">1255</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">CJ Abrams </td>
+              <td class="score">1328</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Shohei Ohtani </td>
+              <td class="score">1928</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Trevor Rogers </td>
+              <td class="score">680</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Tarik Skubal </td>
+              <td class="score">824</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Hunter Brown </td>
+              <td class="score">461</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Nathan Eovaldi <span class="injury-tag">INJ</span></td>
+              <td class="score">728</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Sandy Alcantara </td>
+              <td class="score">940</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Cristopher Sánchez </td>
+              <td class="score">1160</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Paul Skenes </td>
+              <td class="score">877</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Logan Webb </td>
+              <td class="score">734</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Ian Seymour </td>
+              <td class="score">695</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Grant Taylor </td>
+              <td class="score">536</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Reid Detmers </td>
+              <td class="score">884</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Kyle Leahy </td>
+              <td class="score">687</td>
+            </tr>
+          </tbody>
+        </table>
+      </details>
+
+      <details class="team-card" id="team-Brandon-Zaikowski">
+        <summary>
+          <span class="summary-team">Brandon Zaikowski</span>
+          <span class="summary-total">27969 pts</span>
+        </summary>
+        <table class="roster-table">
+          <thead>
+            <tr><th>Pos</th><th>Player</th><th>Score</th></tr>
+          </thead>
+          <tbody>
+            
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">Cal Raleigh </td>
+              <td class="score">725</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">Hunter Goodman </td>
+              <td class="score">1093</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">1B</td>
+              <td class="player">Pete Alonso </td>
+              <td class="score">1311</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">1B</td>
+              <td class="player">Vladimir Guerrero Jr. </td>
+              <td class="score">878</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Brice Turang </td>
+              <td class="score">1208</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Ketel Marte </td>
+              <td class="score">1006</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">Junior Caminero </td>
+              <td class="score">1340</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">José Ramírez </td>
+              <td class="score">944</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Bobby Witt Jr. </td>
+              <td class="score">1167</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Elly De La Cruz </td>
+              <td class="score">1183</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">Aaron Judge <span class="injury-tag">INJ</span></td>
+              <td class="score">622</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Yordan Alvarez </td>
+              <td class="score">1496</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Ronald Acuña Jr. </td>
+              <td class="score">764</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Juan Soto </td>
+              <td class="score">867</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">James Wood <span class="injury-tag">INJ</span></td>
+              <td class="score">1337</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Fernando Tatis Jr. </td>
+              <td class="score">1255</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Nick Kurtz <span class="injury-tag">INJ</span></td>
+              <td class="score">1003</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Shohei Ohtani </td>
+              <td class="score">1928</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Garrett Crochet <span class="injury-tag">INJ</span></td>
+              <td class="score">168</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Tarik Skubal </td>
+              <td class="score">824</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Joe Ryan <span class="injury-tag">INJ</span></td>
+              <td class="score">723</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">MacKenzie Gore </td>
+              <td class="score">804</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Cristopher Sánchez </td>
+              <td class="score">1160</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Paul Skenes </td>
+              <td class="score">877</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Logan Webb </td>
+              <td class="score">734</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Sandy Alcantara </td>
+              <td class="score">940</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Seranthony Domínguez </td>
+              <td class="score">345</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Reid Detmers </td>
+              <td class="score">884</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">JoJo Romero </td>
+              <td class="score">255</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Daniel Palencia </td>
+              <td class="score">128</td>
+            </tr>
+          </tbody>
+        </table>
+      </details>
+
+      <details class="team-card" id="team-Ben-Fowler">
+        <summary>
+          <span class="summary-team">Ben Fowler</span>
+          <span class="summary-total">27857 pts</span>
+        </summary>
+        <table class="roster-table">
+          <thead>
+            <tr><th>Pos</th><th>Player</th><th>Score</th></tr>
+          </thead>
+          <tbody>
+            
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">Cal Raleigh </td>
+              <td class="score">725</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">Hunter Goodman </td>
+              <td class="score">1093</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">1B</td>
+              <td class="player">Vladimir Guerrero Jr. </td>
+              <td class="score">878</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">1B</td>
+              <td class="player">Nick Kurtz <span class="injury-tag">INJ</span></td>
+              <td class="score">1003</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Brice Turang </td>
+              <td class="score">1208</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Ketel Marte </td>
+              <td class="score">1006</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">José Ramírez </td>
+              <td class="score">944</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">Alex Bregman </td>
+              <td class="score">1215</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Gunnar Henderson </td>
+              <td class="score">1133</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Bobby Witt Jr. </td>
+              <td class="score">1167</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">Aaron Judge <span class="injury-tag">INJ</span></td>
+              <td class="score">622</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Brandon Nimmo </td>
+              <td class="score">1006</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Ronald Acuña Jr. </td>
+              <td class="score">764</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Juan Soto </td>
+              <td class="score">867</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">James Wood <span class="injury-tag">INJ</span></td>
+              <td class="score">1337</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Fernando Tatis Jr. </td>
+              <td class="score">1255</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Elly De La Cruz </td>
+              <td class="score">1183</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Shohei Ohtani </td>
+              <td class="score">1928</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Garrett Crochet <span class="injury-tag">INJ</span></td>
+              <td class="score">168</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Tarik Skubal </td>
+              <td class="score">824</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Joe Ryan <span class="injury-tag">INJ</span></td>
+              <td class="score">723</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Hunter Brown </td>
+              <td class="score">461</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Eury Pérez </td>
+              <td class="score">758</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Cristopher Sánchez </td>
+              <td class="score">1160</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Paul Skenes </td>
+              <td class="score">877</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Logan Webb </td>
+              <td class="score">734</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Nick Martinez </td>
+              <td class="score">711</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Grant Taylor </td>
+              <td class="score">536</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Reid Detmers </td>
+              <td class="score">884</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Kyle Leahy </td>
+              <td class="score">687</td>
+            </tr>
+          </tbody>
+        </table>
+      </details>
+
+      <details class="team-card" id="team-Zac-Brittain">
+        <summary>
+          <span class="summary-team">Zac Brittain</span>
+          <span class="summary-total">27608 pts</span>
+        </summary>
+        <table class="roster-table">
+          <thead>
+            <tr><th>Pos</th><th>Player</th><th>Score</th></tr>
+          </thead>
+          <tbody>
+            
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">Cal Raleigh </td>
+              <td class="score">725</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">Hunter Goodman </td>
+              <td class="score">1093</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">1B</td>
+              <td class="player">Vladimir Guerrero Jr. </td>
+              <td class="score">878</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">1B</td>
+              <td class="player">Nick Kurtz <span class="injury-tag">INJ</span></td>
+              <td class="score">1003</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Ketel Marte </td>
+              <td class="score">1006</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Nico Hoerner </td>
+              <td class="score">1031</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">Junior Caminero </td>
+              <td class="score">1340</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">Eugenio Suárez </td>
+              <td class="score">759</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Gunnar Henderson </td>
+              <td class="score">1133</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Bobby Witt Jr. </td>
+              <td class="score">1167</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">Aaron Judge <span class="injury-tag">INJ</span></td>
+              <td class="score">622</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Juan Soto </td>
+              <td class="score">867</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Mike Trout </td>
+              <td class="score">1100</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">James Wood <span class="injury-tag">INJ</span></td>
+              <td class="score">1337</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Roman Anthony </td>
+              <td class="score">237</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Fernando Tatis Jr. </td>
+              <td class="score">1255</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Shohei Ohtani </td>
+              <td class="score">1928</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Yordan Alvarez </td>
+              <td class="score">1496</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Tarik Skubal </td>
+              <td class="score">824</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Paul Skenes </td>
+              <td class="score">877</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Cristopher Sánchez </td>
+              <td class="score">1160</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Chris Sale </td>
+              <td class="score">1014</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Logan Webb </td>
+              <td class="score">734</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Jacob deGrom </td>
+              <td class="score">830</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Eury Pérez </td>
+              <td class="score">758</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Joe Ryan <span class="injury-tag">INJ</span></td>
+              <td class="score">723</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Seranthony Domínguez </td>
+              <td class="score">345</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Riley O&#x27;Brien </td>
+              <td class="score">441</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Abner Uribe </td>
+              <td class="score">342</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Cade Smith </td>
+              <td class="score">583</td>
+            </tr>
+          </tbody>
+        </table>
+      </details>
+
+      <details class="team-card" id="team-Jake-Brittain">
+        <summary>
+          <span class="summary-team">Jake Brittain</span>
+          <span class="summary-total">27592 pts</span>
+        </summary>
+        <table class="roster-table">
+          <thead>
+            <tr><th>Pos</th><th>Player</th><th>Score</th></tr>
+          </thead>
+          <tbody>
+            
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">Cal Raleigh </td>
+              <td class="score">725</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">Hunter Goodman </td>
+              <td class="score">1093</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">1B</td>
+              <td class="player">Vladimir Guerrero Jr. </td>
+              <td class="score">878</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">1B</td>
+              <td class="player">Nick Kurtz <span class="injury-tag">INJ</span></td>
+              <td class="score">1003</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Nico Hoerner </td>
+              <td class="score">1031</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Ketel Marte </td>
+              <td class="score">1006</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">Miguel Vargas </td>
+              <td class="score">1334</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">José Ramírez </td>
+              <td class="score">944</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Gunnar Henderson </td>
+              <td class="score">1133</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Bobby Witt Jr. </td>
+              <td class="score">1167</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">Aaron Judge <span class="injury-tag">INJ</span></td>
+              <td class="score">622</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Jakob Marsee </td>
+              <td class="score">920</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Juan Soto </td>
+              <td class="score">867</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">James Wood <span class="injury-tag">INJ</span></td>
+              <td class="score">1337</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Jackson Chourio </td>
+              <td class="score">998</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Alec Burleson </td>
+              <td class="score">1235</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Yordan Alvarez </td>
+              <td class="score">1496</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Shohei Ohtani </td>
+              <td class="score">1928</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Garrett Crochet <span class="injury-tag">INJ</span></td>
+              <td class="score">168</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Tarik Skubal </td>
+              <td class="score">824</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Joe Ryan <span class="injury-tag">INJ</span></td>
+              <td class="score">723</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">José Soriano </td>
+              <td class="score">832</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Nathan Eovaldi <span class="injury-tag">INJ</span></td>
+              <td class="score">728</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Chase Burns </td>
+              <td class="score">944</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Paul Skenes </td>
+              <td class="score">877</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Logan Webb </td>
+              <td class="score">734</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">RP</td>
+              <td class="player">Griffin Jax <span class="injury-tag">INJ</span></td>
+              <td class="score">508</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Raisel Iglesias </td>
+              <td class="score">411</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Jhoan Duran </td>
+              <td class="score">486</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Mason Miller </td>
+              <td class="score">640</td>
+            </tr>
+          </tbody>
+        </table>
+      </details>
+
+      <details class="team-card" id="team-Mike-Zisk">
+        <summary>
+          <span class="summary-team">Mike Zisk</span>
+          <span class="summary-total">27508 pts</span>
+        </summary>
+        <table class="roster-table">
+          <thead>
+            <tr><th>Pos</th><th>Player</th><th>Score</th></tr>
+          </thead>
+          <tbody>
+            
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">Cal Raleigh </td>
+              <td class="score">725</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">Hunter Goodman </td>
+              <td class="score">1093</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">1B</td>
+              <td class="player">Vladimir Guerrero Jr. </td>
+              <td class="score">878</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">1B</td>
+              <td class="player">Nick Kurtz <span class="injury-tag">INJ</span></td>
+              <td class="score">1003</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Brice Turang </td>
+              <td class="score">1208</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Ketel Marte </td>
+              <td class="score">1006</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">Junior Caminero </td>
+              <td class="score">1340</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">José Ramírez </td>
+              <td class="score">944</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Bobby Witt Jr. </td>
+              <td class="score">1167</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Elly De La Cruz </td>
+              <td class="score">1183</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">Aaron Judge <span class="injury-tag">INJ</span></td>
+              <td class="score">622</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Ronald Acuña Jr. </td>
+              <td class="score">764</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Juan Soto </td>
+              <td class="score">867</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">James Wood <span class="injury-tag">INJ</span></td>
+              <td class="score">1337</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Pete Crow-Armstrong </td>
+              <td class="score">1588</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Fernando Tatis Jr. </td>
+              <td class="score">1255</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Gunnar Henderson </td>
+              <td class="score">1133</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Shohei Ohtani </td>
+              <td class="score">1928</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Garrett Crochet <span class="injury-tag">INJ</span></td>
+              <td class="score">168</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Tarik Skubal </td>
+              <td class="score">824</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Joe Ryan <span class="injury-tag">INJ</span></td>
+              <td class="score">723</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Hunter Brown </td>
+              <td class="score">461</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">MacKenzie Gore </td>
+              <td class="score">804</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Cristopher Sánchez </td>
+              <td class="score">1160</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Paul Skenes </td>
+              <td class="score">877</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Logan Webb </td>
+              <td class="score">734</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Seranthony Domínguez </td>
+              <td class="score">345</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Reid Detmers </td>
+              <td class="score">884</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">RP</td>
+              <td class="player">Pete Fairbanks <span class="injury-tag">INJ</span></td>
+              <td class="score">325</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">RP</td>
+              <td class="player">Matt Svanson <span class="injury-tag">INJ</span></td>
+              <td class="score">162</td>
+            </tr>
+          </tbody>
+        </table>
+      </details>
+
+      <details class="team-card" id="team-Andrew-Serio">
+        <summary>
+          <span class="summary-team">Andrew Serio</span>
+          <span class="summary-total">27001 pts</span>
+        </summary>
+        <table class="roster-table">
+          <thead>
+            <tr><th>Pos</th><th>Player</th><th>Score</th></tr>
+          </thead>
+          <tbody>
+            
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">Cal Raleigh </td>
+              <td class="score">725</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">Hunter Goodman </td>
+              <td class="score">1093</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">1B</td>
+              <td class="player">Nick Kurtz <span class="injury-tag">INJ</span></td>
+              <td class="score">1003</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">1B</td>
+              <td class="player">Vladimir Guerrero Jr. </td>
+              <td class="score">878</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Brice Turang </td>
+              <td class="score">1208</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Luke Keaschall </td>
+              <td class="score">982</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">Junior Caminero </td>
+              <td class="score">1340</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">José Ramírez </td>
+              <td class="score">944</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Bobby Witt Jr. </td>
+              <td class="score">1167</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Gunnar Henderson </td>
+              <td class="score">1133</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">Aaron Judge <span class="injury-tag">INJ</span></td>
+              <td class="score">622</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Roman Anthony </td>
+              <td class="score">237</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Juan Soto </td>
+              <td class="score">867</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Corbin Carroll </td>
+              <td class="score">1265</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Fernando Tatis Jr. </td>
+              <td class="score">1255</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">James Wood <span class="injury-tag">INJ</span></td>
+              <td class="score">1337</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Elly De La Cruz </td>
+              <td class="score">1183</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Shohei Ohtani </td>
+              <td class="score">1928</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Tarik Skubal </td>
+              <td class="score">824</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Paul Skenes </td>
+              <td class="score">877</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Logan Webb </td>
+              <td class="score">734</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Cristopher Sánchez </td>
+              <td class="score">1160</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Jacob deGrom </td>
+              <td class="score">830</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Eury Pérez </td>
+              <td class="score">758</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Hunter Brown </td>
+              <td class="score">461</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Chris Sale </td>
+              <td class="score">1014</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Grant Taylor </td>
+              <td class="score">536</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Ben Joyce </td>
+              <td class="score">71</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Riley O&#x27;Brien </td>
+              <td class="score">441</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Daniel Palencia </td>
+              <td class="score">128</td>
+            </tr>
+          </tbody>
+        </table>
+      </details>
+
+      <details class="team-card" id="team-Owen-Shelffo">
+        <summary>
+          <span class="summary-team">Owen Shelffo</span>
+          <span class="summary-total">26592 pts</span>
+        </summary>
+        <table class="roster-table">
+          <thead>
+            <tr><th>Pos</th><th>Player</th><th>Score</th></tr>
+          </thead>
+          <tbody>
+            
+            <tr class="roster-row injured">
+              <td class="pos">C</td>
+              <td class="player">Shea Langeliers <span class="injury-tag">INJ</span></td>
+              <td class="score">852</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">Hunter Goodman </td>
+              <td class="score">1093</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">1B</td>
+              <td class="player">Michael Busch </td>
+              <td class="score">1111</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">1B</td>
+              <td class="player">Sal Stewart </td>
+              <td class="score">1314</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">2B</td>
+              <td class="player">Xavier Edwards <span class="injury-tag">INJ</span></td>
+              <td class="score">1041</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Ketel Marte </td>
+              <td class="score">1006</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">Junior Caminero </td>
+              <td class="score">1340</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">José Ramírez </td>
+              <td class="score">944</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Bobby Witt Jr. </td>
+              <td class="score">1167</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Zach Neto </td>
+              <td class="score">1207</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">Aaron Judge <span class="injury-tag">INJ</span></td>
+              <td class="score">622</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">George Springer </td>
+              <td class="score">833</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Wyatt Langford </td>
+              <td class="score">744</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Ronald Acuña Jr. </td>
+              <td class="score">764</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Juan Soto </td>
+              <td class="score">867</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">James Wood <span class="injury-tag">INJ</span></td>
+              <td class="score">1337</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Colson Montgomery </td>
+              <td class="score">1028</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Shohei Ohtani </td>
+              <td class="score">1928</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Garrett Crochet <span class="injury-tag">INJ</span></td>
+              <td class="score">168</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Tarik Skubal </td>
+              <td class="score">824</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Joe Ryan <span class="injury-tag">INJ</span></td>
+              <td class="score">723</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Hunter Brown </td>
+              <td class="score">461</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Logan Gilbert </td>
+              <td class="score">911</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Jacob Misiorowski </td>
+              <td class="score">1187</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Paul Skenes </td>
+              <td class="score">877</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Logan Webb </td>
+              <td class="score">734</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">RP</td>
+              <td class="player">Ryan Helsley <span class="injury-tag">INJ</span></td>
+              <td class="score">128</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Jhoan Duran </td>
+              <td class="score">486</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">JoJo Romero </td>
+              <td class="score">255</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Mason Miller </td>
+              <td class="score">640</td>
+            </tr>
+          </tbody>
+        </table>
+      </details>
+
+      <details class="team-card" id="team-Maxwell-Edwards">
+        <summary>
+          <span class="summary-team">Maxwell Edwards</span>
+          <span class="summary-total">26545 pts</span>
+        </summary>
+        <table class="roster-table">
+          <thead>
+            <tr><th>Pos</th><th>Player</th><th>Score</th></tr>
+          </thead>
+          <tbody>
+            
+            <tr class="roster-row injured">
+              <td class="pos">C</td>
+              <td class="player">Shea Langeliers <span class="injury-tag">INJ</span></td>
+              <td class="score">852</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">Hunter Goodman </td>
+              <td class="score">1093</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">1B</td>
+              <td class="player">Vladimir Guerrero Jr. </td>
+              <td class="score">878</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">1B</td>
+              <td class="player">Munetaka Murakami </td>
+              <td class="score">992</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Nico Hoerner </td>
+              <td class="score">1031</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Ketel Marte </td>
+              <td class="score">1006</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">Junior Caminero </td>
+              <td class="score">1340</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">José Ramírez </td>
+              <td class="score">944</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Gunnar Henderson </td>
+              <td class="score">1133</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">CJ Abrams </td>
+              <td class="score">1328</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">Aaron Judge <span class="injury-tag">INJ</span></td>
+              <td class="score">622</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Jo Adell </td>
+              <td class="score">997</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Julio Rodriguez </td>
+              <td class="score">1005</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Wyatt Langford </td>
+              <td class="score">744</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Kyle Stowers </td>
+              <td class="score">829</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Juan Soto </td>
+              <td class="score">867</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Yordan Alvarez </td>
+              <td class="score">1496</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Shohei Ohtani </td>
+              <td class="score">1928</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Garrett Crochet <span class="injury-tag">INJ</span></td>
+              <td class="score">168</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Tarik Skubal </td>
+              <td class="score">824</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Cole Ragans <span class="injury-tag">INJ</span></td>
+              <td class="score">204</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Joe Ryan <span class="injury-tag">INJ</span></td>
+              <td class="score">723</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Cristopher Sánchez </td>
+              <td class="score">1160</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Jacob Misiorowski </td>
+              <td class="score">1187</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Paul Skenes </td>
+              <td class="score">877</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Logan Webb </td>
+              <td class="score">734</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Raisel Iglesias </td>
+              <td class="score">411</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Emilio Pagán </td>
+              <td class="score">277</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">JoJo Romero </td>
+              <td class="score">255</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Mason Miller </td>
+              <td class="score">640</td>
+            </tr>
+          </tbody>
+        </table>
+      </details>
+
+      <details class="team-card" id="team-Emily-Zaikowski">
+        <summary>
+          <span class="summary-team">Emily Zaikowski</span>
+          <span class="summary-total">26455 pts</span>
+        </summary>
+        <table class="roster-table">
+          <thead>
+            <tr><th>Pos</th><th>Player</th><th>Score</th></tr>
+          </thead>
+          <tbody>
+            
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">Cal Raleigh </td>
+              <td class="score">725</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">William Contreras </td>
+              <td class="score">1004</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">1B</td>
+              <td class="player">Pete Alonso </td>
+              <td class="score">1311</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">1B</td>
+              <td class="player">Nick Kurtz <span class="injury-tag">INJ</span></td>
+              <td class="score">1003</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Ozzie Albies </td>
+              <td class="score">1049</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Ketel Marte </td>
+              <td class="score">1006</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">Junior Caminero </td>
+              <td class="score">1340</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">José Ramírez </td>
+              <td class="score">944</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Bobby Witt Jr. </td>
+              <td class="score">1167</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Elly De La Cruz </td>
+              <td class="score">1183</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">Aaron Judge <span class="injury-tag">INJ</span></td>
+              <td class="score">622</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Yordan Alvarez </td>
+              <td class="score">1496</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Mike Trout </td>
+              <td class="score">1100</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Juan Soto </td>
+              <td class="score">867</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">James Wood <span class="injury-tag">INJ</span></td>
+              <td class="score">1337</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Fernando Tatis Jr. </td>
+              <td class="score">1255</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Vladimir Guerrero Jr. </td>
+              <td class="score">878</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Shohei Ohtani </td>
+              <td class="score">1928</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Garrett Crochet <span class="injury-tag">INJ</span></td>
+              <td class="score">168</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Shane Smith <span class="injury-tag">INJ</span></td>
+              <td class="score">28</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Tarik Skubal </td>
+              <td class="score">824</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Joe Ryan <span class="injury-tag">INJ</span></td>
+              <td class="score">723</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">MacKenzie Gore </td>
+              <td class="score">804</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Cristopher Sánchez </td>
+              <td class="score">1160</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Paul Skenes </td>
+              <td class="score">877</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Logan Webb </td>
+              <td class="score">734</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">RP</td>
+              <td class="player">Pete Fairbanks <span class="injury-tag">INJ</span></td>
+              <td class="score">325</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Daniel Palencia </td>
+              <td class="score">128</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">JoJo Romero </td>
+              <td class="score">255</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Victor Vodnik </td>
+              <td class="score">214</td>
+            </tr>
+          </tbody>
+        </table>
+      </details>
+
+      <details class="team-card" id="team-Amy-Serio">
+        <summary>
+          <span class="summary-team">Amy Serio</span>
+          <span class="summary-total">26419 pts</span>
+        </summary>
+        <table class="roster-table">
+          <thead>
+            <tr><th>Pos</th><th>Player</th><th>Score</th></tr>
+          </thead>
+          <tbody>
+            
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">Cal Raleigh </td>
+              <td class="score">725</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">Hunter Goodman </td>
+              <td class="score">1093</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">1B</td>
+              <td class="player">Vladimir Guerrero Jr. </td>
+              <td class="score">878</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">1B</td>
+              <td class="player">Matt Olson </td>
+              <td class="score">1314</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Jose Altuve </td>
+              <td class="score">820</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Ketel Marte </td>
+              <td class="score">1006</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">Junior Caminero </td>
+              <td class="score">1340</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">Alex Bregman </td>
+              <td class="score">1215</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Bobby Witt Jr. </td>
+              <td class="score">1167</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Elly De La Cruz </td>
+              <td class="score">1183</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">Aaron Judge <span class="injury-tag">INJ</span></td>
+              <td class="score">622</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">Brent Rooker <span class="injury-tag">INJ</span></td>
+              <td class="score">359</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Juan Soto </td>
+              <td class="score">867</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">James Wood <span class="injury-tag">INJ</span></td>
+              <td class="score">1337</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Jackson Chourio </td>
+              <td class="score">998</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Fernando Tatis Jr. </td>
+              <td class="score">1255</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">José Ramírez </td>
+              <td class="score">944</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Shohei Ohtani </td>
+              <td class="score">1928</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Trevor Rogers </td>
+              <td class="score">680</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Garrett Crochet <span class="injury-tag">INJ</span></td>
+              <td class="score">168</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Tarik Skubal </td>
+              <td class="score">824</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">José Soriano </td>
+              <td class="score">832</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Nathan Eovaldi <span class="injury-tag">INJ</span></td>
+              <td class="score">728</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Cristopher Sánchez </td>
+              <td class="score">1160</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Paul Skenes </td>
+              <td class="score">877</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Logan Webb </td>
+              <td class="score">734</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Seranthony Domínguez </td>
+              <td class="score">345</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Taylor Rogers </td>
+              <td class="score">254</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">RP</td>
+              <td class="player">Pete Fairbanks <span class="injury-tag">INJ</span></td>
+              <td class="score">325</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Riley O&#x27;Brien </td>
+              <td class="score">441</td>
+            </tr>
+          </tbody>
+        </table>
+      </details>
+
+      <details class="team-card" id="team-Trevor-Maslowski">
+        <summary>
+          <span class="summary-team">Trevor Maslowski</span>
+          <span class="summary-total">26334 pts</span>
+        </summary>
+        <table class="roster-table">
+          <thead>
+            <tr><th>Pos</th><th>Player</th><th>Score</th></tr>
+          </thead>
+          <tbody>
+            
+            <tr class="roster-row injured">
+              <td class="pos">C</td>
+              <td class="player">Shea Langeliers <span class="injury-tag">INJ</span></td>
+              <td class="score">852</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">Cal Raleigh </td>
+              <td class="score">725</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">1B</td>
+              <td class="player">Pete Alonso </td>
+              <td class="score">1311</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">1B</td>
+              <td class="player">Vladimir Guerrero Jr. </td>
+              <td class="score">878</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Otto Lopez </td>
+              <td class="score">1187</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Brice Turang </td>
+              <td class="score">1208</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">Junior Caminero </td>
+              <td class="score">1340</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">José Ramírez </td>
+              <td class="score">944</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Colson Montgomery </td>
+              <td class="score">1028</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Bobby Witt Jr. </td>
+              <td class="score">1167</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Roman Anthony </td>
+              <td class="score">237</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">Aaron Judge <span class="injury-tag">INJ</span></td>
+              <td class="score">622</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Yordan Alvarez </td>
+              <td class="score">1496</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Ronald Acuña Jr. </td>
+              <td class="score">764</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Juan Soto </td>
+              <td class="score">867</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">James Wood <span class="injury-tag">INJ</span></td>
+              <td class="score">1337</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Zach Neto </td>
+              <td class="score">1207</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Shohei Ohtani </td>
+              <td class="score">1928</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Tarik Skubal </td>
+              <td class="score">824</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Joe Ryan <span class="injury-tag">INJ</span></td>
+              <td class="score">723</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Jacob deGrom </td>
+              <td class="score">830</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Shota Imanaga </td>
+              <td class="score">789</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Chase Burns </td>
+              <td class="score">944</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Paul Skenes </td>
+              <td class="score">877</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Zac Gallen <span class="injury-tag">INJ</span></td>
+              <td class="score">300</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Kyle Freeland <span class="injury-tag">INJ</span></td>
+              <td class="score">458</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Jhoan Duran </td>
+              <td class="score">486</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">JoJo Romero </td>
+              <td class="score">255</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Mason Miller </td>
+              <td class="score">640</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Ryan Walker </td>
+              <td class="score">110</td>
+            </tr>
+          </tbody>
+        </table>
+      </details>
+
+      <details class="team-card" id="team-Tim-Horton">
+        <summary>
+          <span class="summary-team">Tim Horton</span>
+          <span class="summary-total">26010 pts</span>
+        </summary>
+        <table class="roster-table">
+          <thead>
+            <tr><th>Pos</th><th>Player</th><th>Score</th></tr>
+          </thead>
+          <tbody>
+            
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">Agustín Ramírez </td>
+              <td class="score">335</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">Hunter Goodman </td>
+              <td class="score">1093</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">1B</td>
+              <td class="player">Pete Alonso </td>
+              <td class="score">1311</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">1B</td>
+              <td class="player">Vladimir Guerrero Jr. </td>
+              <td class="score">878</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Brice Turang </td>
+              <td class="score">1208</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Ketel Marte </td>
+              <td class="score">1006</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">Junior Caminero </td>
+              <td class="score">1340</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">José Ramírez </td>
+              <td class="score">944</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Colson Montgomery </td>
+              <td class="score">1028</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Bobby Witt Jr. </td>
+              <td class="score">1167</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">Aaron Judge <span class="injury-tag">INJ</span></td>
+              <td class="score">622</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">Brent Rooker <span class="injury-tag">INJ</span></td>
+              <td class="score">359</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Julio Rodriguez </td>
+              <td class="score">1005</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Ronald Acuña Jr. </td>
+              <td class="score">764</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Juan Soto </td>
+              <td class="score">867</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Pete Crow-Armstrong </td>
+              <td class="score">1588</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">DH/Utility</td>
+              <td class="player">James Wood <span class="injury-tag">INJ</span></td>
+              <td class="score">1337</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Shohei Ohtani </td>
+              <td class="score">1928</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Garrett Crochet <span class="injury-tag">INJ</span></td>
+              <td class="score">168</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Tarik Skubal </td>
+              <td class="score">824</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Joe Ryan <span class="injury-tag">INJ</span></td>
+              <td class="score">723</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Yusei Kikuchi </td>
+              <td class="score">187</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Jacob deGrom </td>
+              <td class="score">830</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Cristopher Sánchez </td>
+              <td class="score">1160</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Paul Skenes </td>
+              <td class="score">877</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Logan Webb </td>
+              <td class="score">734</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Josh Hader </td>
+              <td class="score">369</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Emilio Pagán </td>
+              <td class="score">277</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Riley O&#x27;Brien </td>
+              <td class="score">441</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Mason Miller </td>
+              <td class="score">640</td>
+            </tr>
+          </tbody>
+        </table>
+      </details>
+
+      <details class="team-card" id="team-Julie-Brittain">
+        <summary>
+          <span class="summary-team">Julie Brittain</span>
+          <span class="summary-total">25972 pts</span>
+        </summary>
+        <table class="roster-table">
+          <thead>
+            <tr><th>Pos</th><th>Player</th><th>Score</th></tr>
+          </thead>
+          <tbody>
+            
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">Cal Raleigh </td>
+              <td class="score">725</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">William Contreras </td>
+              <td class="score">1004</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">1B</td>
+              <td class="player">Vladimir Guerrero Jr. </td>
+              <td class="score">878</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">1B</td>
+              <td class="player">Nick Kurtz <span class="injury-tag">INJ</span></td>
+              <td class="score">1003</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Nico Hoerner </td>
+              <td class="score">1031</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Ketel Marte </td>
+              <td class="score">1006</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">Junior Caminero </td>
+              <td class="score">1340</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">José Ramírez </td>
+              <td class="score">944</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Gunnar Henderson </td>
+              <td class="score">1133</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Bobby Witt Jr. </td>
+              <td class="score">1167</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">Aaron Judge <span class="injury-tag">INJ</span></td>
+              <td class="score">622</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Wyatt Langford </td>
+              <td class="score">744</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Ronald Acuña Jr. </td>
+              <td class="score">764</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Juan Soto </td>
+              <td class="score">867</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">James Wood <span class="injury-tag">INJ</span></td>
+              <td class="score">1337</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Fernando Tatis Jr. </td>
+              <td class="score">1255</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Elly De La Cruz </td>
+              <td class="score">1183</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Shohei Ohtani </td>
+              <td class="score">1928</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Garrett Crochet <span class="injury-tag">INJ</span></td>
+              <td class="score">168</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Tarik Skubal </td>
+              <td class="score">824</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Joe Ryan <span class="injury-tag">INJ</span></td>
+              <td class="score">723</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Hunter Brown </td>
+              <td class="score">461</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Sandy Alcantara </td>
+              <td class="score">940</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Cristopher Sánchez </td>
+              <td class="score">1160</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Paul Skenes </td>
+              <td class="score">877</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Logan Webb </td>
+              <td class="score">734</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Grant Taylor </td>
+              <td class="score">536</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Kirby Yates </td>
+              <td class="score">242</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">RP</td>
+              <td class="player">Matt Svanson <span class="injury-tag">INJ</span></td>
+              <td class="score">162</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Victor Vodnik </td>
+              <td class="score">214</td>
+            </tr>
+          </tbody>
+        </table>
+      </details>
+
+      <details class="team-card" id="team-Andrew-Sadowski">
+        <summary>
+          <span class="summary-team">Andrew Sadowski</span>
+          <span class="summary-total">25681 pts</span>
+        </summary>
+        <table class="roster-table">
+          <thead>
+            <tr><th>Pos</th><th>Player</th><th>Score</th></tr>
+          </thead>
+          <tbody>
+            
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">Cal Raleigh </td>
+              <td class="score">725</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">Hunter Goodman </td>
+              <td class="score">1093</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">1B</td>
+              <td class="player">Nick Kurtz <span class="injury-tag">INJ</span></td>
+              <td class="score">1003</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">1B</td>
+              <td class="player">Vladimir Guerrero Jr. </td>
+              <td class="score">878</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Jackson Holliday </td>
+              <td class="score">527</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">2B</td>
+              <td class="player">JJ Wetherholt <span class="injury-tag">INJ</span></td>
+              <td class="score">1092</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">Junior Caminero </td>
+              <td class="score">1340</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">José Ramírez </td>
+              <td class="score">944</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Bobby Witt Jr. </td>
+              <td class="score">1167</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Zach Neto </td>
+              <td class="score">1207</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Roman Anthony </td>
+              <td class="score">237</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">Aaron Judge <span class="injury-tag">INJ</span></td>
+              <td class="score">622</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Ronald Acuña Jr. </td>
+              <td class="score">764</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">James Wood <span class="injury-tag">INJ</span></td>
+              <td class="score">1337</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Jackson Chourio </td>
+              <td class="score">998</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Corbin Carroll </td>
+              <td class="score">1265</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Shohei Ohtani </td>
+              <td class="score">1928</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Rafael Devers </td>
+              <td class="score">1209</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Joe Ryan <span class="injury-tag">INJ</span></td>
+              <td class="score">723</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Tarik Skubal </td>
+              <td class="score">824</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Hunter Brown </td>
+              <td class="score">461</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">MacKenzie Gore </td>
+              <td class="score">804</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Eury Pérez </td>
+              <td class="score">758</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Cristopher Sánchez </td>
+              <td class="score">1160</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Nick Lodolo </td>
+              <td class="score">321</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Paul Skenes </td>
+              <td class="score">877</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Seranthony Domínguez </td>
+              <td class="score">345</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">RP</td>
+              <td class="player">Devin Williams <span class="injury-tag">INJ</span></td>
+              <td class="score">304</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Daniel Palencia </td>
+              <td class="score">128</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Mason Miller </td>
+              <td class="score">640</td>
+            </tr>
+          </tbody>
+        </table>
+      </details>
+
+      <details class="team-card" id="team-Levi-Richards">
+        <summary>
+          <span class="summary-team">Levi Richards</span>
+          <span class="summary-total">25477 pts</span>
+        </summary>
+        <table class="roster-table">
+          <thead>
+            <tr><th>Pos</th><th>Player</th><th>Score</th></tr>
+          </thead>
+          <tbody>
+            
+            <tr class="roster-row injured">
+              <td class="pos">C</td>
+              <td class="player">Shea Langeliers <span class="injury-tag">INJ</span></td>
+              <td class="score">852</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">Cal Raleigh </td>
+              <td class="score">725</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">1B</td>
+              <td class="player">Vladimir Guerrero Jr. </td>
+              <td class="score">878</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">1B</td>
+              <td class="player">Rafael Devers </td>
+              <td class="score">1209</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Luke Keaschall </td>
+              <td class="score">982</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Brice Turang </td>
+              <td class="score">1208</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">Junior Caminero </td>
+              <td class="score">1340</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">José Ramírez </td>
+              <td class="score">944</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Gunnar Henderson </td>
+              <td class="score">1133</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Bobby Witt Jr. </td>
+              <td class="score">1167</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">Aaron Judge <span class="injury-tag">INJ</span></td>
+              <td class="score">622</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Ronald Acuña Jr. </td>
+              <td class="score">764</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Juan Soto </td>
+              <td class="score">867</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">James Wood <span class="injury-tag">INJ</span></td>
+              <td class="score">1337</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Corbin Carroll </td>
+              <td class="score">1265</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Fernando Tatis Jr. </td>
+              <td class="score">1255</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Kyle Schwarber </td>
+              <td class="score">1308</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Shohei Ohtani </td>
+              <td class="score">1928</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Garrett Crochet <span class="injury-tag">INJ</span></td>
+              <td class="score">168</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Shane Smith <span class="injury-tag">INJ</span></td>
+              <td class="score">28</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Tarik Skubal </td>
+              <td class="score">824</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Hunter Brown </td>
+              <td class="score">461</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Nathan Eovaldi <span class="injury-tag">INJ</span></td>
+              <td class="score">728</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Paul Skenes </td>
+              <td class="score">877</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Matthew Liberatore </td>
+              <td class="score">639</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Michael Lorenzen </td>
+              <td class="score">354</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Reid Detmers </td>
+              <td class="score">884</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">RP</td>
+              <td class="player">Pete Fairbanks <span class="injury-tag">INJ</span></td>
+              <td class="score">325</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Daniel Palencia </td>
+              <td class="score">128</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Emilio Pagán </td>
+              <td class="score">277</td>
+            </tr>
+          </tbody>
+        </table>
+      </details>
+
+      <details class="team-card" id="team-Paul-Serio">
+        <summary>
+          <span class="summary-team">Paul Serio</span>
+          <span class="summary-total">25232 pts</span>
+        </summary>
+        <table class="roster-table">
+          <thead>
+            <tr><th>Pos</th><th>Player</th><th>Score</th></tr>
+          </thead>
+          <tbody>
+            
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">Cal Raleigh </td>
+              <td class="score">725</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">William Contreras </td>
+              <td class="score">1004</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">1B</td>
+              <td class="player">Vladimir Guerrero Jr. </td>
+              <td class="score">878</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">1B</td>
+              <td class="player">Rafael Devers </td>
+              <td class="score">1209</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Luke Keaschall </td>
+              <td class="score">982</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Ketel Marte </td>
+              <td class="score">1006</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">Junior Caminero </td>
+              <td class="score">1340</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">José Ramírez </td>
+              <td class="score">944</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Gunnar Henderson </td>
+              <td class="score">1133</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Bobby Witt Jr. </td>
+              <td class="score">1167</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">Aaron Judge <span class="injury-tag">INJ</span></td>
+              <td class="score">622</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">Brent Rooker <span class="injury-tag">INJ</span></td>
+              <td class="score">359</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Yordan Alvarez </td>
+              <td class="score">1496</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Ronald Acuña Jr. </td>
+              <td class="score">764</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Juan Soto </td>
+              <td class="score">867</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">James Wood <span class="injury-tag">INJ</span></td>
+              <td class="score">1337</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Kyle Schwarber </td>
+              <td class="score">1308</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Shohei Ohtani </td>
+              <td class="score">1928</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Garrett Crochet <span class="injury-tag">INJ</span></td>
+              <td class="score">168</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Shane Smith <span class="injury-tag">INJ</span></td>
+              <td class="score">28</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Tarik Skubal </td>
+              <td class="score">824</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Yusei Kikuchi </td>
+              <td class="score">187</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">MacKenzie Gore </td>
+              <td class="score">804</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Matthew Boyd </td>
+              <td class="score">465</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Chase Burns </td>
+              <td class="score">944</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Paul Skenes </td>
+              <td class="score">877</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">RP</td>
+              <td class="player">Pete Fairbanks <span class="injury-tag">INJ</span></td>
+              <td class="score">325</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Kyle Leahy </td>
+              <td class="score">687</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Victor Vodnik </td>
+              <td class="score">214</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Mason Miller </td>
+              <td class="score">640</td>
+            </tr>
+          </tbody>
+        </table>
+      </details>
+
+      <details class="team-card" id="team-Gabe-Selig">
+        <summary>
+          <span class="summary-team">Gabe Selig</span>
+          <span class="summary-total">25050 pts</span>
+        </summary>
+        <table class="roster-table">
+          <thead>
+            <tr><th>Pos</th><th>Player</th><th>Score</th></tr>
+          </thead>
+          <tbody>
+            
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">William Contreras </td>
+              <td class="score">1004</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">Hunter Goodman </td>
+              <td class="score">1093</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">1B</td>
+              <td class="player">Vladimir Guerrero Jr. </td>
+              <td class="score">878</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">1B</td>
+              <td class="player">Nick Kurtz <span class="injury-tag">INJ</span></td>
+              <td class="score">1003</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Nico Hoerner </td>
+              <td class="score">1031</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Ketel Marte </td>
+              <td class="score">1006</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">Junior Caminero </td>
+              <td class="score">1340</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">José Ramírez </td>
+              <td class="score">944</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Gunnar Henderson </td>
+              <td class="score">1133</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Bobby Witt Jr. </td>
+              <td class="score">1167</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Roman Anthony </td>
+              <td class="score">237</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">Aaron Judge <span class="injury-tag">INJ</span></td>
+              <td class="score">622</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Wyatt Langford </td>
+              <td class="score">744</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Ronald Acuña Jr. </td>
+              <td class="score">764</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Juan Soto </td>
+              <td class="score">867</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">James Wood <span class="injury-tag">INJ</span></td>
+              <td class="score">1337</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Munetaka Murakami </td>
+              <td class="score">992</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Shohei Ohtani </td>
+              <td class="score">1928</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Tarik Skubal </td>
+              <td class="score">824</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Joe Ryan <span class="injury-tag">INJ</span></td>
+              <td class="score">723</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Hunter Brown </td>
+              <td class="score">461</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Bryan Woo </td>
+              <td class="score">756</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Eury Pérez </td>
+              <td class="score">758</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Cristopher Sánchez </td>
+              <td class="score">1160</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Hunter Greene <span class="injury-tag">INJ</span></td>
+              <td class="score">139</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Paul Skenes </td>
+              <td class="score">877</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Ben Joyce </td>
+              <td class="score">71</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Riley O&#x27;Brien </td>
+              <td class="score">441</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Mason Miller </td>
+              <td class="score">640</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Ryan Walker </td>
+              <td class="score">110</td>
+            </tr>
+          </tbody>
+        </table>
+      </details>
+
+      <details class="team-card" id="team-Steve-Richards">
+        <summary>
+          <span class="summary-team">Steve Richards</span>
+          <span class="summary-total">24993 pts</span>
+        </summary>
+        <table class="roster-table">
+          <thead>
+            <tr><th>Pos</th><th>Player</th><th>Score</th></tr>
+          </thead>
+          <tbody>
+            
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">Cal Raleigh </td>
+              <td class="score">725</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">Hunter Goodman </td>
+              <td class="score">1093</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">1B</td>
+              <td class="player">Pete Alonso </td>
+              <td class="score">1311</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">1B</td>
+              <td class="player">Vladimir Guerrero Jr. </td>
+              <td class="score">878</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Brice Turang </td>
+              <td class="score">1208</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Ketel Marte </td>
+              <td class="score">1006</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">Junior Caminero </td>
+              <td class="score">1340</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">José Ramírez </td>
+              <td class="score">944</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Bobby Witt Jr. </td>
+              <td class="score">1167</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Zach Neto </td>
+              <td class="score">1207</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">Aaron Judge <span class="injury-tag">INJ</span></td>
+              <td class="score">622</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">Brent Rooker <span class="injury-tag">INJ</span></td>
+              <td class="score">359</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Wyatt Langford </td>
+              <td class="score">744</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Ronald Acuña Jr. </td>
+              <td class="score">764</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Juan Soto </td>
+              <td class="score">867</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">James Wood <span class="injury-tag">INJ</span></td>
+              <td class="score">1337</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Kyle Schwarber </td>
+              <td class="score">1308</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Shohei Ohtani </td>
+              <td class="score">1928</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Garrett Crochet <span class="injury-tag">INJ</span></td>
+              <td class="score">168</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Tarik Skubal </td>
+              <td class="score">824</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Joe Ryan <span class="injury-tag">INJ</span></td>
+              <td class="score">723</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Hunter Brown </td>
+              <td class="score">461</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Nick Lodolo </td>
+              <td class="score">321</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Paul Skenes </td>
+              <td class="score">877</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Matthew Liberatore </td>
+              <td class="score">639</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Logan Webb </td>
+              <td class="score">734</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Seranthony Domínguez </td>
+              <td class="score">345</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">RP</td>
+              <td class="player">Pete Fairbanks <span class="injury-tag">INJ</span></td>
+              <td class="score">325</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Daniel Palencia </td>
+              <td class="score">128</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Mason Miller </td>
+              <td class="score">640</td>
+            </tr>
+          </tbody>
+        </table>
+      </details>
+
+      <details class="team-card" id="team-Jamie-Horton">
+        <summary>
+          <span class="summary-team">Jamie Horton</span>
+          <span class="summary-total">24877 pts</span>
+        </summary>
+        <table class="roster-table">
+          <thead>
+            <tr><th>Pos</th><th>Player</th><th>Score</th></tr>
+          </thead>
+          <tbody>
+            
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">Cal Raleigh </td>
+              <td class="score">725</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">William Contreras </td>
+              <td class="score">1004</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">1B</td>
+              <td class="player">Vladimir Guerrero Jr. </td>
+              <td class="score">878</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">1B</td>
+              <td class="player">Nick Kurtz <span class="injury-tag">INJ</span></td>
+              <td class="score">1003</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Jackson Holliday </td>
+              <td class="score">527</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Jake Cronenworth </td>
+              <td class="score">514</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">Junior Caminero </td>
+              <td class="score">1340</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">José Ramírez </td>
+              <td class="score">944</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Bobby Witt Jr. </td>
+              <td class="score">1167</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Ezequiel Tovar </td>
+              <td class="score">669</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Roman Anthony </td>
+              <td class="score">237</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">Aaron Judge <span class="injury-tag">INJ</span></td>
+              <td class="score">622</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Ronald Acuña Jr. </td>
+              <td class="score">764</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Juan Soto </td>
+              <td class="score">867</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">James Wood <span class="injury-tag">INJ</span></td>
+              <td class="score">1337</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Corbin Carroll </td>
+              <td class="score">1265</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Kyle Schwarber </td>
+              <td class="score">1308</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Shohei Ohtani </td>
+              <td class="score">1928</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Tarik Skubal </td>
+              <td class="score">824</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Joe Ryan <span class="injury-tag">INJ</span></td>
+              <td class="score">723</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Nathan Eovaldi <span class="injury-tag">INJ</span></td>
+              <td class="score">728</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Sandy Alcantara </td>
+              <td class="score">940</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Chase Burns </td>
+              <td class="score">944</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Paul Skenes </td>
+              <td class="score">877</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Hunter Dobbins <span class="injury-tag">INJ</span></td>
+              <td class="score">282</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Logan Webb </td>
+              <td class="score">734</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Seranthony Domínguez </td>
+              <td class="score">345</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Josh Hader </td>
+              <td class="score">369</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Reid Detmers </td>
+              <td class="score">884</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Daniel Palencia </td>
+              <td class="score">128</td>
+            </tr>
+          </tbody>
+        </table>
+      </details>
+
+      <details class="team-card" id="team-Jason-Gouin">
+        <summary>
+          <span class="summary-team">Jason Gouin</span>
+          <span class="summary-total">24596 pts</span>
+        </summary>
+        <table class="roster-table">
+          <thead>
+            <tr><th>Pos</th><th>Player</th><th>Score</th></tr>
+          </thead>
+          <tbody>
+            
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">Cal Raleigh </td>
+              <td class="score">725</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">William Contreras </td>
+              <td class="score">1004</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">1B</td>
+              <td class="player">Vladimir Guerrero Jr. </td>
+              <td class="score">878</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">1B</td>
+              <td class="player">Nick Kurtz <span class="injury-tag">INJ</span></td>
+              <td class="score">1003</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Luke Keaschall </td>
+              <td class="score">982</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Nico Hoerner </td>
+              <td class="score">1031</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">Junior Caminero </td>
+              <td class="score">1340</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">José Ramírez </td>
+              <td class="score">944</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Bobby Witt Jr. </td>
+              <td class="score">1167</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Elly De La Cruz </td>
+              <td class="score">1183</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">Aaron Judge <span class="injury-tag">INJ</span></td>
+              <td class="score">622</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Mike Trout </td>
+              <td class="score">1100</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Ronald Acuña Jr. </td>
+              <td class="score">764</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Juan Soto </td>
+              <td class="score">867</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Jordan Beck </td>
+              <td class="score">205</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Fernando Tatis Jr. </td>
+              <td class="score">1255</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Ketel Marte </td>
+              <td class="score">1006</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Shohei Ohtani </td>
+              <td class="score">1928</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Chris Bassitt </td>
+              <td class="score">317</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Garrett Crochet <span class="injury-tag">INJ</span></td>
+              <td class="score">168</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Tarik Skubal </td>
+              <td class="score">824</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Hunter Brown </td>
+              <td class="score">461</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Jacob deGrom </td>
+              <td class="score">830</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Cade Cavalli </td>
+              <td class="score">970</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Paul Skenes </td>
+              <td class="score">877</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Logan Webb </td>
+              <td class="score">734</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Seranthony Domínguez </td>
+              <td class="score">345</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">RP</td>
+              <td class="player">Pete Fairbanks <span class="injury-tag">INJ</span></td>
+              <td class="score">325</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Jhoan Duran </td>
+              <td class="score">486</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">JoJo Romero </td>
+              <td class="score">255</td>
+            </tr>
+          </tbody>
+        </table>
+      </details>
+
+      <details class="team-card" id="team-Billy-Haber">
+        <summary>
+          <span class="summary-team">Billy Haber</span>
+          <span class="summary-total">24174 pts</span>
+        </summary>
+        <table class="roster-table">
+          <thead>
+            <tr><th>Pos</th><th>Player</th><th>Score</th></tr>
+          </thead>
+          <tbody>
+            
+            <tr class="roster-row injured">
+              <td class="pos">C</td>
+              <td class="player">Kyle Teel <span class="injury-tag">INJ</span></td>
+              <td class="score">123</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">Hunter Goodman </td>
+              <td class="score">1093</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">1B</td>
+              <td class="player">Vladimir Guerrero Jr. </td>
+              <td class="score">878</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">1B</td>
+              <td class="player">Nick Kurtz <span class="injury-tag">INJ</span></td>
+              <td class="score">1003</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Brice Turang </td>
+              <td class="score">1208</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Ketel Marte </td>
+              <td class="score">1006</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">Junior Caminero </td>
+              <td class="score">1340</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">José Ramírez </td>
+              <td class="score">944</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Gunnar Henderson </td>
+              <td class="score">1133</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Bobby Witt Jr. </td>
+              <td class="score">1167</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">Aaron Judge <span class="injury-tag">INJ</span></td>
+              <td class="score">622</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Wyatt Langford </td>
+              <td class="score">744</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Ronald Acuña Jr. </td>
+              <td class="score">764</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Kyle Stowers </td>
+              <td class="score">829</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Juan Soto </td>
+              <td class="score">867</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">James Wood <span class="injury-tag">INJ</span></td>
+              <td class="score">1337</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Jo Adell </td>
+              <td class="score">997</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Shohei Ohtani </td>
+              <td class="score">1928</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Garrett Crochet <span class="injury-tag">INJ</span></td>
+              <td class="score">168</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Tarik Skubal </td>
+              <td class="score">824</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Joe Ryan <span class="injury-tag">INJ</span></td>
+              <td class="score">723</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Hunter Brown </td>
+              <td class="score">461</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Bryan Woo </td>
+              <td class="score">756</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Hunter Greene <span class="injury-tag">INJ</span></td>
+              <td class="score">139</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Paul Skenes </td>
+              <td class="score">877</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Logan Webb </td>
+              <td class="score">734</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Jhoan Duran </td>
+              <td class="score">486</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Daniel Palencia </td>
+              <td class="score">128</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">JoJo Romero </td>
+              <td class="score">255</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Mason Miller </td>
+              <td class="score">640</td>
+            </tr>
+          </tbody>
+        </table>
+      </details>
+
+      <details class="team-card" id="team-Jack-Power">
+        <summary>
+          <span class="summary-team">Jack Power</span>
+          <span class="summary-total">22644 pts</span>
+        </summary>
+        <table class="roster-table">
+          <thead>
+            <tr><th>Pos</th><th>Player</th><th>Score</th></tr>
+          </thead>
+          <tbody>
+            
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">Hunter Goodman </td>
+              <td class="score">1093</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">Patrick Bailey </td>
+              <td class="score">423</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">1B</td>
+              <td class="player">Vladimir Guerrero Jr. </td>
+              <td class="score">878</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">1B</td>
+              <td class="player">Nick Kurtz <span class="injury-tag">INJ</span></td>
+              <td class="score">1003</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Brice Turang </td>
+              <td class="score">1208</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">2B</td>
+              <td class="player">JJ Wetherholt <span class="injury-tag">INJ</span></td>
+              <td class="score">1092</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">Junior Caminero </td>
+              <td class="score">1340</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">José Ramírez </td>
+              <td class="score">944</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Gunnar Henderson </td>
+              <td class="score">1133</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Bobby Witt Jr. </td>
+              <td class="score">1167</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Roman Anthony </td>
+              <td class="score">237</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">Aaron Judge <span class="injury-tag">INJ</span></td>
+              <td class="score">622</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Austin Hays </td>
+              <td class="score">112</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Ronald Acuña Jr. </td>
+              <td class="score">764</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Juan Soto </td>
+              <td class="score">867</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">James Wood <span class="injury-tag">INJ</span></td>
+              <td class="score">1337</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Jeremy Peña </td>
+              <td class="score">818</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Shohei Ohtani </td>
+              <td class="score">1928</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Tarik Skubal </td>
+              <td class="score">824</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Bailey Ober </td>
+              <td class="score">477</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Bryan Woo </td>
+              <td class="score">756</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Tommy White </td>
+              <td class="score">203</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Zack Wheeler </td>
+              <td class="score">829</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Chase Burns </td>
+              <td class="score">944</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Paul Skenes </td>
+              <td class="score">877</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Corbin Burnes <span class="injury-tag">INJ</span></td>
+              <td class="score">0</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">RP</td>
+              <td class="player">Hunter Strickland <span class="injury-tag">INJ</span></td>
+              <td class="score">0</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Mason Miller </td>
+              <td class="score">640</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Daniel Palencia </td>
+              <td class="score">128</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">RP</td>
+              <td class="player">Chris Martin <span class="injury-tag">INJ</span></td>
+              <td class="score">0</td>
+            </tr>
+          </tbody>
+        </table>
+      </details>
+
+      <details class="team-card" id="team-Randy-Sherman">
+        <summary>
+          <span class="summary-team">Randy Sherman</span>
+          <span class="summary-total">21358 pts</span>
+        </summary>
+        <table class="roster-table">
+          <thead>
+            <tr><th>Pos</th><th>Player</th><th>Score</th></tr>
+          </thead>
+          <tbody>
+            
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">Cal Raleigh </td>
+              <td class="score">725</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">C</td>
+              <td class="player">Hunter Goodman </td>
+              <td class="score">1093</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">1B</td>
+              <td class="player">Spencer Torkelson </td>
+              <td class="score">935</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">1B</td>
+              <td class="player">Nick Kurtz <span class="injury-tag">INJ</span></td>
+              <td class="score">1003</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">M McLain </td>
+              <td class="score">0</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">2B</td>
+              <td class="player">Ketel Marte </td>
+              <td class="score">1006</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">3B</td>
+              <td class="player">José Ramírez </td>
+              <td class="score">944</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">3B</td>
+              <td class="player">Jordan Westburg <span class="injury-tag">INJ</span></td>
+              <td class="score">0</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Zach Neto </td>
+              <td class="score">1207</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SS</td>
+              <td class="player">Bobby Witt Jr. </td>
+              <td class="score">1167</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">Aaron Judge <span class="injury-tag">INJ</span></td>
+              <td class="score">622</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">Byron Buxton <span class="injury-tag">INJ</span></td>
+              <td class="score">874</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Ronald Acuña Jr. </td>
+              <td class="score">764</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Juan Soto </td>
+              <td class="score">867</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">OF</td>
+              <td class="player">James Wood <span class="injury-tag">INJ</span></td>
+              <td class="score">1337</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">OF</td>
+              <td class="player">Fernando Tatis Jr. </td>
+              <td class="score">1255</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Kyle Schwarber </td>
+              <td class="score">1308</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">DH/Utility</td>
+              <td class="player">Iván Herrera </td>
+              <td class="score">1138</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Garrett Crochet <span class="injury-tag">INJ</span></td>
+              <td class="score">168</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Shane McClanahan </td>
+              <td class="score">598</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Trey Yesavage <span class="injury-tag">INJ</span></td>
+              <td class="score">500</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Shane Smith <span class="injury-tag">INJ</span></td>
+              <td class="score">28</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Hunter Brown </td>
+              <td class="score">461</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">SP</td>
+              <td class="player">Nathan Eovaldi <span class="injury-tag">INJ</span></td>
+              <td class="score">728</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Yoshinobu Yamamoto </td>
+              <td class="score">953</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">SP</td>
+              <td class="player">Logan Webb </td>
+              <td class="score">734</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">RP</td>
+              <td class="player">Pete Fairbanks <span class="injury-tag">INJ</span></td>
+              <td class="score">325</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Daniel Palencia </td>
+              <td class="score">128</td>
+            </tr>
+            <tr class="roster-row">
+              <td class="pos">RP</td>
+              <td class="player">Trevor Megill </td>
+              <td class="score">438</td>
+            </tr>
+            <tr class="roster-row injured">
+              <td class="pos">RP</td>
+              <td class="player">Hunter Barco <span class="injury-tag">INJ</span></td>
+              <td class="score">52</td>
+            </tr>
+          </tbody>
+        </table>
+      </details>
+  </section>
+</main>
+
+<footer>
+  Refreshes automatically every day.
+</footer>
+
+</body>
+</html>

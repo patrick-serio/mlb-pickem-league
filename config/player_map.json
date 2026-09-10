@@ -1,0 +1,854 @@
+[
+    {
+        "Shorthand": "K Teel",
+        "Full Name": "Kyle Teel",
+        "Player ID": 691019,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "P Alonso",
+        "Full Name": "Pete Alonso",
+        "Player ID": 624413,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "V Guerrero Jr",
+        "Full Name": "Vladimir Guerrero Jr.",
+        "Player ID": 665489,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "J Holliday",
+        "Full Name": "Jackson Holliday",
+        "Player ID": 702616,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "J Caminero",
+        "Full Name": "Junior Caminero",
+        "Player ID": 691406,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "M Murakami",
+        "Full Name": "Munetaka Murakami",
+        "Player ID": 808959,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "G Henderson",
+        "Full Name": "Gunnar Henderson",
+        "Player ID": 683002,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "C Montgomery",
+        "Full Name": "Colson Montgomery",
+        "Player ID": 695657,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "R Anthony",
+        "Full Name": "Roman Anthony",
+        "Player ID": 701350,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "J Duran",
+        "Full Name": "Jarren Duran",
+        "Player ID": 680776,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "A Judge",
+        "Full Name": "Aaron Judge",
+        "Player ID": 592450,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "G Springer",
+        "Full Name": "George Springer",
+        "Player ID": 543807,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "A Hays",
+        "Full Name": "Austin Hays",
+        "Player ID": 669720,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "M Vargas",
+        "Full Name": "Miguel Vargas",
+        "Player ID": 678246,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "J Ramirez",
+        "Full Name": "Jos\u00e9 Ram\u00edrez",
+        "Player ID": 608070,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "S Torkelson",
+        "Full Name": "Spencer Torkelson",
+        "Player ID": 679529,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "C Bassitt",
+        "Full Name": "Chris Bassitt",
+        "Player ID": 605135,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "Trev Rogers",
+        "Full Name": "Trevor Rogers",
+        "Player ID": 669432,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "G Crochet",
+        "Full Name": "Garrett Crochet",
+        "Player ID": 676979,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "I Seymour",
+        "Full Name": "Ian Seymour",
+        "Player ID": 693855,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "S McClanahan",
+        "Full Name": "Shane McClanahan",
+        "Player ID": 663556,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "N Martinez",
+        "Full Name": "Nick Martinez",
+        "Player ID": 607259,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "T Yesavage",
+        "Full Name": "Trey Yesavage",
+        "Player ID": 702056,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "S Smith",
+        "Full Name": "Shane Smith",
+        "Player ID": 681343,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "R Helsley",
+        "Full Name": "Ryan Helsley",
+        "Player ID": 664854,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "G Jax",
+        "Full Name": "Griffin Jax",
+        "Player ID": 643377,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "S Dominguez",
+        "Full Name": "Seranthony Dom\u00ednguez",
+        "Player ID": 622554,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "G Taylor",
+        "Full Name": "Grant Taylor",
+        "Player ID": 691799,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "E Fedde",
+        "Full Name": "Erick Fedde",
+        "Player ID": 607200,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "T Skubal",
+        "Full Name": "Tarik Skubal",
+        "Player ID": 669373,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "S Langeliers",
+        "Full Name": "Shea Langeliers",
+        "Player ID": 669127,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "C Raleigh",
+        "Full Name": "Cal Raleigh",
+        "Player ID": 663728,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "N Kurtz",
+        "Full Name": "Nick Kurtz",
+        "Player ID": 701762,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "L Keaschall",
+        "Full Name": "Luke Keaschall",
+        "Player ID": 807712,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "J Altuve",
+        "Full Name": "Jose Altuve",
+        "Player ID": 514888,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "B Witt Jr",
+        "Full Name": "Bobby Witt Jr.",
+        "Player ID": 677951,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "J Pena",
+        "Full Name": "Jeremy Pe\u00f1a",
+        "Player ID": 665161,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "B Buxton",
+        "Full Name": "Byron Buxton",
+        "Player ID": 621439,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "B Rooker",
+        "Full Name": "Brent Rooker",
+        "Player ID": 667670,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "Y Alvarez",
+        "Full Name": "Yordan Alvarez",
+        "Player ID": 670541,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "J Adell",
+        "Full Name": "Jo Adell",
+        "Player ID": 666176,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "M Trout",
+        "Full Name": "Mike Trout",
+        "Player ID": 545361,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "J Rodriguez",
+        "Full Name": "Julio Rodriguez",
+        "Player ID": 677594,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "Z Neto",
+        "Full Name": "Zach Neto",
+        "Player ID": 687263,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "W Langford",
+        "Full Name": "Wyatt Langford",
+        "Player ID": 694671,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "C Ragans",
+        "Full Name": "Cole Ragans",
+        "Player ID": 666142,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "B Ober",
+        "Full Name": "Bailey Ober",
+        "Player ID": 641927,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "J Ryan",
+        "Full Name": "Joe Ryan",
+        "Player ID": 657746,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "H Brown",
+        "Full Name": "Hunter Brown",
+        "Player ID": 686613,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "J Soriano",
+        "Full Name": "Jos\u00e9 Soriano",
+        "Player ID": 667755,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "Y Kikuchi",
+        "Full Name": "Yusei Kikuchi",
+        "Player ID": 579328,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "B Woo",
+        "Full Name": "Bryan Woo",
+        "Player ID": 693433,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "L Gilbert",
+        "Full Name": "Logan Gilbert",
+        "Player ID": 669302,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "Tay Rogers",
+        "Full Name": "Taylor Rogers",
+        "Player ID": 573124,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "J Hader",
+        "Full Name": "Josh Hader",
+        "Player ID": 623352,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "H Strickland",
+        "Full Name": "Hunter Strickland",
+        "Player ID": 519326,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "B Joyce",
+        "Full Name": "Ben Joyce",
+        "Player ID": 690829,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "R Detmers",
+        "Full Name": "Reid Detmers",
+        "Player ID": 672282,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "K Yates",
+        "Full Name": "Kirby Yates",
+        "Player ID": 489446,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "C Martin",
+        "Full Name": "Chris Martin",
+        "Player ID": 668885,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "A Ramirez",
+        "Full Name": "Agust\u00edn Ram\u00edrez",
+        "Player ID": 682663,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "M Olson",
+        "Full Name": "Matt Olson",
+        "Player ID": 621566,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "M Busch",
+        "Full Name": "Michael Busch",
+        "Player ID": 683737,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "O Albies",
+        "Full Name": "Ozzie Albies",
+        "Player ID": 645277,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "X Edwards",
+        "Full Name": "Xavier Edwards",
+        "Player ID": 669364,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "O Lopez",
+        "Full Name": "Otto Lopez",
+        "Player ID": 672640,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "C Abrams",
+        "Full Name": "CJ Abrams",
+        "Player ID": 682928,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "B Nimmo",
+        "Full Name": "Brandon Nimmo",
+        "Player ID": 607043,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "R Acuna Jr",
+        "Full Name": "Ronald Acu\u00f1a Jr.",
+        "Player ID": 660670,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "K Stowers",
+        "Full Name": "Kyle Stowers",
+        "Player ID": 669065,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "J Marsee",
+        "Full Name": "Jakob Marsee",
+        "Player ID": 805300,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "J Soto",
+        "Full Name": "Juan Soto",
+        "Player ID": 665742,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "J Wood",
+        "Full Name": "James Wood",
+        "Player ID": 695578,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "K Schwarber",
+        "Full Name": "Kyle Schwarber",
+        "Player ID": 656941,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "N Hoerner",
+        "Full Name": "Nico Hoerner",
+        "Player ID": 663538,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "J DeGrom",
+        "Full Name": "Jacob deGrom",
+        "Player ID": 594798,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "N Eovaldi",
+        "Full Name": "Nathan Eovaldi",
+        "Player ID": 543135,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "M Gore",
+        "Full Name": "MacKenzie Gore",
+        "Player ID": 669022,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "T White",
+        "Full Name": "Tommy White",
+        "Player ID": 695720,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "E Perez",
+        "Full Name": "Eury P\u00e9rez",
+        "Player ID": 691587,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "S Alcantara",
+        "Full Name": "Sandy Alcantara",
+        "Player ID": 645261,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "Z Wheeler",
+        "Full Name": "Zack Wheeler",
+        "Player ID": 554430,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "C Sanchez",
+        "Full Name": "Cristopher S\u00e1nchez",
+        "Player ID": 650911,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "R Iglesias",
+        "Full Name": "Raisel Iglesias",
+        "Player ID": 628452,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "P Fairbanks",
+        "Full Name": "Pete Fairbanks",
+        "Player ID": 664126,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "D Williams",
+        "Full Name": "Devin Williams",
+        "Player ID": 642207,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "Jo Duran",
+        "Full Name": "Jhoan Duran",
+        "Player ID": 661395,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "C Cavalli",
+        "Full Name": "Cade Cavalli",
+        "Player ID": 676917,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "C Beeter",
+        "Full Name": "Clayton Beeter",
+        "Player ID": 690925,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "D Palencia",
+        "Full Name": "Daniel Palencia",
+        "Player ID": 694037,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "W Contreras",
+        "Full Name": "William Contreras",
+        "Player ID": 661388,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "S Stewart",
+        "Full Name": "Sal Stewart",
+        "Player ID": 701398,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "A Burleson",
+        "Full Name": "Alec Burleson",
+        "Player ID": 676475,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "M Mclain",
+        "Full Name": "Matt McLain",
+        "Player ID": 680574,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "B Turang",
+        "Full Name": "Brice Turang",
+        "Player ID": 668930,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "A Bregman",
+        "Full Name": "Alex Bregman",
+        "Player ID": 608324,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "E De La Cruz",
+        "Full Name": "Elly De La Cruz",
+        "Player ID": 682829,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "J Wetherholt",
+        "Full Name": "JJ Wetherholt",
+        "Player ID": 802139,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "P Crow-Armstrong",
+        "Full Name": "Pete Crow-Armstrong",
+        "Player ID": 691718,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "J Chourio",
+        "Full Name": "Jackson Chourio",
+        "Player ID": 694192,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "C Carroll",
+        "Full Name": "Corbin Carroll",
+        "Player ID": 682998,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "I Herrera",
+        "Full Name": "Iv\u00e1n Herrera",
+        "Player ID": 671056,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "K Marte",
+        "Full Name": "Ketel Marte",
+        "Player ID": 606466,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "M Boyd",
+        "Full Name": "Matthew Boyd",
+        "Player ID": 571510,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "S Imanaga",
+        "Full Name": "Shota Imanaga",
+        "Player ID": 684007,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "C Burns",
+        "Full Name": "Chase Burns",
+        "Player ID": 695505,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "H Greene",
+        "Full Name": "Hunter Greene",
+        "Player ID": 668881,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "N Lodolo",
+        "Full Name": "Nick Lodolo",
+        "Player ID": 666157,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "J Misiorowski",
+        "Full Name": "Jacob Misiorowski",
+        "Player ID": 694819,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "P Skenes",
+        "Full Name": "Paul Skenes",
+        "Player ID": 694973,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "H Barco",
+        "Full Name": "Hunter Barco",
+        "Player ID": 682995,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "E Pagan",
+        "Full Name": "Emilio Pag\u00e1n",
+        "Player ID": 641941,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "T Megill",
+        "Full Name": "Trevor Megill",
+        "Player ID": 656730,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "R O'Brien",
+        "Full Name": "Riley O'Brien",
+        "Player ID": 676617,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "Jo Romero",
+        "Full Name": "JoJo Romero",
+        "Player ID": 668941,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "M Liberatore",
+        "Full Name": "Matthew Liberatore",
+        "Player ID": 669461,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "M Svanson",
+        "Full Name": "Matt Svanson",
+        "Player ID": 694335,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "K Leahy",
+        "Full Name": "Kyle Leahy",
+        "Player ID": 681517,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "H Dobbins",
+        "Full Name": "Hunter Dobbins",
+        "Player ID": 690928,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "C Burnes",
+        "Full Name": "Corbin Burnes",
+        "Player ID": 669203,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "H Goodman",
+        "Full Name": "Hunter Goodman",
+        "Player ID": 696100,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "P Bailey",
+        "Full Name": "Patrick Bailey",
+        "Player ID": 672275,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "R Devers",
+        "Full Name": "Rafael Devers",
+        "Player ID": 646240,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "J Cronenworth",
+        "Full Name": "Jake Cronenworth",
+        "Player ID": 630105,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "M Machado",
+        "Full Name": "Manny Machado",
+        "Player ID": 592518,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "E Suarez",
+        "Full Name": "Eugenio Su\u00e1rez",
+        "Player ID": 553993,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "E Tovar",
+        "Full Name": "Ezequiel Tovar",
+        "Player ID": 678662,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "J Beck",
+        "Full Name": "Jordan Beck",
+        "Player ID": 687597,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "F Tatis Jr",
+        "Full Name": "Fernando Tatis Jr.",
+        "Player ID": 665487,
+        "Type": "hitter"
+    },
+    {
+        "Shorthand": "S Ohtani",
+        "Full Name": "Shohei Ohtani",
+        "Player ID": 660271,
+        "Type": "both"
+    },
+    {
+        "Shorthand": "Z Gallen",
+        "Full Name": "Zac Gallen",
+        "Player ID": 668678,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "M Lorenzen",
+        "Full Name": "Michael Lorenzen",
+        "Player ID": 547179,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "K Freeland",
+        "Full Name": "Kyle Freeland",
+        "Player ID": 607536,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "Y Yamamoto",
+        "Full Name": "Yoshinobu Yamamoto",
+        "Player ID": 808967,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "L Webb",
+        "Full Name": "Logan Webb",
+        "Player ID": 657277,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "C Sale",
+        "Full Name": "Chris Sale",
+        "Player ID": 519242,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "V Vodnik",
+        "Full Name": "Victor Vodnik",
+        "Player ID": 680767,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "M Miller",
+        "Full Name": "Mason Miller",
+        "Player ID": 695243,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "R Walker",
+        "Full Name": "Ryan Walker",
+        "Player ID": 676254,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "A Uribe",
+        "Full Name": "Abner Uribe",
+        "Player ID": 682842,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "C Smith",
+        "Full Name": "Cade Smith",
+        "Player ID": 671922,
+        "Type": "pitcher"
+    },
+    {
+        "Shorthand": "J Westburg",
+        "Full Name": "Jordan Westburg",
+        "Player ID": 676059,
+        "Type": "hitter"
+    }
+]
