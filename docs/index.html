@@ -3,11 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>2026 Baseball Pick&#x27;em — Standings</title>
+<title>Fantasy Baseball League — Standings</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
+
   :root {
     --navy: #303444;
     --navy-light: #454a60;
@@ -32,11 +33,11 @@
   header {
     background: var(--navy);
     color: var(--white);
-    padding: 2.5rem 1.5rem 2rem;
+    padding: 2.5rem 1.5rem 1.25rem;
   }
 
   .header-inner {
-    max-width: 760px;
+    max-width: 960px;
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
@@ -59,10 +60,42 @@
     font-family: 'Inter', sans-serif;
   }
 
+  .top-nav {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0.75rem 1.5rem 0;
+    display: flex;
+    gap: 1.5rem;
+    border-top: 1px solid rgba(255,255,255,0.12);
+  }
+
+  .top-nav a {
+    color: rgba(255,255,255,0.65);
+    text-decoration: none;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding: 0.6rem 0.1rem 0.5rem;
+    border-bottom: 2px solid transparent;
+  }
+
+  .top-nav a.active {
+    color: var(--white);
+    border-bottom-color: var(--gold);
+  }
+
+  .top-nav a:hover {
+    color: var(--white);
+  }
+
   main {
-    max-width: 760px;
+    max-width: 960px;
     margin: 0 auto;
     padding: 2rem 1.5rem 4rem;
+  }
+
+  main.narrow {
+    max-width: 760px;
   }
 
   h2 {
@@ -78,6 +111,15 @@
   section + section {
     margin-top: 2.5rem;
   }
+
+  footer {
+    text-align: center;
+    color: #8a8d99;
+    font-size: 0.8rem;
+    padding: 1.5rem;
+  }
+
+  /* ---- Standings page ---- */
 
   ul.standings {
     list-style: none;
@@ -186,7 +228,8 @@
     border-top: 1px solid var(--cream-row);
   }
 
-  .roster-row.injured td {
+  .roster-row.injured td,
+  .player-row.injured td {
     background: var(--red);
     color: var(--white);
   }
@@ -207,29 +250,110 @@
     text-align: right;
   }
 
-  footer {
-    text-align: center;
-    color: #8a8d99;
+  /* ---- Players page ---- */
+
+  .filter-bar {
+    margin-bottom: 1rem;
+  }
+
+  .filter-bar input {
+    width: 100%;
+    max-width: 320px;
+    padding: 0.55rem 0.8rem;
+    border: 1px solid var(--cream-row);
+    border-radius: 6px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    background: var(--white);
+    color: var(--text);
+  }
+
+  .filter-bar input:focus {
+    outline: 2px solid var(--gold);
+    outline-offset: 1px;
+  }
+
+  .player-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    background: var(--white);
+    border: 1px solid var(--cream-row);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .player-table th {
+    text-align: left;
+    background: var(--navy);
+    color: var(--white);
+    padding: 0.55rem 0.7rem;
+    font-weight: 600;
+    font-family: 'Oswald', sans-serif;
     font-size: 0.8rem;
-    padding: 1.5rem;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+  }
+
+  .player-table th:hover {
+    background: var(--navy-light);
+  }
+
+  .player-table th.sorted-asc::after {
+    content: " \25B2";
+    color: var(--gold);
+  }
+
+  .player-table th.sorted-desc::after {
+    content: " \25BC";
+    color: var(--gold);
+  }
+
+  .player-table td {
+    padding: 0.5rem 0.7rem;
+    border-top: 1px solid var(--cream-row);
+    white-space: nowrap;
+  }
+
+  .player-table tbody tr:nth-child(odd) {
+    background: var(--cream-row);
+  }
+
+  .player-table th[data-sort="num"] {
+    text-align: center;
+  }
+
+  .player-table td.stat,
+  .player-table td.score {
+    font-variant-numeric: tabular-nums;
+    text-align: center;
   }
 
   @media (max-width: 480px) {
     h1 { font-size: 1.6rem; }
     .roster-table { font-size: 0.85rem; }
+    .player-table { font-size: 0.78rem; }
   }
+
 </style>
 </head>
 <body>
 
 <header>
   <div class="header-inner">
-    <h1>2026 Baseball Pick&#x27;em</h1>
-    <span class="updated">Updated September 09, 2026 at 10:40 PM EDT</span>
+    <h1>Fantasy Baseball League</h1>
+    <span class="updated">Updated September 10, 2026 at 4:35 PM EDT</span>
   </div>
+  
+    <nav class="top-nav">
+      <a href="index.html" class="active">Standings</a>
+      <a href="players.html" class="">Players</a>
+    </nav>
 </header>
 
-<main>
+<main class="narrow">
   <section>
     <h2>Standings</h2>
     <ul class="standings">
@@ -237,139 +361,139 @@
         <li class="standing-row">
           <span class="rank">1</span>
           <a class="team-name" href="#team-Patrick-+-Emily">Patrick + Emily</a>
-          <span class="pts">30274<span class="pts-label"> pts</span></span>
+          <span class="pts">30306<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">2</span>
           <a class="team-name" href="#team-Nate-Moggio">Nate Moggio</a>
-          <span class="pts">29778<span class="pts-label"> pts</span></span>
+          <span class="pts">29792<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">3</span>
           <a class="team-name" href="#team-Casey-Spilka">Casey Spilka</a>
-          <span class="pts">29618<span class="pts-label"> pts</span></span>
+          <span class="pts">29662<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">4</span>
           <a class="team-name" href="#team-Brandon-Zaikowski">Brandon Zaikowski</a>
-          <span class="pts">29534<span class="pts-label"> pts</span></span>
+          <span class="pts">29548<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">5</span>
           <a class="team-name" href="#team-Ben-Fowler">Ben Fowler</a>
-          <span class="pts">29416<span class="pts-label"> pts</span></span>
+          <span class="pts">29463<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">6</span>
           <a class="team-name" href="#team-Mike-Zisk">Mike Zisk</a>
-          <span class="pts">29102<span class="pts-label"> pts</span></span>
+          <span class="pts">29119<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">7</span>
           <a class="team-name" href="#team-Zac-Brittain">Zac Brittain</a>
-          <span class="pts">29041<span class="pts-label"> pts</span></span>
+          <span class="pts">29059<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">8</span>
           <a class="team-name" href="#team-Jake-Brittain">Jake Brittain</a>
-          <span class="pts">28975<span class="pts-label"> pts</span></span>
+          <span class="pts">28989<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">9</span>
           <a class="team-name" href="#team-Andrew-Serio">Andrew Serio</a>
-          <span class="pts">28474<span class="pts-label"> pts</span></span>
+          <span class="pts">28503<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">10</span>
           <a class="team-name" href="#team-Owen-Shelffo">Owen Shelffo</a>
-          <span class="pts">27940<span class="pts-label"> pts</span></span>
+          <span class="pts">27964<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">11</span>
           <a class="team-name" href="#team-Amy-Serio">Amy Serio</a>
-          <span class="pts">27910<span class="pts-label"> pts</span></span>
+          <span class="pts">27939<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">12</span>
           <a class="team-name" href="#team-Trevor-Maslowski">Trevor Maslowski</a>
-          <span class="pts">27867<span class="pts-label"> pts</span></span>
+          <span class="pts">27882<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">13</span>
           <a class="team-name" href="#team-Emily-Zaikowski">Emily Zaikowski</a>
-          <span class="pts">27845<span class="pts-label"> pts</span></span>
+          <span class="pts">27869<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">14</span>
           <a class="team-name" href="#team-Maxwell-Edwards">Maxwell Edwards</a>
-          <span class="pts">27837<span class="pts-label"> pts</span></span>
+          <span class="pts">27845<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">15</span>
           <a class="team-name" href="#team-Tim-Horton">Tim Horton</a>
-          <span class="pts">27515<span class="pts-label"> pts</span></span>
+          <span class="pts">27541<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">16</span>
           <a class="team-name" href="#team-Julie-Brittain">Julie Brittain</a>
-          <span class="pts">27407<span class="pts-label"> pts</span></span>
+          <span class="pts">27424<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">17</span>
           <a class="team-name" href="#team-Andrew-Sadowski">Andrew Sadowski</a>
-          <span class="pts">27196<span class="pts-label"> pts</span></span>
+          <span class="pts">27199<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">18</span>
           <a class="team-name" href="#team-Levi-Richards">Levi Richards</a>
-          <span class="pts">26986<span class="pts-label"> pts</span></span>
+          <span class="pts">26992<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">19</span>
           <a class="team-name" href="#team-Paul-Serio">Paul Serio</a>
-          <span class="pts">26739<span class="pts-label"> pts</span></span>
+          <span class="pts">26748<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">20</span>
           <a class="team-name" href="#team-Steve-Richards">Steve Richards</a>
-          <span class="pts">26518<span class="pts-label"> pts</span></span>
+          <span class="pts">26524<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">21</span>
           <a class="team-name" href="#team-Gabe-Selig">Gabe Selig</a>
-          <span class="pts">26518<span class="pts-label"> pts</span></span>
+          <span class="pts">26521<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">22</span>
           <a class="team-name" href="#team-Jamie-Horton">Jamie Horton</a>
-          <span class="pts">26233<span class="pts-label"> pts</span></span>
+          <span class="pts">26250<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">23</span>
           <a class="team-name" href="#team-Jason-Gouin">Jason Gouin</a>
-          <span class="pts">26061<span class="pts-label"> pts</span></span>
+          <span class="pts">26087<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
@@ -381,13 +505,13 @@
         <li class="standing-row">
           <span class="rank">25</span>
           <a class="team-name" href="#team-Jack-Power">Jack Power</a>
-          <span class="pts">23933<span class="pts-label"> pts</span></span>
+          <span class="pts">23989<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">26</span>
           <a class="team-name" href="#team-Randy-Sherman">Randy Sherman</a>
-          <span class="pts">22529<span class="pts-label"> pts</span></span>
+          <span class="pts">22575<span class="pts-label"> pts</span></span>
         </li>
     </ul>
   </section>
@@ -398,7 +522,7 @@
       <details class="team-card" id="team-Patrick-+-Emily">
         <summary>
           <span class="summary-team">Patrick + Emily</span>
-          <span class="summary-total">30274 pts</span>
+          <span class="summary-total">30306 pts</span>
         </summary>
         <table class="roster-table">
           <thead>
@@ -439,7 +563,7 @@
             <tr class="roster-row">
               <td class="pos">3B</td>
               <td class="player">Junior Caminero </td>
-              <td class="score">1416</td>
+              <td class="score">1419</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">3B</td>
@@ -454,7 +578,7 @@
             <tr class="roster-row">
               <td class="pos">SS</td>
               <td class="player">Elly De La Cruz </td>
-              <td class="score">1304</td>
+              <td class="score">1318</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">OF</td>
@@ -464,7 +588,7 @@
             <tr class="roster-row">
               <td class="pos">OF</td>
               <td class="player">Yordan Alvarez </td>
-              <td class="score">1560</td>
+              <td class="score">1563</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">OF</td>
@@ -514,7 +638,7 @@
             <tr class="roster-row">
               <td class="pos">SP</td>
               <td class="player">Jacob deGrom </td>
-              <td class="score">868</td>
+              <td class="score">880</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">SP</td>
@@ -563,7 +687,7 @@
       <details class="team-card" id="team-Nate-Moggio">
         <summary>
           <span class="summary-team">Nate Moggio</span>
-          <span class="summary-total">29778 pts</span>
+          <span class="summary-total">29792 pts</span>
         </summary>
         <table class="roster-table">
           <thead>
@@ -619,7 +743,7 @@
             <tr class="roster-row">
               <td class="pos">SS</td>
               <td class="player">Elly De La Cruz </td>
-              <td class="score">1304</td>
+              <td class="score">1318</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">OF</td>
@@ -728,7 +852,7 @@
       <details class="team-card" id="team-Casey-Spilka">
         <summary>
           <span class="summary-team">Casey Spilka</span>
-          <span class="summary-total">29618 pts</span>
+          <span class="summary-total">29662 pts</span>
         </summary>
         <table class="roster-table">
           <thead>
@@ -759,7 +883,7 @@
             <tr class="roster-row">
               <td class="pos">2B</td>
               <td class="player">Jose Altuve </td>
-              <td class="score">874</td>
+              <td class="score">883</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">2B</td>
@@ -784,7 +908,7 @@
             <tr class="roster-row">
               <td class="pos">SS</td>
               <td class="player">Elly De La Cruz </td>
-              <td class="score">1304</td>
+              <td class="score">1318</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">OF</td>
@@ -844,7 +968,7 @@
             <tr class="roster-row">
               <td class="pos">SP</td>
               <td class="player">Logan Gilbert </td>
-              <td class="score">934</td>
+              <td class="score">955</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">SP</td>
@@ -893,7 +1017,7 @@
       <details class="team-card" id="team-Brandon-Zaikowski">
         <summary>
           <span class="summary-team">Brandon Zaikowski</span>
-          <span class="summary-total">29534 pts</span>
+          <span class="summary-total">29548 pts</span>
         </summary>
         <table class="roster-table">
           <thead>
@@ -934,7 +1058,7 @@
             <tr class="roster-row">
               <td class="pos">3B</td>
               <td class="player">Junior Caminero </td>
-              <td class="score">1416</td>
+              <td class="score">1419</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">3B</td>
@@ -949,7 +1073,7 @@
             <tr class="roster-row">
               <td class="pos">SS</td>
               <td class="player">Elly De La Cruz </td>
-              <td class="score">1304</td>
+              <td class="score">1318</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">OF</td>
@@ -959,7 +1083,7 @@
             <tr class="roster-row">
               <td class="pos">OF</td>
               <td class="player">Yordan Alvarez </td>
-              <td class="score">1560</td>
+              <td class="score">1563</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">OF</td>
@@ -1044,7 +1168,7 @@
             <tr class="roster-row">
               <td class="pos">RP</td>
               <td class="player">JoJo Romero </td>
-              <td class="score">281</td>
+              <td class="score">275</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">RP</td>
@@ -1058,7 +1182,7 @@
       <details class="team-card" id="team-Ben-Fowler">
         <summary>
           <span class="summary-team">Ben Fowler</span>
-          <span class="summary-total">29416 pts</span>
+          <span class="summary-total">29463 pts</span>
         </summary>
         <table class="roster-table">
           <thead>
@@ -1149,7 +1273,7 @@
             <tr class="roster-row">
               <td class="pos">DH/Utility</td>
               <td class="player">Elly De La Cruz </td>
-              <td class="score">1304</td>
+              <td class="score">1318</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">DH/Utility</td>
@@ -1199,7 +1323,7 @@
             <tr class="roster-row">
               <td class="pos">RP</td>
               <td class="player">Nick Martinez </td>
-              <td class="score">743</td>
+              <td class="score">776</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">RP</td>
@@ -1223,7 +1347,7 @@
       <details class="team-card" id="team-Mike-Zisk">
         <summary>
           <span class="summary-team">Mike Zisk</span>
-          <span class="summary-total">29102 pts</span>
+          <span class="summary-total">29119 pts</span>
         </summary>
         <table class="roster-table">
           <thead>
@@ -1264,7 +1388,7 @@
             <tr class="roster-row">
               <td class="pos">3B</td>
               <td class="player">Junior Caminero </td>
-              <td class="score">1416</td>
+              <td class="score">1419</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">3B</td>
@@ -1279,7 +1403,7 @@
             <tr class="roster-row">
               <td class="pos">SS</td>
               <td class="player">Elly De La Cruz </td>
-              <td class="score">1304</td>
+              <td class="score">1318</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">OF</td>
@@ -1388,7 +1512,7 @@
       <details class="team-card" id="team-Zac-Brittain">
         <summary>
           <span class="summary-team">Zac Brittain</span>
-          <span class="summary-total">29041 pts</span>
+          <span class="summary-total">29059 pts</span>
         </summary>
         <table class="roster-table">
           <thead>
@@ -1429,7 +1553,7 @@
             <tr class="roster-row">
               <td class="pos">3B</td>
               <td class="player">Junior Caminero </td>
-              <td class="score">1416</td>
+              <td class="score">1419</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">3B</td>
@@ -1484,7 +1608,7 @@
             <tr class="roster-row">
               <td class="pos">DH/Utility</td>
               <td class="player">Yordan Alvarez </td>
-              <td class="score">1560</td>
+              <td class="score">1563</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">SP</td>
@@ -1514,7 +1638,7 @@
             <tr class="roster-row">
               <td class="pos">SP</td>
               <td class="player">Jacob deGrom </td>
-              <td class="score">868</td>
+              <td class="score">880</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">SP</td>
@@ -1553,7 +1677,7 @@
       <details class="team-card" id="team-Jake-Brittain">
         <summary>
           <span class="summary-team">Jake Brittain</span>
-          <span class="summary-total">28975 pts</span>
+          <span class="summary-total">28989 pts</span>
         </summary>
         <table class="roster-table">
           <thead>
@@ -1644,7 +1768,7 @@
             <tr class="roster-row">
               <td class="pos">DH/Utility</td>
               <td class="player">Yordan Alvarez </td>
-              <td class="score">1560</td>
+              <td class="score">1563</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">DH/Utility</td>
@@ -1699,12 +1823,12 @@
             <tr class="roster-row">
               <td class="pos">RP</td>
               <td class="player">Raisel Iglesias </td>
-              <td class="score">436</td>
+              <td class="score">444</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">RP</td>
               <td class="player">Jhoan Duran </td>
-              <td class="score">512</td>
+              <td class="score">515</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">RP</td>
@@ -1718,7 +1842,7 @@
       <details class="team-card" id="team-Andrew-Serio">
         <summary>
           <span class="summary-team">Andrew Serio</span>
-          <span class="summary-total">28474 pts</span>
+          <span class="summary-total">28503 pts</span>
         </summary>
         <table class="roster-table">
           <thead>
@@ -1759,7 +1883,7 @@
             <tr class="roster-row">
               <td class="pos">3B</td>
               <td class="player">Junior Caminero </td>
-              <td class="score">1416</td>
+              <td class="score">1419</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">3B</td>
@@ -1809,7 +1933,7 @@
             <tr class="roster-row">
               <td class="pos">DH/Utility</td>
               <td class="player">Elly De La Cruz </td>
-              <td class="score">1304</td>
+              <td class="score">1318</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">DH/Utility</td>
@@ -1839,7 +1963,7 @@
             <tr class="roster-row">
               <td class="pos">SP</td>
               <td class="player">Jacob deGrom </td>
-              <td class="score">868</td>
+              <td class="score">880</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">SP</td>
@@ -1883,7 +2007,7 @@
       <details class="team-card" id="team-Owen-Shelffo">
         <summary>
           <span class="summary-team">Owen Shelffo</span>
-          <span class="summary-total">27940 pts</span>
+          <span class="summary-total">27964 pts</span>
         </summary>
         <table class="roster-table">
           <thead>
@@ -1909,7 +2033,7 @@
             <tr class="roster-row">
               <td class="pos">1B</td>
               <td class="player">Sal Stewart </td>
-              <td class="score">1362</td>
+              <td class="score">1365</td>
             </tr>
             <tr class="roster-row injured">
               <td class="pos">2B</td>
@@ -1924,7 +2048,7 @@
             <tr class="roster-row">
               <td class="pos">3B</td>
               <td class="player">Junior Caminero </td>
-              <td class="score">1416</td>
+              <td class="score">1419</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">3B</td>
@@ -2004,7 +2128,7 @@
             <tr class="roster-row">
               <td class="pos">SP</td>
               <td class="player">Logan Gilbert </td>
-              <td class="score">934</td>
+              <td class="score">955</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">SP</td>
@@ -2029,12 +2153,12 @@
             <tr class="roster-row">
               <td class="pos">RP</td>
               <td class="player">Jhoan Duran </td>
-              <td class="score">512</td>
+              <td class="score">515</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">RP</td>
               <td class="player">JoJo Romero </td>
-              <td class="score">281</td>
+              <td class="score">275</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">RP</td>
@@ -2048,7 +2172,7 @@
       <details class="team-card" id="team-Amy-Serio">
         <summary>
           <span class="summary-team">Amy Serio</span>
-          <span class="summary-total">27910 pts</span>
+          <span class="summary-total">27939 pts</span>
         </summary>
         <table class="roster-table">
           <thead>
@@ -2074,12 +2198,12 @@
             <tr class="roster-row">
               <td class="pos">1B</td>
               <td class="player">Matt Olson </td>
-              <td class="score">1336</td>
+              <td class="score">1339</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">2B</td>
               <td class="player">Jose Altuve </td>
-              <td class="score">874</td>
+              <td class="score">883</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">2B</td>
@@ -2089,7 +2213,7 @@
             <tr class="roster-row">
               <td class="pos">3B</td>
               <td class="player">Junior Caminero </td>
-              <td class="score">1416</td>
+              <td class="score">1419</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">3B</td>
@@ -2104,7 +2228,7 @@
             <tr class="roster-row">
               <td class="pos">SS</td>
               <td class="player">Elly De La Cruz </td>
-              <td class="score">1304</td>
+              <td class="score">1318</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">OF</td>
@@ -2213,7 +2337,7 @@
       <details class="team-card" id="team-Trevor-Maslowski">
         <summary>
           <span class="summary-team">Trevor Maslowski</span>
-          <span class="summary-total">27867 pts</span>
+          <span class="summary-total">27882 pts</span>
         </summary>
         <table class="roster-table">
           <thead>
@@ -2254,7 +2378,7 @@
             <tr class="roster-row">
               <td class="pos">3B</td>
               <td class="player">Junior Caminero </td>
-              <td class="score">1416</td>
+              <td class="score">1419</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">3B</td>
@@ -2284,7 +2408,7 @@
             <tr class="roster-row">
               <td class="pos">OF</td>
               <td class="player">Yordan Alvarez </td>
-              <td class="score">1560</td>
+              <td class="score">1563</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">OF</td>
@@ -2324,7 +2448,7 @@
             <tr class="roster-row">
               <td class="pos">SP</td>
               <td class="player">Jacob deGrom </td>
-              <td class="score">868</td>
+              <td class="score">880</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">SP</td>
@@ -2354,12 +2478,12 @@
             <tr class="roster-row">
               <td class="pos">RP</td>
               <td class="player">Jhoan Duran </td>
-              <td class="score">512</td>
+              <td class="score">515</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">RP</td>
               <td class="player">JoJo Romero </td>
-              <td class="score">281</td>
+              <td class="score">275</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">RP</td>
@@ -2378,7 +2502,7 @@
       <details class="team-card" id="team-Emily-Zaikowski">
         <summary>
           <span class="summary-team">Emily Zaikowski</span>
-          <span class="summary-total">27845 pts</span>
+          <span class="summary-total">27869 pts</span>
         </summary>
         <table class="roster-table">
           <thead>
@@ -2409,7 +2533,7 @@
             <tr class="roster-row">
               <td class="pos">2B</td>
               <td class="player">Ozzie Albies </td>
-              <td class="score">1091</td>
+              <td class="score">1101</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">2B</td>
@@ -2419,7 +2543,7 @@
             <tr class="roster-row">
               <td class="pos">3B</td>
               <td class="player">Junior Caminero </td>
-              <td class="score">1416</td>
+              <td class="score">1419</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">3B</td>
@@ -2434,7 +2558,7 @@
             <tr class="roster-row">
               <td class="pos">SS</td>
               <td class="player">Elly De La Cruz </td>
-              <td class="score">1304</td>
+              <td class="score">1318</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">OF</td>
@@ -2444,7 +2568,7 @@
             <tr class="roster-row">
               <td class="pos">OF</td>
               <td class="player">Yordan Alvarez </td>
-              <td class="score">1560</td>
+              <td class="score">1563</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">OF</td>
@@ -2529,7 +2653,7 @@
             <tr class="roster-row">
               <td class="pos">RP</td>
               <td class="player">JoJo Romero </td>
-              <td class="score">281</td>
+              <td class="score">275</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">RP</td>
@@ -2543,7 +2667,7 @@
       <details class="team-card" id="team-Maxwell-Edwards">
         <summary>
           <span class="summary-team">Maxwell Edwards</span>
-          <span class="summary-total">27837 pts</span>
+          <span class="summary-total">27845 pts</span>
         </summary>
         <table class="roster-table">
           <thead>
@@ -2584,7 +2708,7 @@
             <tr class="roster-row">
               <td class="pos">3B</td>
               <td class="player">Junior Caminero </td>
-              <td class="score">1416</td>
+              <td class="score">1419</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">3B</td>
@@ -2634,7 +2758,7 @@
             <tr class="roster-row">
               <td class="pos">DH/Utility</td>
               <td class="player">Yordan Alvarez </td>
-              <td class="score">1560</td>
+              <td class="score">1563</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">DH/Utility</td>
@@ -2684,7 +2808,7 @@
             <tr class="roster-row">
               <td class="pos">RP</td>
               <td class="player">Raisel Iglesias </td>
-              <td class="score">436</td>
+              <td class="score">444</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">RP</td>
@@ -2694,7 +2818,7 @@
             <tr class="roster-row">
               <td class="pos">RP</td>
               <td class="player">JoJo Romero </td>
-              <td class="score">281</td>
+              <td class="score">275</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">RP</td>
@@ -2708,7 +2832,7 @@
       <details class="team-card" id="team-Tim-Horton">
         <summary>
           <span class="summary-team">Tim Horton</span>
-          <span class="summary-total">27515 pts</span>
+          <span class="summary-total">27541 pts</span>
         </summary>
         <table class="roster-table">
           <thead>
@@ -2749,7 +2873,7 @@
             <tr class="roster-row">
               <td class="pos">3B</td>
               <td class="player">Junior Caminero </td>
-              <td class="score">1416</td>
+              <td class="score">1419</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">3B</td>
@@ -2829,7 +2953,7 @@
             <tr class="roster-row">
               <td class="pos">SP</td>
               <td class="player">Jacob deGrom </td>
-              <td class="score">868</td>
+              <td class="score">880</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">SP</td>
@@ -2849,7 +2973,7 @@
             <tr class="roster-row">
               <td class="pos">RP</td>
               <td class="player">Josh Hader </td>
-              <td class="score">408</td>
+              <td class="score">419</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">RP</td>
@@ -2873,7 +2997,7 @@
       <details class="team-card" id="team-Julie-Brittain">
         <summary>
           <span class="summary-team">Julie Brittain</span>
-          <span class="summary-total">27407 pts</span>
+          <span class="summary-total">27424 pts</span>
         </summary>
         <table class="roster-table">
           <thead>
@@ -2914,7 +3038,7 @@
             <tr class="roster-row">
               <td class="pos">3B</td>
               <td class="player">Junior Caminero </td>
-              <td class="score">1416</td>
+              <td class="score">1419</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">3B</td>
@@ -2964,7 +3088,7 @@
             <tr class="roster-row">
               <td class="pos">DH/Utility</td>
               <td class="player">Elly De La Cruz </td>
-              <td class="score">1304</td>
+              <td class="score">1318</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">DH/Utility</td>
@@ -3038,7 +3162,7 @@
       <details class="team-card" id="team-Andrew-Sadowski">
         <summary>
           <span class="summary-team">Andrew Sadowski</span>
-          <span class="summary-total">27196 pts</span>
+          <span class="summary-total">27199 pts</span>
         </summary>
         <table class="roster-table">
           <thead>
@@ -3079,7 +3203,7 @@
             <tr class="roster-row">
               <td class="pos">3B</td>
               <td class="player">Junior Caminero </td>
-              <td class="score">1416</td>
+              <td class="score">1419</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">3B</td>
@@ -3203,7 +3327,7 @@
       <details class="team-card" id="team-Levi-Richards">
         <summary>
           <span class="summary-team">Levi Richards</span>
-          <span class="summary-total">26986 pts</span>
+          <span class="summary-total">26992 pts</span>
         </summary>
         <table class="roster-table">
           <thead>
@@ -3244,7 +3368,7 @@
             <tr class="roster-row">
               <td class="pos">3B</td>
               <td class="player">Junior Caminero </td>
-              <td class="score">1416</td>
+              <td class="score">1419</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">3B</td>
@@ -3294,7 +3418,7 @@
             <tr class="roster-row">
               <td class="pos">DH/Utility</td>
               <td class="player">Kyle Schwarber </td>
-              <td class="score">1405</td>
+              <td class="score">1408</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">DH/Utility</td>
@@ -3368,7 +3492,7 @@
       <details class="team-card" id="team-Paul-Serio">
         <summary>
           <span class="summary-team">Paul Serio</span>
-          <span class="summary-total">26739 pts</span>
+          <span class="summary-total">26748 pts</span>
         </summary>
         <table class="roster-table">
           <thead>
@@ -3409,7 +3533,7 @@
             <tr class="roster-row">
               <td class="pos">3B</td>
               <td class="player">Junior Caminero </td>
-              <td class="score">1416</td>
+              <td class="score">1419</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">3B</td>
@@ -3439,7 +3563,7 @@
             <tr class="roster-row">
               <td class="pos">OF</td>
               <td class="player">Yordan Alvarez </td>
-              <td class="score">1560</td>
+              <td class="score">1563</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">OF</td>
@@ -3459,7 +3583,7 @@
             <tr class="roster-row">
               <td class="pos">DH/Utility</td>
               <td class="player">Kyle Schwarber </td>
-              <td class="score">1405</td>
+              <td class="score">1408</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">DH/Utility</td>
@@ -3533,7 +3657,7 @@
       <details class="team-card" id="team-Steve-Richards">
         <summary>
           <span class="summary-team">Steve Richards</span>
-          <span class="summary-total">26518 pts</span>
+          <span class="summary-total">26524 pts</span>
         </summary>
         <table class="roster-table">
           <thead>
@@ -3574,7 +3698,7 @@
             <tr class="roster-row">
               <td class="pos">3B</td>
               <td class="player">Junior Caminero </td>
-              <td class="score">1416</td>
+              <td class="score">1419</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">3B</td>
@@ -3624,7 +3748,7 @@
             <tr class="roster-row">
               <td class="pos">DH/Utility</td>
               <td class="player">Kyle Schwarber </td>
-              <td class="score">1405</td>
+              <td class="score">1408</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">DH/Utility</td>
@@ -3698,7 +3822,7 @@
       <details class="team-card" id="team-Gabe-Selig">
         <summary>
           <span class="summary-team">Gabe Selig</span>
-          <span class="summary-total">26518 pts</span>
+          <span class="summary-total">26521 pts</span>
         </summary>
         <table class="roster-table">
           <thead>
@@ -3739,7 +3863,7 @@
             <tr class="roster-row">
               <td class="pos">3B</td>
               <td class="player">Junior Caminero </td>
-              <td class="score">1416</td>
+              <td class="score">1419</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">3B</td>
@@ -3863,7 +3987,7 @@
       <details class="team-card" id="team-Jamie-Horton">
         <summary>
           <span class="summary-team">Jamie Horton</span>
-          <span class="summary-total">26233 pts</span>
+          <span class="summary-total">26250 pts</span>
         </summary>
         <table class="roster-table">
           <thead>
@@ -3904,7 +4028,7 @@
             <tr class="roster-row">
               <td class="pos">3B</td>
               <td class="player">Junior Caminero </td>
-              <td class="score">1416</td>
+              <td class="score">1419</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">3B</td>
@@ -3954,7 +4078,7 @@
             <tr class="roster-row">
               <td class="pos">DH/Utility</td>
               <td class="player">Kyle Schwarber </td>
-              <td class="score">1405</td>
+              <td class="score">1408</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">DH/Utility</td>
@@ -4009,7 +4133,7 @@
             <tr class="roster-row">
               <td class="pos">RP</td>
               <td class="player">Josh Hader </td>
-              <td class="score">408</td>
+              <td class="score">419</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">RP</td>
@@ -4028,7 +4152,7 @@
       <details class="team-card" id="team-Jason-Gouin">
         <summary>
           <span class="summary-team">Jason Gouin</span>
-          <span class="summary-total">26061 pts</span>
+          <span class="summary-total">26087 pts</span>
         </summary>
         <table class="roster-table">
           <thead>
@@ -4069,7 +4193,7 @@
             <tr class="roster-row">
               <td class="pos">3B</td>
               <td class="player">Junior Caminero </td>
-              <td class="score">1416</td>
+              <td class="score">1419</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">3B</td>
@@ -4084,7 +4208,7 @@
             <tr class="roster-row">
               <td class="pos">SS</td>
               <td class="player">Elly De La Cruz </td>
-              <td class="score">1304</td>
+              <td class="score">1318</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">OF</td>
@@ -4149,7 +4273,7 @@
             <tr class="roster-row">
               <td class="pos">SP</td>
               <td class="player">Jacob deGrom </td>
-              <td class="score">868</td>
+              <td class="score">880</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">SP</td>
@@ -4179,12 +4303,12 @@
             <tr class="roster-row">
               <td class="pos">RP</td>
               <td class="player">Jhoan Duran </td>
-              <td class="score">512</td>
+              <td class="score">515</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">RP</td>
               <td class="player">JoJo Romero </td>
-              <td class="score">281</td>
+              <td class="score">275</td>
             </tr>
           </tbody>
         </table>
@@ -4234,7 +4358,7 @@
             <tr class="roster-row">
               <td class="pos">3B</td>
               <td class="player">Junior Caminero </td>
-              <td class="score">1416</td>
+              <td class="score">1419</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">3B</td>
@@ -4334,7 +4458,7 @@
             <tr class="roster-row">
               <td class="pos">RP</td>
               <td class="player">Jhoan Duran </td>
-              <td class="score">512</td>
+              <td class="score">515</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">RP</td>
@@ -4344,7 +4468,7 @@
             <tr class="roster-row">
               <td class="pos">RP</td>
               <td class="player">JoJo Romero </td>
-              <td class="score">281</td>
+              <td class="score">275</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">RP</td>
@@ -4358,7 +4482,7 @@
       <details class="team-card" id="team-Jack-Power">
         <summary>
           <span class="summary-team">Jack Power</span>
-          <span class="summary-total">23933 pts</span>
+          <span class="summary-total">23989 pts</span>
         </summary>
         <table class="roster-table">
           <thead>
@@ -4399,7 +4523,7 @@
             <tr class="roster-row">
               <td class="pos">3B</td>
               <td class="player">Junior Caminero </td>
-              <td class="score">1416</td>
+              <td class="score">1419</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">3B</td>
@@ -4449,7 +4573,7 @@
             <tr class="roster-row">
               <td class="pos">DH/Utility</td>
               <td class="player">Jeremy Peña </td>
-              <td class="score">853</td>
+              <td class="score">856</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">DH/Utility</td>
@@ -4479,7 +4603,7 @@
             <tr class="roster-row">
               <td class="pos">SP</td>
               <td class="player">Zack Wheeler </td>
-              <td class="score">881</td>
+              <td class="score">931</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">SP</td>
@@ -4523,7 +4647,7 @@
       <details class="team-card" id="team-Randy-Sherman">
         <summary>
           <span class="summary-team">Randy Sherman</span>
-          <span class="summary-total">22529 pts</span>
+          <span class="summary-total">22575 pts</span>
         </summary>
         <table class="roster-table">
           <thead>
@@ -4614,7 +4738,7 @@
             <tr class="roster-row">
               <td class="pos">DH/Utility</td>
               <td class="player">Kyle Schwarber </td>
-              <td class="score">1405</td>
+              <td class="score">1408</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">DH/Utility</td>
@@ -4654,7 +4778,7 @@
             <tr class="roster-row">
               <td class="pos">SP</td>
               <td class="player">Yoshinobu Yamamoto </td>
-              <td class="score">1001</td>
+              <td class="score">1044</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">SP</td>
