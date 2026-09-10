@@ -274,7 +274,7 @@ for i, row in df.iterrows():
     df.at[i, "SB"] = hitting_stats.get("stolenBases", 0)
     df.at[i, "HBP"] = hitting_stats.get("hitByPitch", 0)
 
-    df.at[i, "IP"] = pitching_stats.get("inningsPitched", 0)
+    df.at[i, "IP"] = str(pitching_stats.get("inningsPitched", "0.0"))
     df.at[i, "ER"] = pitching_stats.get("earnedRuns", 0)
     df.at[i, "Wins"] = pitching_stats.get("wins", 0)
     df.at[i, "Saves"] = pitching_stats.get("saves", 0)
