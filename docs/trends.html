@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fantasy Baseball League — Trends</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+
+  :root {
+    --navy: #303444;
+    --navy-light: #454a60;
+    --gold: #D5A451;
+    --cream: #F6EFDF;
+    --cream-row: #EDE2C4;
+    --red: #D14B36;
+    --cold: #5C7A9E;
+    --text: #22242E;
+    --white: #FFFFFF;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--cream);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.5;
+  }
+
+  header {
+    background: var(--navy);
+    color: var(--white);
+    padding: 2.5rem 1.5rem 1.25rem;
+  }
+
+  .header-inner {
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  h1 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 2.1rem;
+    margin: 0;
+    letter-spacing: 0.01em;
+  }
+
+  .updated {
+    color: var(--gold);
+    font-size: 0.9rem;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .top-nav {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0.75rem 1.5rem 0;
+    display: flex;
+    gap: 1.5rem;
+    border-top: 1px solid rgba(255,255,255,0.12);
+  }
+
+  .top-nav a {
+    color: rgba(255,255,255,0.65);
+    text-decoration: none;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding: 0.6rem 0.1rem 0.5rem;
+    border-bottom: 2px solid transparent;
+  }
+
+  .top-nav a.active {
+    color: var(--white);
+    border-bottom-color: var(--gold);
+  }
+
+  .top-nav a:hover {
+    color: var(--white);
+  }
+
+  main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  main.narrow {
+    max-width: 760px;
+  }
+
+  h2 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: 1.3rem;
+    color: var(--navy);
+    margin: 0 0 1rem;
+    border-bottom: 3px solid var(--gold);
+    padding-bottom: 0.4rem;
+  }
+
+  section + section {
+    margin-top: 2.5rem;
+  }
+
+  footer {
+    text-align: center;
+    color: #8a8d99;
+    font-size: 0.8rem;
+    padding: 1.5rem;
+  }
+
+  /* ---- Standings page ---- */
+
+  ul.standings {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border: 1px solid var(--cream-row);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .standing-row {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.7rem 1rem;
+    background: var(--white);
+  }
+
+  .standing-row:nth-child(odd) {
+    background: var(--cream-row);
+  }
+
+  .rank {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--gold);
+    width: 1.6rem;
+    text-align: right;
+  }
+
+  .team-name {
+    flex: 1;
+    font-weight: 600;
+    color: var(--navy);
+    text-decoration: none;
+  }
+
+  .team-name:hover {
+    text-decoration: underline;
+  }
+
+  .pts {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .pts-label {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 0.8rem;
+    color: #6b6e7a;
+  }
+
+  .team-card {
+    background: var(--white);
+    border: 1px solid var(--cream-row);
+    border-radius: 6px;
+    margin-bottom: 0.75rem;
+    overflow: hidden;
+  }
+
+  .team-card summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.85rem 1.1rem;
+    cursor: pointer;
+    background: var(--navy);
+    color: var(--white);
+    font-family: 'Oswald', sans-serif;
+    list-style: none;
+  }
+
+  .team-card summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .summary-team {
+    font-weight: 600;
+    font-size: 1.05rem;
+  }
+
+  .summary-total {
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  .roster-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+  }
+
+  .roster-table th {
+    text-align: left;
+    background: var(--cream-row);
+    color: var(--navy);
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+  }
+
+  .roster-table td {
+    padding: 0.5rem 1rem;
+    border-top: 1px solid var(--cream-row);
+  }
+
+  .roster-row.injured td,
+  .player-row.injured td {
+    background: var(--red);
+    color: var(--white);
+  }
+
+  .injury-tag {
+    display: inline-block;
+    margin-left: 0.4rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    background: rgba(255,255,255,0.25);
+    padding: 0.05rem 0.35rem;
+    border-radius: 3px;
+  }
+
+  .score {
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+
+  /* ---- Players page ---- */
+
+  .filter-bar {
+    margin-bottom: 1rem;
+  }
+
+  .filter-bar input {
+    width: 100%;
+    max-width: 320px;
+    padding: 0.55rem 0.8rem;
+    border: 1px solid var(--cream-row);
+    border-radius: 6px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    background: var(--white);
+    color: var(--text);
+  }
+
+  .filter-bar input:focus {
+    outline: 2px solid var(--gold);
+    outline-offset: 1px;
+  }
+
+  .player-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    background: var(--white);
+    border: 1px solid var(--cream-row);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .player-table th {
+    text-align: left;
+    background: var(--navy);
+    color: var(--white);
+    padding: 0.55rem 0.7rem;
+    font-weight: 600;
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+  }
+
+  .player-table th:hover {
+    background: var(--navy-light);
+  }
+
+  .player-table th.sorted-asc::after {
+    content: " \25B2";
+    color: var(--gold);
+  }
+
+  .player-table th.sorted-desc::after {
+    content: " \25BC";
+    color: var(--gold);
+  }
+
+  .player-table td {
+    padding: 0.5rem 0.7rem;
+    border-top: 1px solid var(--cream-row);
+    white-space: nowrap;
+  }
+
+  .player-table tbody tr:nth-child(odd) {
+    background: var(--cream-row);
+  }
+
+  .player-table th[data-sort="num"] {
+    text-align: center;
+  }
+
+  .player-table td.stat,
+  .player-table td.score {
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+  }
+
+  /* ---- Trends page ---- */
+
+  .trend-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .trend-card {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    background: var(--white);
+    border: 1px solid var(--cream-row);
+    border-left: 4px solid var(--gold);
+    border-radius: 6px;
+    padding: 0.9rem 1rem;
+  }
+
+  .trend-card.cold {
+    border-left-color: var(--cold);
+  }
+
+  .trend-icon {
+    font-size: 1.4rem;
+    line-height: 1;
+  }
+
+  .trend-name {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    color: var(--navy);
+  }
+
+  .trend-team {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 0.78rem;
+    color: #8a8d99;
+  }
+
+  .trend-blurb {
+    font-size: 0.88rem;
+    margin-top: 0.15rem;
+    color: var(--text);
+  }
+
+  .trend-pts {
+    margin-top: 0.4rem;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--gold);
+  }
+
+  .trend-card.cold .trend-pts {
+    color: var(--cold);
+  }
+
+  .no-data {
+    color: #6b6e7a;
+    font-style: italic;
+  }
+
+  @media (max-width: 480px) {
+    h1 { font-size: 1.6rem; }
+    .roster-table { font-size: 0.85rem; }
+    .player-table { font-size: 0.78rem; }
+  }
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <h1>Fantasy Baseball League</h1>
+    <span class="updated">Updated September 10, 2026 at 5:26 PM EDT</span>
+  </div>
+  
+    <nav class="top-nav">
+      <a href="index.html" class="">Standings</a>
+      <a href="players.html" class="">Players</a>
+      <a href="trends.html" class="active">Trends</a>
+    </nav>
+</header>
+
+<main>
+  
+    <section>
+      <h2>🔥 Hot Hitters</h2>
+      <div class="trend-grid">
+        
+        <div class="trend-card hot">
+          <div class="trend-icon">🔥</div>
+          <div class="trend-body">
+            <div class="trend-name">Shohei Ohtani <span class="trend-team">LAD</span></div>
+            <div class="trend-blurb">Hitting .128 with 0 HR and 0 RBI over his last 10 games</div>
+            <div class="trend-pts">443 pts</div>
+          </div>
+        </div>
+        <div class="trend-card hot">
+          <div class="trend-icon">🔥</div>
+          <div class="trend-body">
+            <div class="trend-name">Rafael Devers <span class="trend-team">SF</span></div>
+            <div class="trend-blurb">Hitting .368 with 6 HR and 16 RBI over his last 10 games</div>
+            <div class="trend-pts">173 pts</div>
+          </div>
+        </div>
+        <div class="trend-card hot">
+          <div class="trend-icon">🔥</div>
+          <div class="trend-body">
+            <div class="trend-name">Elly De La Cruz <span class="trend-team">CIN</span></div>
+            <div class="trend-blurb">Hitting .459 with 5 HR and 10 RBI over his last 10 games</div>
+            <div class="trend-pts">152 pts</div>
+          </div>
+        </div>
+        <div class="trend-card hot">
+          <div class="trend-icon">🔥</div>
+          <div class="trend-body">
+            <div class="trend-name">Jackson Chourio <span class="trend-team">MIL</span></div>
+            <div class="trend-blurb">Hitting .370 with 3 HR and 8 RBI over his last 10 games</div>
+            <div class="trend-pts">136 pts</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>🥶 Cold Hitters</h2>
+      <div class="trend-grid">
+        
+        <div class="trend-card cold">
+          <div class="trend-icon">🥶</div>
+          <div class="trend-body">
+            <div class="trend-name">Austin Hays <span class="trend-team">SD</span></div>
+            <div class="trend-blurb">Hitting .250 with 0 HR and 1 RBI over his last 10 games</div>
+            <div class="trend-pts">24 pts</div>
+          </div>
+        </div>
+        <div class="trend-card cold">
+          <div class="trend-icon">🥶</div>
+          <div class="trend-body">
+            <div class="trend-name">Jordan Beck <span class="trend-team">COL</span></div>
+            <div class="trend-blurb">Hitting .238 with 0 HR and 1 RBI over his last 10 games</div>
+            <div class="trend-pts">24 pts</div>
+          </div>
+        </div>
+        <div class="trend-card cold">
+          <div class="trend-icon">🥶</div>
+          <div class="trend-body">
+            <div class="trend-name">Ezequiel Tovar <span class="trend-team">COL</span></div>
+            <div class="trend-blurb">Hitting .185 with 0 HR and 0 RBI over his last 10 games</div>
+            <div class="trend-pts">25 pts</div>
+          </div>
+        </div>
+        <div class="trend-card cold">
+          <div class="trend-icon">🥶</div>
+          <div class="trend-body">
+            <div class="trend-name">Matt Olson <span class="trend-team">ATL</span></div>
+            <div class="trend-blurb">Hitting .111 with 0 HR and 2 RBI over his last 10 games</div>
+            <div class="trend-pts">27 pts</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>🔥 Hot Pitchers</h2>
+      <div class="trend-grid">
+        
+        <div class="trend-card hot">
+          <div class="trend-icon">🔥</div>
+          <div class="trend-body">
+            <div class="trend-name">Shohei Ohtani <span class="trend-team">LAD</span></div>
+            <div class="trend-blurb">70 Ks and a 2.34 ERA over his last 10 games</div>
+            <div class="trend-pts">443 pts</div>
+          </div>
+        </div>
+        <div class="trend-card hot">
+          <div class="trend-icon">🔥</div>
+          <div class="trend-body">
+            <div class="trend-name">Cade Cavalli <span class="trend-team">WSH</span></div>
+            <div class="trend-blurb">75 Ks and a 1.95 ERA over his last 10 games</div>
+            <div class="trend-pts">401 pts</div>
+          </div>
+        </div>
+        <div class="trend-card hot">
+          <div class="trend-icon">🔥</div>
+          <div class="trend-body">
+            <div class="trend-name">Chris Sale <span class="trend-team">ATL</span></div>
+            <div class="trend-blurb">75 Ks and a 2.10 ERA over his last 10 games</div>
+            <div class="trend-pts">393 pts</div>
+          </div>
+        </div>
+        <div class="trend-card hot">
+          <div class="trend-icon">🔥</div>
+          <div class="trend-body">
+            <div class="trend-name">Jacob Misiorowski <span class="trend-team">MIL</span></div>
+            <div class="trend-blurb">80 Ks and a 2.83 ERA over his last 10 games</div>
+            <div class="trend-pts">383 pts</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>🥶 Cold Pitchers</h2>
+      <div class="trend-grid">
+        
+        <div class="trend-card cold">
+          <div class="trend-icon">🥶</div>
+          <div class="trend-body">
+            <div class="trend-name">Ryan Walker <span class="trend-team">nan</span></div>
+            <div class="trend-blurb">5 Ks and a 10.64 ERA over his last 10 games</div>
+            <div class="trend-pts">13 pts</div>
+          </div>
+        </div>
+        <div class="trend-card cold">
+          <div class="trend-icon">🥶</div>
+          <div class="trend-body">
+            <div class="trend-name">Corbin Burnes <span class="trend-team">AZ</span></div>
+            <div class="trend-blurb">2 Ks and a 0.00 ERA over his last 10 games</div>
+            <div class="trend-pts">15 pts</div>
+          </div>
+        </div>
+        <div class="trend-card cold">
+          <div class="trend-icon">🥶</div>
+          <div class="trend-body">
+            <div class="trend-name">Matt Svanson <span class="trend-team">nan</span></div>
+            <div class="trend-blurb">7 Ks and a 7.27 ERA over his last 10 games</div>
+            <div class="trend-pts">26 pts</div>
+          </div>
+        </div>
+        <div class="trend-card cold">
+          <div class="trend-icon">🥶</div>
+          <div class="trend-body">
+            <div class="trend-name">Shane Smith <span class="trend-team">nan</span></div>
+            <div class="trend-blurb">11 Ks and a 10.80 ERA over his last 10 games</div>
+            <div class="trend-pts">28 pts</div>
+          </div>
+        </div>
+      </div>
+    </section>
+</main>
+
+<footer>
+  Based on each player's last 10 games. Refreshes automatically every day.
+</footer>
+
+</body>
+</html>
