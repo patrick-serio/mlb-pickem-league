@@ -17,6 +17,16 @@ PLAYER_MAP_FILE = "config/player_map.json"
 ROSTER_OUTPUT = "data/team_rosters_updated.csv"
 TEAM_OUTPUT = "data/team_scores.csv"
 
+# Raw stat columns update.py attaches to each player, carried through to the
+# roster file so the dashboard can show what's behind each point total.
+STAT_COLUMNS = [
+    "Hits", "Doubles", "Triples", "HR", "BB", "Runs", "RBI", "SB", "HBP",
+    "IP", "ER", "Wins", "Saves", "K", "QS", "Holds",
+]
+
+# Non-numeric extras also attached by update.py.
+EXTRA_COLUMNS = ["Type", "Player ID", "MLB Team"]
+
 # =========================
 # 2. LOAD DATA
 # =========================
@@ -63,8 +73,12 @@ if "Total Points" in backend_df.columns:
 
 print("Merging team roster with backend stats...")
 
+backend_cols = ["Player", "Full Name", "Total Score", "Injured"] + [
+    c for c in (EXTRA_COLUMNS + STAT_COLUMNS) if c in backend_df.columns
+]
+
 merged = team_df.merge(
-    backend_df[["Player", "Full Name", "Total Score", "Injured"]],
+    backend_df[backend_cols],
     on="Player",
     how="left"
 )
@@ -114,6 +128,15 @@ if len(missing) > 0:
 
 # Fill missing values with 0
 merged["Total Score"] = merged["Total Score"].fillna(0)
+
+numeric_stat_cols = [c for c in STAT_COLUMNS if c in merged.columns]
+merged[numeric_stat_cols] = merged[numeric_stat_cols].fillna(0)
+if "Type" in merged.columns:
+    merged["Type"] = merged["Type"].fillna("hitter")
+if "MLB Team" in merged.columns:
+    merged["MLB Team"] = merged["MLB Team"].fillna("")
+if "Player ID" in merged.columns:
+    merged["Player ID"] = merged["Player ID"].fillna(0)
 
 # =========================
 # 7. CALCULATE TEAM SCORES

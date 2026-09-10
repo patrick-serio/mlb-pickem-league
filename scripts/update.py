@@ -67,11 +67,12 @@ def get_stats(player_id, group):
         print(f"Stats error for ID {player_id}: {e}")
         return {}
 
-# Active Player Check (Injury/Minors Status):
+# Active Player Check (Injury/Minors Status) + MLB team lookup:
 def build_active_roster_set():
     teams = statsapi.get('teams', {'sportId': 1, 'activeStatus': 'Y'})['teams']
 
     active_ids = set()
+    team_map = {}   # player_id -> MLB team abbreviation
 
     for team in teams:
         roster = statsapi.get('team_roster', {
@@ -79,10 +80,14 @@ def build_active_roster_set():
             'rosterType': 'active'
         })['roster']
 
-        for entry in roster:
-            active_ids.add(entry['person']['id'])
+        team_label = team.get('abbreviation') or team.get('name', '')
 
-    return active_ids
+        for entry in roster:
+            player_id = entry['person']['id']
+            active_ids.add(player_id)
+            team_map[player_id] = team_label
+
+    return active_ids, team_map
 
 # This function checks if a player ID is in the active roster set and returns "N" for active, "Y" for injured/minors
 def get_injury_status(player_id):
@@ -90,6 +95,21 @@ def get_injury_status(player_id):
         return "N"
     else:
         return "Y"
+
+# Fallback for players not on an active 26-man roster (IL, minors) — their
+# current org is still available from the person endpoint.
+def get_mlb_team(player_id):
+    if player_id in PLAYER_TEAM_MAP:
+        return PLAYER_TEAM_MAP[player_id]
+
+    try:
+        data = statsapi.get('people', {'personIds': player_id})
+        person = data.get('people', [{}])[0]
+        team = person.get('currentTeam', {})
+        return team.get('abbreviation') or team.get('name', '')
+    except Exception as e:
+        print(f"MLB team lookup error for ID {player_id}: {e}")
+        return ""
 
 # =========================
 # 5. SCORING RULES
@@ -181,7 +201,7 @@ def calculate_pitcher_points(stats, quality_starts):
 # =========================
 
 print("Building active MLB roster set...")
-ACTIVE_ROSTER_IDS = build_active_roster_set()
+ACTIVE_ROSTER_IDS, PLAYER_TEAM_MAP = build_active_roster_set()
 print(f"Loaded {len(ACTIVE_ROSTER_IDS)} active players")
 
 for i, row in df.iterrows():
@@ -199,6 +219,9 @@ for i, row in df.iterrows():
     injured_status = get_injury_status(player_id)
 
     total_points = 0
+    hitting_stats = {}
+    pitching_stats = {}
+    qs = 0
 
     print("\n---")
     print("Player:", player_name)
@@ -232,6 +255,32 @@ for i, row in df.iterrows():
 
     df.at[i, "Total Points"] = total_points
     df.at[i, "Injured"] = injured_status
+    df.at[i, "Type"] = player_type
+    df.at[i, "Player ID"] = player_id
+    df.at[i, "MLB Team"] = get_mlb_team(player_id)
+
+    # =========================
+    # SAVE THE RAW STAT LINE
+    # (so the dashboard can show what's behind each player's points,
+    # not just the final total)
+    # =========================
+    df.at[i, "Hits"] = hitting_stats.get("hits", 0)
+    df.at[i, "Doubles"] = hitting_stats.get("doubles", 0)
+    df.at[i, "Triples"] = hitting_stats.get("triples", 0)
+    df.at[i, "HR"] = hitting_stats.get("homeRuns", 0)
+    df.at[i, "BB"] = hitting_stats.get("baseOnBalls", 0)
+    df.at[i, "Runs"] = hitting_stats.get("runs", 0)
+    df.at[i, "RBI"] = hitting_stats.get("rbi", 0)
+    df.at[i, "SB"] = hitting_stats.get("stolenBases", 0)
+    df.at[i, "HBP"] = hitting_stats.get("hitByPitch", 0)
+
+    df.at[i, "IP"] = pitching_stats.get("inningsPitched", 0)
+    df.at[i, "ER"] = pitching_stats.get("earnedRuns", 0)
+    df.at[i, "Wins"] = pitching_stats.get("wins", 0)
+    df.at[i, "Saves"] = pitching_stats.get("saves", 0)
+    df.at[i, "K"] = pitching_stats.get("strikeOuts", 0)
+    df.at[i, "QS"] = qs
+    df.at[i, "Holds"] = pitching_stats.get("holds", 0)
 
 # =========================
 # 7. SAVE OUTPUT
