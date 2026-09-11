@@ -26,8 +26,10 @@ STAT_COLUMNS = [
 
 # Last-14-days trend stats, for the Trends page hot/cold callouts.
 TREND_COLUMNS = [
-    "TrendPoints", "TrendAB", "TrendAVG", "TrendHR", "TrendRBI",
-    "TrendIP", "TrendERA", "TrendWins", "TrendK",
+    "TrendPoints", "TrendAB", "TrendAVG",
+    "TrendHits", "TrendDoubles", "TrendTriples", "TrendHR", "TrendBB",
+    "TrendRuns", "TrendRBI", "TrendSB", "TrendHBP",
+    "TrendIP", "TrendER", "TrendERA", "TrendWins", "TrendSaves", "TrendK", "TrendHolds",
 ]
 
 # Non-numeric extras also attached by update.py. TrendIP is text (like IP)

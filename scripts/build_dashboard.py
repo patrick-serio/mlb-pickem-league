@@ -262,25 +262,52 @@ def build_trend_section(title: str, cards_html: str) -> str:
     </section>"""
 
 
+# Full stat breakdown shown under the headline in each trend card.
+TREND_HITTER_CHIPS = [
+    ("TrendAVG", "AVG", True), ("TrendHits", "H", False), ("TrendDoubles", "2B", False),
+    ("TrendTriples", "3B", False), ("TrendHR", "HR", False), ("TrendBB", "BB", False),
+    ("TrendRuns", "R", False), ("TrendRBI", "RBI", False), ("TrendSB", "SB", False),
+    ("TrendHBP", "HBP", False),
+]
+TREND_PITCHER_CHIPS = [
+    ("TrendIP", "IP", False), ("TrendERA", "ERA", True), ("TrendER", "ER", False),
+    ("TrendWins", "W", False), ("TrendSaves", "SV", False), ("TrendK", "K", False),
+    ("TrendHolds", "HLD", False),
+]
+
+
+def build_stat_chips(row, chip_defs) -> str:
+    chips = []
+    for col, label, is_avg_style in chip_defs:
+        raw = row.get(col, 0)
+        if is_avg_style:
+            value = format_avg(raw) if col == "TrendAVG" else format(_safe_float(raw), ".2f")
+        elif col == "TrendIP":
+            value = str(raw)
+        else:
+            value = int(_safe_float(raw))
+        chips.append(f'<span class="trend-stat"><b>{label}</b> {esc(value)}</span>')
+    return "".join(chips)
+
+
 def build_hitter_trend_card(row, hot: bool) -> str:
     name = player_display_name(row)
     team = str(row.get("MLB Team", "") or "").strip() or "—"
-    avg = format_avg(row.get("TrendAVG", 0))
-    hr = int(_safe_float(row.get("TrendHR", 0)))
-    rbi = int(_safe_float(row.get("TrendRBI", 0)))
     pts = int(_safe_float(row.get("TrendPoints", 0)))
 
     css = "trend-card hot" if hot else "trend-card cold"
     icon = "🔥" if hot else "🥶"
-    blurb = f"Hitting {avg} with {hr} HR and {rbi} RBI over the last 14 days"
+    verb = "scored" if pts >= 0 else "managed"
+    headline = f"{esc(name)} has {verb} <strong>{pts} pts</strong> over the last 14 days"
+    chips = build_stat_chips(row, TREND_HITTER_CHIPS)
 
     return f"""
         <div class="{css}">
           <div class="trend-icon">{icon}</div>
           <div class="trend-body">
-            <div class="trend-name">{esc(name)} <span class="trend-team">{esc(team)}</span></div>
-            <div class="trend-blurb">{esc(blurb)}</div>
-            <div class="trend-pts">{pts} pts</div>
+            <div class="trend-headline">{headline}</div>
+            <div class="trend-meta">{esc(team)}</div>
+            <div class="trend-stats">{chips}</div>
           </div>
         </div>"""
 
@@ -288,21 +315,21 @@ def build_hitter_trend_card(row, hot: bool) -> str:
 def build_pitcher_trend_card(row, hot: bool) -> str:
     name = player_display_name(row)
     team = str(row.get("MLB Team", "") or "").strip() or "—"
-    era = format(_safe_float(row.get("TrendERA", 0)), ".2f")
-    k = int(_safe_float(row.get("TrendK", 0)))
     pts = int(_safe_float(row.get("TrendPoints", 0)))
 
     css = "trend-card hot" if hot else "trend-card cold"
     icon = "🔥" if hot else "🥶"
-    blurb = f"{k} Ks and a {era} ERA over the last 14 days"
+    verb = "scored" if pts >= 0 else "managed"
+    headline = f"{esc(name)} has {verb} <strong>{pts} pts</strong> over the last 14 days"
+    chips = build_stat_chips(row, TREND_PITCHER_CHIPS)
 
     return f"""
         <div class="{css}">
           <div class="trend-icon">{icon}</div>
           <div class="trend-body">
-            <div class="trend-name">{esc(name)} <span class="trend-team">{esc(team)}</span></div>
-            <div class="trend-blurb">{esc(blurb)}</div>
-            <div class="trend-pts">{pts} pts</div>
+            <div class="trend-headline">{headline}</div>
+            <div class="trend-meta">{esc(team)}</div>
+            <div class="trend-stats">{chips}</div>
           </div>
         </div>"""
 
@@ -694,7 +721,7 @@ BASE_CSS = """
 
   .trend-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 0.75rem;
   }
 
@@ -718,35 +745,47 @@ BASE_CSS = """
     line-height: 1;
   }
 
-  .trend-name {
+  .trend-headline {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  .trend-headline strong {
     font-family: 'Oswald', sans-serif;
     font-weight: 600;
     color: var(--navy);
   }
 
-  .trend-team {
-    font-family: 'Inter', sans-serif;
-    font-weight: 400;
+  .trend-card.cold .trend-headline strong {
+    color: var(--cold);
+  }
+
+  .trend-meta {
     font-size: 0.78rem;
     color: #8a8d99;
+    margin-top: 0.1rem;
   }
 
-  .trend-blurb {
-    font-size: 0.88rem;
-    margin-top: 0.15rem;
+  .trend-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.7rem;
+    margin-top: 0.55rem;
+  }
+
+  .trend-stat {
+    font-size: 0.8rem;
     color: var(--text);
+    white-space: nowrap;
   }
 
-  .trend-pts {
-    margin-top: 0.4rem;
+  .trend-stat b {
     font-family: 'Oswald', sans-serif;
     font-weight: 600;
-    font-size: 0.85rem;
-    color: var(--gold);
-  }
-
-  .trend-card.cold .trend-pts {
-    color: var(--cold);
+    color: var(--navy);
+    margin-right: 0.2rem;
   }
 
   .no-data {

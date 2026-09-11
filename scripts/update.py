@@ -330,12 +330,23 @@ for i, row in df.iterrows():
     df.at[i, "TrendPoints"] = trend_points
     df.at[i, "TrendAB"] = recent_at_bats
     df.at[i, "TrendAVG"] = recent_avg
+    df.at[i, "TrendHits"] = recent_hits
+    df.at[i, "TrendDoubles"] = recent_hitting.get("doubles", 0)
+    df.at[i, "TrendTriples"] = recent_hitting.get("triples", 0)
     df.at[i, "TrendHR"] = recent_hitting.get("homeRuns", 0)
+    df.at[i, "TrendBB"] = recent_hitting.get("baseOnBalls", 0)
+    df.at[i, "TrendRuns"] = recent_hitting.get("runs", 0)
     df.at[i, "TrendRBI"] = recent_hitting.get("rbi", 0)
+    df.at[i, "TrendSB"] = recent_hitting.get("stolenBases", 0)
+    df.at[i, "TrendHBP"] = recent_hitting.get("hitByPitch", 0)
+
     df.at[i, "TrendIP"] = recent_ip_str
+    df.at[i, "TrendER"] = recent_er
     df.at[i, "TrendERA"] = recent_era
     df.at[i, "TrendWins"] = recent_pitching.get("wins", 0)
+    df.at[i, "TrendSaves"] = recent_pitching.get("saves", 0)
     df.at[i, "TrendK"] = recent_pitching.get("strikeOuts", 0)
+    df.at[i, "TrendHolds"] = recent_pitching.get("holds", 0)
 
     # =========================
     # SAVE THE RAW STAT LINE
