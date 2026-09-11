@@ -28,6 +28,7 @@ import os
 
 LEAGUE_NAME = "Fantasy Baseball League"     # <-- change to your league's name
 TEAM_SCORES_FILE = "data/team_scores.csv"
+PREV_TEAM_SCORES_FILE = "data/team_scores_previous.csv"
 ROSTER_FILE = "data/team_rosters_updated.csv"
 OUTPUT_DIR = "docs"
 INDEX_FILE = os.path.join(OUTPUT_DIR, "index.html")
@@ -59,6 +60,29 @@ def load_data():
     roster["Total Score"] = pd.to_numeric(roster["Total Score"], errors="coerce").fillna(0)
 
     return scores, roster
+
+
+def load_rank_movement(scores: pd.DataFrame) -> dict:
+    """Compare today's standings order against the last snapshot to work out
+    which teams moved up/down. Returns {team: delta}, where positive means
+    the team moved up that many spots. Empty dict if there's no snapshot yet
+    (e.g. the very first run) or team names don't line up."""
+    try:
+        prev = pd.read_csv(PREV_TEAM_SCORES_FILE)
+    except (FileNotFoundError, pd.errors.EmptyDataError):
+        return {}
+
+    prev["Total Score"] = pd.to_numeric(prev["Total Score"], errors="coerce").fillna(0)
+    prev = prev.sort_values("Total Score", ascending=False).reset_index(drop=True)
+
+    prev_rank = {row["Team"]: i + 1 for i, row in prev.iterrows()}
+    curr_rank = {row["Team"]: i + 1 for i, row in scores.iterrows()}
+
+    return {
+        team: prev_rank[team] - curr_rank[team]
+        for team in curr_rank
+        if team in prev_rank
+    }
 
 
 def esc(value) -> str:
@@ -97,14 +121,27 @@ def build_nav(active: str) -> str:
 # STANDINGS PAGE FRAGMENTS
 # =========================
 
-def build_standings_rows(scores: pd.DataFrame) -> str:
+def build_movement_badge(delta) -> str:
+    if delta is None:
+        return '<span class="movement new">NEW</span>'
+    if delta > 0:
+        return f'<span class="movement up">▲{delta}</span>'
+    if delta < 0:
+        return f'<span class="movement down">▼{abs(delta)}</span>'
+    return '<span class="movement flat">–</span>'
+
+
+def build_standings_rows(scores: pd.DataFrame, movement: dict) -> str:
     rows = []
     for i, row in scores.iterrows():
         rank = i + 1
+        delta = movement.get(row["Team"]) if movement else None
+        badge = build_movement_badge(delta)
         rows.append(f"""
         <li class="standing-row">
           <span class="rank">{rank}</span>
           <a class="team-name" href="#team-{esc(row['Team']).replace(' ', '-')}">{esc(row['Team'])}</a>
+          {badge}
           <span class="pts">{int(row['Total Score'])}<span class="pts-label"> pts</span></span>
         </li>""")
     return "\n".join(rows)
@@ -146,6 +183,123 @@ def build_roster_sections(roster: pd.DataFrame) -> str:
       </details>""")
 
     return "\n".join(sections)
+
+
+# =========================
+# LEAGUE LEADERS + INJURED LIST (Standings page)
+# =========================
+
+MIN_LEADER_IP = 20  # minimum season innings to qualify for the ERA leader award
+
+LEADER_CATEGORIES_HITTING = [
+    ("HR", "Most Home Runs", "HR"),
+    ("RBI", "Most RBI", "RBI"),
+    ("SB", "Most Stolen Bases", "SB"),
+]
+LEADER_CATEGORIES_PITCHING = [
+    ("Wins", "Most Wins", "W"),
+    ("K", "Most Strikeouts", "K"),
+    ("Saves", "Most Saves", "SV"),
+]
+
+
+def _ip_to_decimal(ip_str) -> float:
+    """Convert MLB's fractional-innings notation (e.g. '182.1' = 182 + 1/3)
+    into a true decimal for ERA math."""
+    s = str(ip_str)
+    try:
+        if "." in s:
+            whole, frac = s.split(".")
+            whole = int(whole)
+            extra = {"1": 1, "2": 2}.get(frac, 0)
+            return whole + extra / 3
+        return float(s)
+    except (TypeError, ValueError):
+        return 0.0
+
+
+def build_league_leaders_section(roster: pd.DataFrame) -> str:
+    roster = dedupe_by_player(roster)
+    ptype = roster.get("Type", pd.Series(dtype=str)).astype(str).str.lower()
+    hitters = roster[ptype.isin(["hitter", "both"])].copy()
+    pitchers = roster[ptype.isin(["pitcher", "both"])].copy()
+
+    cards = []
+
+    for col, label, unit in LEADER_CATEGORIES_HITTING:
+        if col not in hitters.columns or hitters.empty:
+            continue
+        hitters[col] = pd.to_numeric(hitters[col], errors="coerce").fillna(0)
+        top = hitters.loc[hitters[col].idxmax()]
+        cards.append(build_leader_card(label, player_display_name(top), top.get("MLB Team", ""), int(top[col]), unit))
+
+    for col, label, unit in LEADER_CATEGORIES_PITCHING:
+        if col not in pitchers.columns or pitchers.empty:
+            continue
+        pitchers[col] = pd.to_numeric(pitchers[col], errors="coerce").fillna(0)
+        top = pitchers.loc[pitchers[col].idxmax()]
+        cards.append(build_leader_card(label, player_display_name(top), top.get("MLB Team", ""), int(top[col]), unit))
+
+    if "IP" in pitchers.columns and "ER" in pitchers.columns and not pitchers.empty:
+        qualified = pitchers.copy()
+        qualified["_ip_decimal"] = qualified["IP"].apply(_ip_to_decimal)
+        qualified["ER"] = pd.to_numeric(qualified["ER"], errors="coerce").fillna(0)
+        qualified = qualified[qualified["_ip_decimal"] >= MIN_LEADER_IP]
+        if not qualified.empty:
+            qualified["_era"] = qualified["ER"] * 9 / qualified["_ip_decimal"]
+            top = qualified.loc[qualified["_era"].idxmin()]
+            cards.append(build_leader_card(
+                "Best ERA", player_display_name(top), top.get("MLB Team", ""),
+                format(top["_era"], ".2f"), "ERA"
+            ))
+
+    if not cards:
+        return ""
+
+    return f"""
+    <section>
+      <h2>League Leaders</h2>
+      <div class="leader-grid">
+        {''.join(cards)}
+      </div>
+    </section>"""
+
+
+def build_leader_card(label, name, team, value, unit) -> str:
+    team = str(team or "").strip() or "—"
+    return f"""
+        <div class="leader-card">
+          <div class="leader-label">{esc(label)}</div>
+          <div class="leader-name">{esc(name)}</div>
+          <div class="leader-meta">{esc(team)}</div>
+          <div class="leader-value">{esc(value)} <span>{esc(unit)}</span></div>
+        </div>"""
+
+
+def build_injured_list_section(roster: pd.DataFrame) -> str:
+    roster = dedupe_by_player(roster)
+    injured = roster[roster.apply(is_injured, axis=1)]
+
+    if injured.empty:
+        return ""
+
+    injured = injured.sort_values("Total Score", ascending=False)
+    rows = []
+    for _, r in injured.iterrows():
+        team = str(r.get("MLB Team", "") or "").strip() or "—"
+        rows.append(f"""
+        <li class="injured-row">
+          <span class="injured-name">{esc(player_display_name(r))}</span>
+          <span class="injured-meta">{esc(team)} · {esc(r.get('Position', ''))}</span>
+        </li>""")
+
+    return f"""
+    <section>
+      <h2>Injured List</h2>
+      <ul class="injured-list">
+        {''.join(rows)}
+      </ul>
+    </section>"""
 
 
 # =========================
@@ -561,6 +715,116 @@ BASE_CSS = """
     color: #6b6e7a;
   }
 
+  .movement {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: 0.78rem;
+    min-width: 2.4rem;
+    text-align: center;
+  }
+
+  .movement.up {
+    color: #3E8E5A;
+  }
+
+  .movement.down {
+    color: var(--red);
+  }
+
+  .movement.flat {
+    color: #a3a6b0;
+  }
+
+  .movement.new {
+    color: var(--gold);
+    font-size: 0.68rem;
+  }
+
+  /* ---- League Leaders ---- */
+
+  .leader-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 0.6rem;
+  }
+
+  .leader-card {
+    background: var(--white);
+    border: 1px solid var(--cream-row);
+    border-top: 3px solid var(--gold);
+    border-radius: 6px;
+    padding: 0.7rem 0.85rem;
+  }
+
+  .leader-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: #8a8d99;
+  }
+
+  .leader-name {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    color: var(--navy);
+    margin-top: 0.15rem;
+  }
+
+  .leader-meta {
+    font-size: 0.75rem;
+    color: #8a8d99;
+  }
+
+  .leader-value {
+    margin-top: 0.35rem;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--gold);
+  }
+
+  .leader-value span {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 0.7rem;
+    color: #8a8d99;
+    margin-left: 0.2rem;
+  }
+
+  /* ---- Injured List ---- */
+
+  ul.injured-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border: 1px solid var(--cream-row);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .injured-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem 1rem;
+    background: var(--white);
+    border-left: 4px solid var(--red);
+  }
+
+  .injured-row:nth-child(odd) {
+    background: var(--cream-row);
+  }
+
+  .injured-name {
+    font-weight: 600;
+    color: var(--navy);
+  }
+
+  .injured-meta {
+    font-size: 0.8rem;
+    color: #8a8d99;
+  }
+
   .team-card {
     background: var(--white);
     border: 1px solid var(--cream-row);
@@ -798,6 +1062,56 @@ BASE_CSS = """
     .roster-table { font-size: 0.85rem; }
     .player-table { font-size: 0.78rem; }
   }
+
+  /* ---- Print styles ---- */
+
+  @media print {
+    body {
+      background: white;
+    }
+
+    header {
+      background: white;
+      color: var(--text);
+      padding: 0.5rem 0 1rem;
+      border-bottom: 2px solid var(--navy);
+    }
+
+    .updated {
+      color: var(--navy);
+    }
+
+    .top-nav,
+    .filter-bar,
+    footer {
+      display: none;
+    }
+
+    main {
+      max-width: 100%;
+      padding: 0;
+    }
+
+    /* Team roster cards are collapsed by default on screen — force them
+       open so printing actually shows the rosters, not just the headers. */
+    details > *:not(summary) {
+      display: block !important;
+    }
+
+    .team-card summary {
+      background: white;
+      color: var(--navy);
+      border-bottom: 2px solid var(--cream-row);
+    }
+
+    .team-card,
+    .standing-row,
+    .injured-row,
+    .leader-card,
+    .trend-card {
+      break-inside: avoid;
+    }
+  }
 """
 
 # Vanilla JS: click-to-sort table headers + live name/team filter.
@@ -885,6 +1199,10 @@ INDEX_MAIN = """
     </ul>
   </section>
 
+  {league_leaders_section}
+
+  {injured_list_section}
+
   <section>
     <h2>Rosters</h2>
     {roster_sections}
@@ -944,10 +1262,12 @@ def render_head(page_title: str, active_nav: str, updated: str) -> str:
     )
 
 
-def build_index_page(scores: pd.DataFrame, roster: pd.DataFrame, updated: str) -> str:
+def build_index_page(scores: pd.DataFrame, roster: pd.DataFrame, movement: dict, updated: str) -> str:
     head = render_head("Standings", "standings", updated)
     body = INDEX_MAIN.format(
-        standings_rows=build_standings_rows(scores),
+        standings_rows=build_standings_rows(scores, movement),
+        league_leaders_section=build_league_leaders_section(roster),
+        injured_list_section=build_injured_list_section(roster),
         roster_sections=build_roster_sections(roster),
     )
     return head + body
@@ -972,13 +1292,14 @@ def build_players_page(roster: pd.DataFrame, updated: str) -> str:
 
 def main():
     scores, roster = load_data()
+    movement = load_rank_movement(scores)
     now = datetime.now(timezone.utc).astimezone(ZoneInfo(DISPLAY_TZ))
     updated = now.strftime("%B %d, %Y at %-I:%M %p %Z")
 
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
     with open(INDEX_FILE, "w", encoding="utf-8") as f:
-        f.write(build_index_page(scores, roster, updated))
+        f.write(build_index_page(scores, roster, movement, updated))
 
     with open(PLAYERS_FILE, "w", encoding="utf-8") as f:
         f.write(build_players_page(roster, updated))

@@ -34,5 +34,6 @@ jobs:
           file_pattern: >-
             data/backend_updated.csv
             data/team_scores.csv
+            data/team_scores_previous.csv
             data/team_rosters_updated.csv
             docs/*.html

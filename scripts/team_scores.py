@@ -1,6 +1,7 @@
 import pandas as pd
 import json
 import os
+import shutil
 
 # =========================
 # 1. CONFIG
@@ -16,6 +17,7 @@ PLAYER_MAP_FILE = "config/player_map.json"
 # Output files
 ROSTER_OUTPUT = "data/team_rosters_updated.csv"
 TEAM_OUTPUT = "data/team_scores.csv"
+TEAM_OUTPUT_PREVIOUS = "data/team_scores_previous.csv"
 
 # Raw stat columns update.py attaches to each player, carried through to the
 # roster file so the dashboard can show what's behind each point total.
@@ -168,12 +170,20 @@ team_scores = (
 # =========================
 
 os.makedirs("data", exist_ok=True)
+
+# Snapshot whatever team_scores.csv currently holds (i.e. the last run's
+# results) BEFORE overwriting it, so the dashboard can show movement
+# ("up 2 spots") by comparing today's standings against this snapshot.
+if os.path.exists(TEAM_OUTPUT):
+    shutil.copy(TEAM_OUTPUT, TEAM_OUTPUT_PREVIOUS)
+
 merged.to_csv(ROSTER_OUTPUT, index=False)
 team_scores.to_csv(TEAM_OUTPUT, index=False)
 
 print("\nDone ✅")
 print(f"Updated roster file → {ROSTER_OUTPUT}")
 print(f"Team scores file → {TEAM_OUTPUT}")
+print(f"Previous scores snapshot → {TEAM_OUTPUT_PREVIOUS}")
 
 # =========================
 # 9. PRINT STANDINGS
