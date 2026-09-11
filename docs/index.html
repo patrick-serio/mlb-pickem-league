@@ -336,7 +336,7 @@
 
   .trend-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 0.75rem;
   }
 
@@ -360,35 +360,47 @@
     line-height: 1;
   }
 
-  .trend-name {
+  .trend-headline {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  .trend-headline strong {
     font-family: 'Oswald', sans-serif;
     font-weight: 600;
     color: var(--navy);
   }
 
-  .trend-team {
-    font-family: 'Inter', sans-serif;
-    font-weight: 400;
+  .trend-card.cold .trend-headline strong {
+    color: var(--cold);
+  }
+
+  .trend-meta {
     font-size: 0.78rem;
     color: #8a8d99;
+    margin-top: 0.1rem;
   }
 
-  .trend-blurb {
-    font-size: 0.88rem;
-    margin-top: 0.15rem;
+  .trend-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.7rem;
+    margin-top: 0.55rem;
+  }
+
+  .trend-stat {
+    font-size: 0.8rem;
     color: var(--text);
+    white-space: nowrap;
   }
 
-  .trend-pts {
-    margin-top: 0.4rem;
+  .trend-stat b {
     font-family: 'Oswald', sans-serif;
     font-weight: 600;
-    font-size: 0.85rem;
-    color: var(--gold);
-  }
-
-  .trend-card.cold .trend-pts {
-    color: var(--cold);
+    color: var(--navy);
+    margin-right: 0.2rem;
   }
 
   .no-data {
@@ -409,7 +421,7 @@
 <header>
   <div class="header-inner">
     <h1>Fantasy Baseball League</h1>
-    <span class="updated">Updated September 10, 2026 at 6:14 PM EDT</span>
+    <span class="updated">Updated September 10, 2026 at 10:26 PM EDT</span>
   </div>
   
     <nav class="top-nav">
@@ -439,7 +451,7 @@
         <li class="standing-row">
           <span class="rank">3</span>
           <a class="team-name" href="#team-Casey-Spilka">Casey Spilka</a>
-          <span class="pts">29691<span class="pts-label"> pts</span></span>
+          <span class="pts">29709<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
@@ -469,7 +481,7 @@
         <li class="standing-row">
           <span class="rank">8</span>
           <a class="team-name" href="#team-Jake-Brittain">Jake Brittain</a>
-          <span class="pts">28994<span class="pts-label"> pts</span></span>
+          <span class="pts">29001<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
@@ -481,7 +493,7 @@
         <li class="standing-row">
           <span class="rank">10</span>
           <a class="team-name" href="#team-Owen-Shelffo">Owen Shelffo</a>
-          <span class="pts">27996<span class="pts-label"> pts</span></span>
+          <span class="pts">28014<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
@@ -493,7 +505,7 @@
         <li class="standing-row">
           <span class="rank">12</span>
           <a class="team-name" href="#team-Trevor-Maslowski">Trevor Maslowski</a>
-          <span class="pts">27934<span class="pts-label"> pts</span></span>
+          <span class="pts">27940<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
@@ -505,19 +517,19 @@
         <li class="standing-row">
           <span class="rank">14</span>
           <a class="team-name" href="#team-Maxwell-Edwards">Maxwell Edwards</a>
-          <span class="pts">27866<span class="pts-label"> pts</span></span>
+          <span class="pts">27873<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">15</span>
           <a class="team-name" href="#team-Tim-Horton">Tim Horton</a>
-          <span class="pts">27606<span class="pts-label"> pts</span></span>
+          <span class="pts">27612<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">16</span>
           <a class="team-name" href="#team-Julie-Brittain">Julie Brittain</a>
-          <span class="pts">27432<span class="pts-label"> pts</span></span>
+          <span class="pts">27439<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
@@ -541,31 +553,31 @@
         <li class="standing-row">
           <span class="rank">20</span>
           <a class="team-name" href="#team-Steve-Richards">Steve Richards</a>
-          <span class="pts">26532<span class="pts-label"> pts</span></span>
+          <span class="pts">26539<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">21</span>
           <a class="team-name" href="#team-Gabe-Selig">Gabe Selig</a>
-          <span class="pts">26524<span class="pts-label"> pts</span></span>
+          <span class="pts">26531<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">22</span>
           <a class="team-name" href="#team-Jamie-Horton">Jamie Horton</a>
-          <span class="pts">26255<span class="pts-label"> pts</span></span>
+          <span class="pts">26266<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">23</span>
           <a class="team-name" href="#team-Jason-Gouin">Jason Gouin</a>
-          <span class="pts">26139<span class="pts-label"> pts</span></span>
+          <span class="pts">26142<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">24</span>
           <a class="team-name" href="#team-Billy-Haber">Billy Haber</a>
-          <span class="pts">25638<span class="pts-label"> pts</span></span>
+          <span class="pts">25645<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
@@ -918,7 +930,7 @@
       <details class="team-card" id="team-Casey-Spilka">
         <summary>
           <span class="summary-team">Casey Spilka</span>
-          <span class="summary-total">29691 pts</span>
+          <span class="summary-total">29709 pts</span>
         </summary>
         <table class="roster-table">
           <thead>
@@ -1034,7 +1046,7 @@
             <tr class="roster-row">
               <td class="pos">SP</td>
               <td class="player">Logan Gilbert </td>
-              <td class="score">984</td>
+              <td class="score">989</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">SP</td>
@@ -1064,7 +1076,7 @@
             <tr class="roster-row">
               <td class="pos">RP</td>
               <td class="player">Erick Fedde </td>
-              <td class="score">529</td>
+              <td class="score">542</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">RP</td>
@@ -1743,7 +1755,7 @@
       <details class="team-card" id="team-Jake-Brittain">
         <summary>
           <span class="summary-team">Jake Brittain</span>
-          <span class="summary-total">28994 pts</span>
+          <span class="summary-total">29001 pts</span>
         </summary>
         <table class="roster-table">
           <thead>
@@ -1784,7 +1796,7 @@
             <tr class="roster-row">
               <td class="pos">3B</td>
               <td class="player">Miguel Vargas </td>
-              <td class="score">1395</td>
+              <td class="score">1402</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">3B</td>
@@ -2073,7 +2085,7 @@
       <details class="team-card" id="team-Owen-Shelffo">
         <summary>
           <span class="summary-team">Owen Shelffo</span>
-          <span class="summary-total">27996 pts</span>
+          <span class="summary-total">28014 pts</span>
         </summary>
         <table class="roster-table">
           <thead>
@@ -2144,7 +2156,7 @@
             <tr class="roster-row">
               <td class="pos">OF</td>
               <td class="player">Wyatt Langford </td>
-              <td class="score">816</td>
+              <td class="score">823</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">OF</td>
@@ -2164,7 +2176,7 @@
             <tr class="roster-row">
               <td class="pos">DH/Utility</td>
               <td class="player">Colson Montgomery </td>
-              <td class="score">1088</td>
+              <td class="score">1094</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">DH/Utility</td>
@@ -2194,7 +2206,7 @@
             <tr class="roster-row">
               <td class="pos">SP</td>
               <td class="player">Logan Gilbert </td>
-              <td class="score">984</td>
+              <td class="score">989</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">SP</td>
@@ -2403,7 +2415,7 @@
       <details class="team-card" id="team-Trevor-Maslowski">
         <summary>
           <span class="summary-team">Trevor Maslowski</span>
-          <span class="summary-total">27934 pts</span>
+          <span class="summary-total">27940 pts</span>
         </summary>
         <table class="roster-table">
           <thead>
@@ -2454,7 +2466,7 @@
             <tr class="roster-row">
               <td class="pos">SS</td>
               <td class="player">Colson Montgomery </td>
-              <td class="score">1088</td>
+              <td class="score">1094</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">SS</td>
@@ -2733,7 +2745,7 @@
       <details class="team-card" id="team-Maxwell-Edwards">
         <summary>
           <span class="summary-team">Maxwell Edwards</span>
-          <span class="summary-total">27866 pts</span>
+          <span class="summary-total">27873 pts</span>
         </summary>
         <table class="roster-table">
           <thead>
@@ -2809,7 +2821,7 @@
             <tr class="roster-row">
               <td class="pos">OF</td>
               <td class="player">Wyatt Langford </td>
-              <td class="score">816</td>
+              <td class="score">823</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">OF</td>
@@ -2898,7 +2910,7 @@
       <details class="team-card" id="team-Tim-Horton">
         <summary>
           <span class="summary-team">Tim Horton</span>
-          <span class="summary-total">27606 pts</span>
+          <span class="summary-total">27612 pts</span>
         </summary>
         <table class="roster-table">
           <thead>
@@ -2949,7 +2961,7 @@
             <tr class="roster-row">
               <td class="pos">SS</td>
               <td class="player">Colson Montgomery </td>
-              <td class="score">1088</td>
+              <td class="score">1094</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">SS</td>
@@ -3063,7 +3075,7 @@
       <details class="team-card" id="team-Julie-Brittain">
         <summary>
           <span class="summary-team">Julie Brittain</span>
-          <span class="summary-total">27432 pts</span>
+          <span class="summary-total">27439 pts</span>
         </summary>
         <table class="roster-table">
           <thead>
@@ -3129,7 +3141,7 @@
             <tr class="roster-row">
               <td class="pos">OF</td>
               <td class="player">Wyatt Langford </td>
-              <td class="score">816</td>
+              <td class="score">823</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">OF</td>
@@ -3723,7 +3735,7 @@
       <details class="team-card" id="team-Steve-Richards">
         <summary>
           <span class="summary-team">Steve Richards</span>
-          <span class="summary-total">26532 pts</span>
+          <span class="summary-total">26539 pts</span>
         </summary>
         <table class="roster-table">
           <thead>
@@ -3794,7 +3806,7 @@
             <tr class="roster-row">
               <td class="pos">OF</td>
               <td class="player">Wyatt Langford </td>
-              <td class="score">816</td>
+              <td class="score">823</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">OF</td>
@@ -3888,7 +3900,7 @@
       <details class="team-card" id="team-Gabe-Selig">
         <summary>
           <span class="summary-team">Gabe Selig</span>
-          <span class="summary-total">26524 pts</span>
+          <span class="summary-total">26531 pts</span>
         </summary>
         <table class="roster-table">
           <thead>
@@ -3959,7 +3971,7 @@
             <tr class="roster-row">
               <td class="pos">OF</td>
               <td class="player">Wyatt Langford </td>
-              <td class="score">816</td>
+              <td class="score">823</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">OF</td>
@@ -4053,7 +4065,7 @@
       <details class="team-card" id="team-Jamie-Horton">
         <summary>
           <span class="summary-team">Jamie Horton</span>
-          <span class="summary-total">26255 pts</span>
+          <span class="summary-total">26266 pts</span>
         </summary>
         <table class="roster-table">
           <thead>
@@ -4109,7 +4121,7 @@
             <tr class="roster-row">
               <td class="pos">SS</td>
               <td class="player">Ezequiel Tovar </td>
-              <td class="score">689</td>
+              <td class="score">700</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">OF</td>
@@ -4218,7 +4230,7 @@
       <details class="team-card" id="team-Jason-Gouin">
         <summary>
           <span class="summary-team">Jason Gouin</span>
-          <span class="summary-total">26139 pts</span>
+          <span class="summary-total">26142 pts</span>
         </summary>
         <table class="roster-table">
           <thead>
@@ -4299,7 +4311,7 @@
             <tr class="roster-row">
               <td class="pos">OF</td>
               <td class="player">Jordan Beck </td>
-              <td class="score">205</td>
+              <td class="score">208</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">OF</td>
@@ -4383,7 +4395,7 @@
       <details class="team-card" id="team-Billy-Haber">
         <summary>
           <span class="summary-team">Billy Haber</span>
-          <span class="summary-total">25638 pts</span>
+          <span class="summary-total">25645 pts</span>
         </summary>
         <table class="roster-table">
           <thead>
@@ -4449,7 +4461,7 @@
             <tr class="roster-row">
               <td class="pos">OF</td>
               <td class="player">Wyatt Langford </td>
-              <td class="score">816</td>
+              <td class="score">823</td>
             </tr>
             <tr class="roster-row">
               <td class="pos">OF</td>

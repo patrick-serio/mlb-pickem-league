@@ -336,7 +336,7 @@
 
   .trend-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 0.75rem;
   }
 
@@ -360,35 +360,47 @@
     line-height: 1;
   }
 
-  .trend-name {
+  .trend-headline {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  .trend-headline strong {
     font-family: 'Oswald', sans-serif;
     font-weight: 600;
     color: var(--navy);
   }
 
-  .trend-team {
-    font-family: 'Inter', sans-serif;
-    font-weight: 400;
+  .trend-card.cold .trend-headline strong {
+    color: var(--cold);
+  }
+
+  .trend-meta {
     font-size: 0.78rem;
     color: #8a8d99;
+    margin-top: 0.1rem;
   }
 
-  .trend-blurb {
-    font-size: 0.88rem;
-    margin-top: 0.15rem;
+  .trend-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.7rem;
+    margin-top: 0.55rem;
+  }
+
+  .trend-stat {
+    font-size: 0.8rem;
     color: var(--text);
+    white-space: nowrap;
   }
 
-  .trend-pts {
-    margin-top: 0.4rem;
+  .trend-stat b {
     font-family: 'Oswald', sans-serif;
     font-weight: 600;
-    font-size: 0.85rem;
-    color: var(--gold);
-  }
-
-  .trend-card.cold .trend-pts {
-    color: var(--cold);
+    color: var(--navy);
+    margin-right: 0.2rem;
   }
 
   .no-data {
@@ -409,7 +421,7 @@
 <header>
   <div class="header-inner">
     <h1>Fantasy Baseball League</h1>
-    <span class="updated">Updated September 10, 2026 at 6:14 PM EDT</span>
+    <span class="updated">Updated September 10, 2026 at 10:26 PM EDT</span>
   </div>
   
     <nav class="top-nav">
@@ -428,33 +440,33 @@
         <div class="trend-card hot">
           <div class="trend-icon">🔥</div>
           <div class="trend-body">
-            <div class="trend-name">Jackson Chourio <span class="trend-team">MIL</span></div>
-            <div class="trend-blurb">Hitting .375 with 6 HR and 15 RBI over the last 14 days</div>
-            <div class="trend-pts">211 pts</div>
+            <div class="trend-headline">Pete Crow-Armstrong has scored <strong>209 pts</strong> over the last 14 days</div>
+            <div class="trend-meta">CHC</div>
+            <div class="trend-stats"><span class="trend-stat"><b>AVG</b> .327</span><span class="trend-stat"><b>H</b> 18</span><span class="trend-stat"><b>2B</b> 1</span><span class="trend-stat"><b>3B</b> 0</span><span class="trend-stat"><b>HR</b> 8</span><span class="trend-stat"><b>BB</b> 5</span><span class="trend-stat"><b>R</b> 17</span><span class="trend-stat"><b>RBI</b> 14</span><span class="trend-stat"><b>SB</b> 4</span><span class="trend-stat"><b>HBP</b> 1</span></div>
           </div>
         </div>
         <div class="trend-card hot">
           <div class="trend-icon">🔥</div>
           <div class="trend-body">
-            <div class="trend-name">Pete Crow-Armstrong <span class="trend-team">CHC</span></div>
-            <div class="trend-blurb">Hitting .327 with 8 HR and 14 RBI over the last 14 days</div>
-            <div class="trend-pts">209 pts</div>
+            <div class="trend-headline">Rafael Devers has scored <strong>192 pts</strong> over the last 14 days</div>
+            <div class="trend-meta">SF</div>
+            <div class="trend-stats"><span class="trend-stat"><b>AVG</b> .370</span><span class="trend-stat"><b>H</b> 17</span><span class="trend-stat"><b>2B</b> 5</span><span class="trend-stat"><b>3B</b> 0</span><span class="trend-stat"><b>HR</b> 6</span><span class="trend-stat"><b>BB</b> 9</span><span class="trend-stat"><b>R</b> 11</span><span class="trend-stat"><b>RBI</b> 16</span><span class="trend-stat"><b>SB</b> 0</span><span class="trend-stat"><b>HBP</b> 1</span></div>
           </div>
         </div>
         <div class="trend-card hot">
           <div class="trend-icon">🔥</div>
           <div class="trend-body">
-            <div class="trend-name">Rafael Devers <span class="trend-team">SF</span></div>
-            <div class="trend-blurb">Hitting .380 with 6 HR and 16 RBI over the last 14 days</div>
-            <div class="trend-pts">200 pts</div>
+            <div class="trend-headline">Elly De La Cruz has scored <strong>184 pts</strong> over the last 14 days</div>
+            <div class="trend-meta">CIN</div>
+            <div class="trend-stats"><span class="trend-stat"><b>AVG</b> .477</span><span class="trend-stat"><b>H</b> 21</span><span class="trend-stat"><b>2B</b> 3</span><span class="trend-stat"><b>3B</b> 0</span><span class="trend-stat"><b>HR</b> 5</span><span class="trend-stat"><b>BB</b> 7</span><span class="trend-stat"><b>R</b> 12</span><span class="trend-stat"><b>RBI</b> 12</span><span class="trend-stat"><b>SB</b> 2</span><span class="trend-stat"><b>HBP</b> 0</span></div>
           </div>
         </div>
         <div class="trend-card hot">
           <div class="trend-icon">🔥</div>
           <div class="trend-body">
-            <div class="trend-name">Elly De La Cruz <span class="trend-team">CIN</span></div>
-            <div class="trend-blurb">Hitting .477 with 5 HR and 12 RBI over the last 14 days</div>
-            <div class="trend-pts">184 pts</div>
+            <div class="trend-headline">Alex Bregman has scored <strong>166 pts</strong> over the last 14 days</div>
+            <div class="trend-meta">CHC</div>
+            <div class="trend-stats"><span class="trend-stat"><b>AVG</b> .333</span><span class="trend-stat"><b>H</b> 17</span><span class="trend-stat"><b>2B</b> 5</span><span class="trend-stat"><b>3B</b> 0</span><span class="trend-stat"><b>HR</b> 5</span><span class="trend-stat"><b>BB</b> 5</span><span class="trend-stat"><b>R</b> 9</span><span class="trend-stat"><b>RBI</b> 13</span><span class="trend-stat"><b>SB</b> 0</span><span class="trend-stat"><b>HBP</b> 2</span></div>
           </div>
         </div>
       </div>
@@ -467,33 +479,33 @@
         <div class="trend-card cold">
           <div class="trend-icon">🥶</div>
           <div class="trend-body">
-            <div class="trend-name">JJ Wetherholt <span class="trend-team">nan</span></div>
-            <div class="trend-blurb">Hitting .000 with 0 HR and 0 RBI over the last 14 days</div>
-            <div class="trend-pts">0 pts</div>
+            <div class="trend-headline">JJ Wetherholt has scored <strong>0 pts</strong> over the last 14 days</div>
+            <div class="trend-meta">nan</div>
+            <div class="trend-stats"><span class="trend-stat"><b>AVG</b> .000</span><span class="trend-stat"><b>H</b> 0</span><span class="trend-stat"><b>2B</b> 0</span><span class="trend-stat"><b>3B</b> 0</span><span class="trend-stat"><b>HR</b> 0</span><span class="trend-stat"><b>BB</b> 0</span><span class="trend-stat"><b>R</b> 0</span><span class="trend-stat"><b>RBI</b> 0</span><span class="trend-stat"><b>SB</b> 0</span><span class="trend-stat"><b>HBP</b> 0</span></div>
           </div>
         </div>
         <div class="trend-card cold">
           <div class="trend-icon">🥶</div>
           <div class="trend-body">
-            <div class="trend-name">Aaron Judge <span class="trend-team">NYY</span></div>
-            <div class="trend-blurb">Hitting .286 with 0 HR and 0 RBI over the last 14 days</div>
-            <div class="trend-pts">8 pts</div>
+            <div class="trend-headline">Aaron Judge has scored <strong>8 pts</strong> over the last 14 days</div>
+            <div class="trend-meta">NYY</div>
+            <div class="trend-stats"><span class="trend-stat"><b>AVG</b> .286</span><span class="trend-stat"><b>H</b> 2</span><span class="trend-stat"><b>2B</b> 0</span><span class="trend-stat"><b>3B</b> 0</span><span class="trend-stat"><b>HR</b> 0</span><span class="trend-stat"><b>BB</b> 0</span><span class="trend-stat"><b>R</b> 1</span><span class="trend-stat"><b>RBI</b> 0</span><span class="trend-stat"><b>SB</b> 0</span><span class="trend-stat"><b>HBP</b> 0</span></div>
           </div>
         </div>
         <div class="trend-card cold">
           <div class="trend-icon">🥶</div>
           <div class="trend-body">
-            <div class="trend-name">Jordan Beck <span class="trend-team">COL</span></div>
-            <div class="trend-blurb">Hitting .143 with 0 HR and 1 RBI over the last 14 days</div>
-            <div class="trend-pts">8 pts</div>
+            <div class="trend-headline">Jordan Beck has scored <strong>11 pts</strong> over the last 14 days</div>
+            <div class="trend-meta">COL</div>
+            <div class="trend-stats"><span class="trend-stat"><b>AVG</b> .133</span><span class="trend-stat"><b>H</b> 2</span><span class="trend-stat"><b>2B</b> 0</span><span class="trend-stat"><b>3B</b> 0</span><span class="trend-stat"><b>HR</b> 0</span><span class="trend-stat"><b>BB</b> 1</span><span class="trend-stat"><b>R</b> 0</span><span class="trend-stat"><b>RBI</b> 1</span><span class="trend-stat"><b>SB</b> 0</span><span class="trend-stat"><b>HBP</b> 0</span></div>
           </div>
         </div>
         <div class="trend-card cold">
           <div class="trend-icon">🥶</div>
           <div class="trend-body">
-            <div class="trend-name">Xavier Edwards <span class="trend-team">nan</span></div>
-            <div class="trend-blurb">Hitting .100 with 0 HR and 1 RBI over the last 14 days</div>
-            <div class="trend-pts">12 pts</div>
+            <div class="trend-headline">Xavier Edwards has scored <strong>12 pts</strong> over the last 14 days</div>
+            <div class="trend-meta">nan</div>
+            <div class="trend-stats"><span class="trend-stat"><b>AVG</b> .100</span><span class="trend-stat"><b>H</b> 1</span><span class="trend-stat"><b>2B</b> 0</span><span class="trend-stat"><b>3B</b> 0</span><span class="trend-stat"><b>HR</b> 0</span><span class="trend-stat"><b>BB</b> 1</span><span class="trend-stat"><b>R</b> 0</span><span class="trend-stat"><b>RBI</b> 1</span><span class="trend-stat"><b>SB</b> 1</span><span class="trend-stat"><b>HBP</b> 0</span></div>
           </div>
         </div>
       </div>
@@ -506,33 +518,33 @@
         <div class="trend-card hot">
           <div class="trend-icon">🔥</div>
           <div class="trend-body">
-            <div class="trend-name">Jacob deGrom <span class="trend-team">TEX</span></div>
-            <div class="trend-blurb">27 Ks and a 0.95 ERA over the last 14 days</div>
-            <div class="trend-pts">137 pts</div>
+            <div class="trend-headline">Jacob deGrom has scored <strong>137 pts</strong> over the last 14 days</div>
+            <div class="trend-meta">TEX</div>
+            <div class="trend-stats"><span class="trend-stat"><b>IP</b> 19.0</span><span class="trend-stat"><b>ERA</b> 0.95</span><span class="trend-stat"><b>ER</b> 2</span><span class="trend-stat"><b>W</b> 1</span><span class="trend-stat"><b>SV</b> 0</span><span class="trend-stat"><b>K</b> 27</span><span class="trend-stat"><b>HLD</b> 0</span></div>
           </div>
         </div>
         <div class="trend-card hot">
           <div class="trend-icon">🔥</div>
           <div class="trend-body">
-            <div class="trend-name">Zack Wheeler <span class="trend-team">PHI</span></div>
-            <div class="trend-blurb">24 Ks and a 1.42 ERA over the last 14 days</div>
-            <div class="trend-pts">130 pts</div>
+            <div class="trend-headline">Zack Wheeler has scored <strong>130 pts</strong> over the last 14 days</div>
+            <div class="trend-meta">PHI</div>
+            <div class="trend-stats"><span class="trend-stat"><b>IP</b> 19.0</span><span class="trend-stat"><b>ERA</b> 1.42</span><span class="trend-stat"><b>ER</b> 3</span><span class="trend-stat"><b>W</b> 2</span><span class="trend-stat"><b>SV</b> 0</span><span class="trend-stat"><b>K</b> 24</span><span class="trend-stat"><b>HLD</b> 0</span></div>
           </div>
         </div>
         <div class="trend-card hot">
           <div class="trend-icon">🔥</div>
           <div class="trend-body">
-            <div class="trend-name">Yoshinobu Yamamoto <span class="trend-team">LAD</span></div>
-            <div class="trend-blurb">26 Ks and a 2.66 ERA over the last 14 days</div>
-            <div class="trend-pts">126 pts</div>
+            <div class="trend-headline">Hunter Brown has scored <strong>114 pts</strong> over the last 14 days</div>
+            <div class="trend-meta">HOU</div>
+            <div class="trend-stats"><span class="trend-stat"><b>IP</b> 17.2</span><span class="trend-stat"><b>ERA</b> 3.57</span><span class="trend-stat"><b>ER</b> 7</span><span class="trend-stat"><b>W</b> 2</span><span class="trend-stat"><b>SV</b> 0</span><span class="trend-stat"><b>K</b> 24</span><span class="trend-stat"><b>HLD</b> 0</span></div>
           </div>
         </div>
         <div class="trend-card hot">
           <div class="trend-icon">🔥</div>
           <div class="trend-body">
-            <div class="trend-name">Hunter Brown <span class="trend-team">HOU</span></div>
-            <div class="trend-blurb">24 Ks and a 3.57 ERA over the last 14 days</div>
-            <div class="trend-pts">114 pts</div>
+            <div class="trend-headline">Reid Detmers has scored <strong>113 pts</strong> over the last 14 days</div>
+            <div class="trend-meta">LAA</div>
+            <div class="trend-stats"><span class="trend-stat"><b>IP</b> 19.0</span><span class="trend-stat"><b>ERA</b> 0.95</span><span class="trend-stat"><b>ER</b> 2</span><span class="trend-stat"><b>W</b> 1</span><span class="trend-stat"><b>SV</b> 0</span><span class="trend-stat"><b>K</b> 19</span><span class="trend-stat"><b>HLD</b> 0</span></div>
           </div>
         </div>
       </div>
@@ -545,33 +557,33 @@
         <div class="trend-card cold">
           <div class="trend-icon">🥶</div>
           <div class="trend-body">
-            <div class="trend-name">Ryan Walker <span class="trend-team">nan</span></div>
-            <div class="trend-blurb">2 Ks and a 9.82 ERA over the last 14 days</div>
-            <div class="trend-pts">7 pts</div>
+            <div class="trend-headline">Ryan Walker has scored <strong>1 pts</strong> over the last 14 days</div>
+            <div class="trend-meta">nan</div>
+            <div class="trend-stats"><span class="trend-stat"><b>IP</b> 2.2</span><span class="trend-stat"><b>ERA</b> 13.50</span><span class="trend-stat"><b>ER</b> 4</span><span class="trend-stat"><b>W</b> 0</span><span class="trend-stat"><b>SV</b> 0</span><span class="trend-stat"><b>K</b> 1</span><span class="trend-stat"><b>HLD</b> 1</span></div>
           </div>
         </div>
         <div class="trend-card cold">
           <div class="trend-icon">🥶</div>
           <div class="trend-body">
-            <div class="trend-name">Kirby Yates <span class="trend-team">nan</span></div>
-            <div class="trend-blurb">1 Ks and a 0.00 ERA over the last 14 days</div>
-            <div class="trend-pts">8 pts</div>
+            <div class="trend-headline">Kirby Yates has scored <strong>8 pts</strong> over the last 14 days</div>
+            <div class="trend-meta">nan</div>
+            <div class="trend-stats"><span class="trend-stat"><b>IP</b> 1.0</span><span class="trend-stat"><b>ERA</b> 0.00</span><span class="trend-stat"><b>ER</b> 0</span><span class="trend-stat"><b>W</b> 0</span><span class="trend-stat"><b>SV</b> 0</span><span class="trend-stat"><b>K</b> 1</span><span class="trend-stat"><b>HLD</b> 1</span></div>
           </div>
         </div>
         <div class="trend-card cold">
           <div class="trend-icon">🥶</div>
           <div class="trend-body">
-            <div class="trend-name">Zac Gallen <span class="trend-team">AZ</span></div>
-            <div class="trend-blurb">1 Ks and a 2.70 ERA over the last 14 days</div>
-            <div class="trend-pts">10 pts</div>
+            <div class="trend-headline">Clayton Beeter has scored <strong>9 pts</strong> over the last 14 days</div>
+            <div class="trend-meta">WSH</div>
+            <div class="trend-stats"><span class="trend-stat"><b>IP</b> 4.2</span><span class="trend-stat"><b>ERA</b> 13.50</span><span class="trend-stat"><b>ER</b> 7</span><span class="trend-stat"><b>W</b> 0</span><span class="trend-stat"><b>SV</b> 0</span><span class="trend-stat"><b>K</b> 4</span><span class="trend-stat"><b>HLD</b> 2</span></div>
           </div>
         </div>
         <div class="trend-card cold">
           <div class="trend-icon">🥶</div>
           <div class="trend-body">
-            <div class="trend-name">Daniel Palencia <span class="trend-team">CHC</span></div>
-            <div class="trend-blurb">3 Ks and a 7.71 ERA over the last 14 days</div>
-            <div class="trend-pts">11 pts</div>
+            <div class="trend-headline">Zac Gallen has scored <strong>10 pts</strong> over the last 14 days</div>
+            <div class="trend-meta">AZ</div>
+            <div class="trend-stats"><span class="trend-stat"><b>IP</b> 3.1</span><span class="trend-stat"><b>ERA</b> 2.70</span><span class="trend-stat"><b>ER</b> 1</span><span class="trend-stat"><b>W</b> 0</span><span class="trend-stat"><b>SV</b> 0</span><span class="trend-stat"><b>K</b> 1</span><span class="trend-stat"><b>HLD</b> 0</span></div>
           </div>
         </div>
       </div>
