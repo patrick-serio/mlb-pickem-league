@@ -176,6 +176,116 @@
     color: #6b6e7a;
   }
 
+  .movement {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: 0.78rem;
+    min-width: 2.4rem;
+    text-align: center;
+  }
+
+  .movement.up {
+    color: #3E8E5A;
+  }
+
+  .movement.down {
+    color: var(--red);
+  }
+
+  .movement.flat {
+    color: #a3a6b0;
+  }
+
+  .movement.new {
+    color: var(--gold);
+    font-size: 0.68rem;
+  }
+
+  /* ---- League Leaders ---- */
+
+  .leader-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 0.6rem;
+  }
+
+  .leader-card {
+    background: var(--white);
+    border: 1px solid var(--cream-row);
+    border-top: 3px solid var(--gold);
+    border-radius: 6px;
+    padding: 0.7rem 0.85rem;
+  }
+
+  .leader-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: #8a8d99;
+  }
+
+  .leader-name {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    color: var(--navy);
+    margin-top: 0.15rem;
+  }
+
+  .leader-meta {
+    font-size: 0.75rem;
+    color: #8a8d99;
+  }
+
+  .leader-value {
+    margin-top: 0.35rem;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--gold);
+  }
+
+  .leader-value span {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 0.7rem;
+    color: #8a8d99;
+    margin-left: 0.2rem;
+  }
+
+  /* ---- Injured List ---- */
+
+  ul.injured-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border: 1px solid var(--cream-row);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .injured-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem 1rem;
+    background: var(--white);
+    border-left: 4px solid var(--red);
+  }
+
+  .injured-row:nth-child(odd) {
+    background: var(--cream-row);
+  }
+
+  .injured-name {
+    font-weight: 600;
+    color: var(--navy);
+  }
+
+  .injured-meta {
+    font-size: 0.8rem;
+    color: #8a8d99;
+  }
+
   .team-card {
     background: var(--white);
     border: 1px solid var(--cream-row);
@@ -414,6 +524,56 @@
     .player-table { font-size: 0.78rem; }
   }
 
+  /* ---- Print styles ---- */
+
+  @media print {
+    body {
+      background: white;
+    }
+
+    header {
+      background: white;
+      color: var(--text);
+      padding: 0.5rem 0 1rem;
+      border-bottom: 2px solid var(--navy);
+    }
+
+    .updated {
+      color: var(--navy);
+    }
+
+    .top-nav,
+    .filter-bar,
+    footer {
+      display: none;
+    }
+
+    main {
+      max-width: 100%;
+      padding: 0;
+    }
+
+    /* Team roster cards are collapsed by default on screen — force them
+       open so printing actually shows the rosters, not just the headers. */
+    details > *:not(summary) {
+      display: block !important;
+    }
+
+    .team-card summary {
+      background: white;
+      color: var(--navy);
+      border-bottom: 2px solid var(--cream-row);
+    }
+
+    .team-card,
+    .standing-row,
+    .injured-row,
+    .leader-card,
+    .trend-card {
+      break-inside: avoid;
+    }
+  }
+
 </style>
 </head>
 <body>
@@ -421,7 +581,7 @@
 <header>
   <div class="header-inner">
     <h1>Fantasy Baseball League</h1>
-    <span class="updated">Updated September 10, 2026 at 10:28 PM EDT</span>
+    <span class="updated">Updated September 10, 2026 at 10:58 PM EDT</span>
   </div>
   
     <nav class="top-nav">

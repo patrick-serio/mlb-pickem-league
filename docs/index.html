@@ -176,6 +176,116 @@
     color: #6b6e7a;
   }
 
+  .movement {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: 0.78rem;
+    min-width: 2.4rem;
+    text-align: center;
+  }
+
+  .movement.up {
+    color: #3E8E5A;
+  }
+
+  .movement.down {
+    color: var(--red);
+  }
+
+  .movement.flat {
+    color: #a3a6b0;
+  }
+
+  .movement.new {
+    color: var(--gold);
+    font-size: 0.68rem;
+  }
+
+  /* ---- League Leaders ---- */
+
+  .leader-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 0.6rem;
+  }
+
+  .leader-card {
+    background: var(--white);
+    border: 1px solid var(--cream-row);
+    border-top: 3px solid var(--gold);
+    border-radius: 6px;
+    padding: 0.7rem 0.85rem;
+  }
+
+  .leader-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: #8a8d99;
+  }
+
+  .leader-name {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    color: var(--navy);
+    margin-top: 0.15rem;
+  }
+
+  .leader-meta {
+    font-size: 0.75rem;
+    color: #8a8d99;
+  }
+
+  .leader-value {
+    margin-top: 0.35rem;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--gold);
+  }
+
+  .leader-value span {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 0.7rem;
+    color: #8a8d99;
+    margin-left: 0.2rem;
+  }
+
+  /* ---- Injured List ---- */
+
+  ul.injured-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border: 1px solid var(--cream-row);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .injured-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem 1rem;
+    background: var(--white);
+    border-left: 4px solid var(--red);
+  }
+
+  .injured-row:nth-child(odd) {
+    background: var(--cream-row);
+  }
+
+  .injured-name {
+    font-weight: 600;
+    color: var(--navy);
+  }
+
+  .injured-meta {
+    font-size: 0.8rem;
+    color: #8a8d99;
+  }
+
   .team-card {
     background: var(--white);
     border: 1px solid var(--cream-row);
@@ -414,6 +524,56 @@
     .player-table { font-size: 0.78rem; }
   }
 
+  /* ---- Print styles ---- */
+
+  @media print {
+    body {
+      background: white;
+    }
+
+    header {
+      background: white;
+      color: var(--text);
+      padding: 0.5rem 0 1rem;
+      border-bottom: 2px solid var(--navy);
+    }
+
+    .updated {
+      color: var(--navy);
+    }
+
+    .top-nav,
+    .filter-bar,
+    footer {
+      display: none;
+    }
+
+    main {
+      max-width: 100%;
+      padding: 0;
+    }
+
+    /* Team roster cards are collapsed by default on screen — force them
+       open so printing actually shows the rosters, not just the headers. */
+    details > *:not(summary) {
+      display: block !important;
+    }
+
+    .team-card summary {
+      background: white;
+      color: var(--navy);
+      border-bottom: 2px solid var(--cream-row);
+    }
+
+    .team-card,
+    .standing-row,
+    .injured-row,
+    .leader-card,
+    .trend-card {
+      break-inside: avoid;
+    }
+  }
+
 </style>
 </head>
 <body>
@@ -421,7 +581,7 @@
 <header>
   <div class="header-inner">
     <h1>Fantasy Baseball League</h1>
-    <span class="updated">Updated September 10, 2026 at 10:28 PM EDT</span>
+    <span class="updated">Updated September 10, 2026 at 10:58 PM EDT</span>
   </div>
   
     <nav class="top-nav">
@@ -439,160 +599,336 @@
         <li class="standing-row">
           <span class="rank">1</span>
           <a class="team-name" href="#team-Patrick-+-Emily">Patrick + Emily</a>
+          <span class="movement flat">–</span>
           <span class="pts">30358<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">2</span>
           <a class="team-name" href="#team-Nate-Moggio">Nate Moggio</a>
+          <span class="movement flat">–</span>
           <span class="pts">29797<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">3</span>
           <a class="team-name" href="#team-Casey-Spilka">Casey Spilka</a>
+          <span class="movement flat">–</span>
           <span class="pts">29709<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">4</span>
           <a class="team-name" href="#team-Brandon-Zaikowski">Brandon Zaikowski</a>
+          <span class="movement flat">–</span>
           <span class="pts">29553<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">5</span>
           <a class="team-name" href="#team-Ben-Fowler">Ben Fowler</a>
+          <span class="movement flat">–</span>
           <span class="pts">29468<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">6</span>
           <a class="team-name" href="#team-Mike-Zisk">Mike Zisk</a>
+          <span class="movement flat">–</span>
           <span class="pts">29124<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">7</span>
           <a class="team-name" href="#team-Zac-Brittain">Zac Brittain</a>
+          <span class="movement flat">–</span>
           <span class="pts">29111<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">8</span>
           <a class="team-name" href="#team-Jake-Brittain">Jake Brittain</a>
+          <span class="movement flat">–</span>
           <span class="pts">29001<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">9</span>
           <a class="team-name" href="#team-Andrew-Serio">Andrew Serio</a>
+          <span class="movement flat">–</span>
           <span class="pts">28555<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">10</span>
           <a class="team-name" href="#team-Owen-Shelffo">Owen Shelffo</a>
+          <span class="movement flat">–</span>
           <span class="pts">28014<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">11</span>
           <a class="team-name" href="#team-Amy-Serio">Amy Serio</a>
+          <span class="movement flat">–</span>
           <span class="pts">27944<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">12</span>
           <a class="team-name" href="#team-Trevor-Maslowski">Trevor Maslowski</a>
+          <span class="movement flat">–</span>
           <span class="pts">27940<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">13</span>
           <a class="team-name" href="#team-Emily-Zaikowski">Emily Zaikowski</a>
+          <span class="movement flat">–</span>
           <span class="pts">27874<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">14</span>
           <a class="team-name" href="#team-Maxwell-Edwards">Maxwell Edwards</a>
+          <span class="movement flat">–</span>
           <span class="pts">27873<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">15</span>
           <a class="team-name" href="#team-Tim-Horton">Tim Horton</a>
+          <span class="movement flat">–</span>
           <span class="pts">27612<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">16</span>
           <a class="team-name" href="#team-Julie-Brittain">Julie Brittain</a>
+          <span class="movement flat">–</span>
           <span class="pts">27439<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">17</span>
           <a class="team-name" href="#team-Andrew-Sadowski">Andrew Sadowski</a>
+          <span class="movement flat">–</span>
           <span class="pts">27204<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">18</span>
           <a class="team-name" href="#team-Levi-Richards">Levi Richards</a>
+          <span class="movement flat">–</span>
           <span class="pts">26997<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">19</span>
           <a class="team-name" href="#team-Paul-Serio">Paul Serio</a>
+          <span class="movement flat">–</span>
           <span class="pts">26753<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">20</span>
           <a class="team-name" href="#team-Steve-Richards">Steve Richards</a>
+          <span class="movement flat">–</span>
           <span class="pts">26539<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">21</span>
           <a class="team-name" href="#team-Gabe-Selig">Gabe Selig</a>
+          <span class="movement flat">–</span>
           <span class="pts">26531<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">22</span>
           <a class="team-name" href="#team-Jamie-Horton">Jamie Horton</a>
+          <span class="movement flat">–</span>
           <span class="pts">26266<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">23</span>
           <a class="team-name" href="#team-Jason-Gouin">Jason Gouin</a>
+          <span class="movement flat">–</span>
           <span class="pts">26142<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">24</span>
           <a class="team-name" href="#team-Billy-Haber">Billy Haber</a>
+          <span class="movement flat">–</span>
           <span class="pts">25645<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">25</span>
           <a class="team-name" href="#team-Jack-Power">Jack Power</a>
+          <span class="movement flat">–</span>
           <span class="pts">23989<span class="pts-label"> pts</span></span>
         </li>
 
         <li class="standing-row">
           <span class="rank">26</span>
           <a class="team-name" href="#team-Randy-Sherman">Randy Sherman</a>
+          <span class="movement flat">–</span>
           <span class="pts">22577<span class="pts-label"> pts</span></span>
         </li>
     </ul>
   </section>
+
+  
+    <section>
+      <h2>League Leaders</h2>
+      <div class="leader-grid">
+        
+        <div class="leader-card">
+          <div class="leader-label">Most Home Runs</div>
+          <div class="leader-name">Kyle Schwarber</div>
+          <div class="leader-meta">PHI</div>
+          <div class="leader-value">44 <span>HR</span></div>
+        </div>
+        <div class="leader-card">
+          <div class="leader-label">Most RBI</div>
+          <div class="leader-name">Sal Stewart</div>
+          <div class="leader-meta">CIN</div>
+          <div class="leader-value">107 <span>RBI</span></div>
+        </div>
+        <div class="leader-card">
+          <div class="leader-label">Most Stolen Bases</div>
+          <div class="leader-name">Bobby Witt Jr.</div>
+          <div class="leader-meta">KC</div>
+          <div class="leader-value">39 <span>SB</span></div>
+        </div>
+        <div class="leader-card">
+          <div class="leader-label">Most Wins</div>
+          <div class="leader-name">Cristopher Sánchez</div>
+          <div class="leader-meta">PHI</div>
+          <div class="leader-value">17 <span>W</span></div>
+        </div>
+        <div class="leader-card">
+          <div class="leader-label">Most Strikeouts</div>
+          <div class="leader-name">Jacob Misiorowski</div>
+          <div class="leader-meta">MIL</div>
+          <div class="leader-value">236 <span>K</span></div>
+        </div>
+        <div class="leader-card">
+          <div class="leader-label">Most Saves</div>
+          <div class="leader-name">Riley O&#x27;Brien</div>
+          <div class="leader-meta">STL</div>
+          <div class="leader-value">36 <span>SV</span></div>
+        </div>
+        <div class="leader-card">
+          <div class="leader-label">Best ERA</div>
+          <div class="leader-name">Josh Hader</div>
+          <div class="leader-meta">HOU</div>
+          <div class="leader-value">0.87 <span>ERA</span></div>
+        </div>
+      </div>
+    </section>
+
+  
+    <section>
+      <h2>Injured List</h2>
+      <ul class="injured-list">
+        
+        <li class="injured-row">
+          <span class="injured-name">JJ Wetherholt</span>
+          <span class="injured-meta">nan · 2B</span>
+        </li>
+        <li class="injured-row">
+          <span class="injured-name">Xavier Edwards</span>
+          <span class="injured-meta">nan · 2B</span>
+        </li>
+        <li class="injured-row">
+          <span class="injured-name">Nick Kurtz</span>
+          <span class="injured-meta">nan · 1B</span>
+        </li>
+        <li class="injured-row">
+          <span class="injured-name">Byron Buxton</span>
+          <span class="injured-meta">nan · OF</span>
+        </li>
+        <li class="injured-row">
+          <span class="injured-name">Shea Langeliers</span>
+          <span class="injured-meta">nan · C</span>
+        </li>
+        <li class="injured-row">
+          <span class="injured-name">Nathan Eovaldi</span>
+          <span class="injured-meta">nan · SP</span>
+        </li>
+        <li class="injured-row">
+          <span class="injured-name">Shane McClanahan</span>
+          <span class="injured-meta">nan · SP</span>
+        </li>
+        <li class="injured-row">
+          <span class="injured-name">Trey Yesavage</span>
+          <span class="injured-meta">nan · SP</span>
+        </li>
+        <li class="injured-row">
+          <span class="injured-name">Kyle Freeland</span>
+          <span class="injured-meta">nan · SP</span>
+        </li>
+        <li class="injured-row">
+          <span class="injured-name">Brent Rooker</span>
+          <span class="injured-meta">nan · OF</span>
+        </li>
+        <li class="injured-row">
+          <span class="injured-name">Devin Williams</span>
+          <span class="injured-meta">nan · RP</span>
+        </li>
+        <li class="injured-row">
+          <span class="injured-name">Hunter Dobbins</span>
+          <span class="injured-meta">nan · SP</span>
+        </li>
+        <li class="injured-row">
+          <span class="injured-name">Kirby Yates</span>
+          <span class="injured-meta">nan · RP</span>
+        </li>
+        <li class="injured-row">
+          <span class="injured-name">Cole Ragans</span>
+          <span class="injured-meta">nan · SP</span>
+        </li>
+        <li class="injured-row">
+          <span class="injured-name">Garrett Crochet</span>
+          <span class="injured-meta">nan · SP</span>
+        </li>
+        <li class="injured-row">
+          <span class="injured-name">Matt Svanson</span>
+          <span class="injured-meta">nan · RP</span>
+        </li>
+        <li class="injured-row">
+          <span class="injured-name">Hunter Greene</span>
+          <span class="injured-meta">nan · SP</span>
+        </li>
+        <li class="injured-row">
+          <span class="injured-name">Ryan Helsley</span>
+          <span class="injured-meta">nan · RP</span>
+        </li>
+        <li class="injured-row">
+          <span class="injured-name">Ryan Walker</span>
+          <span class="injured-meta">nan · RP</span>
+        </li>
+        <li class="injured-row">
+          <span class="injured-name">Hunter Barco</span>
+          <span class="injured-meta">nan · RP</span>
+        </li>
+        <li class="injured-row">
+          <span class="injured-name">Shane Smith</span>
+          <span class="injured-meta">nan · SP</span>
+        </li>
+        <li class="injured-row">
+          <span class="injured-name">Hunter Strickland</span>
+          <span class="injured-meta">nan · RP</span>
+        </li>
+        <li class="injured-row">
+          <span class="injured-name">Jordan Westburg</span>
+          <span class="injured-meta">nan · 3B</span>
+        </li>
+      </ul>
+    </section>
 
   <section>
     <h2>Rosters</h2>
